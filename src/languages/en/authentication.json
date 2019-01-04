@@ -1,0 +1,13 @@
+{
+    "login":{
+        "title": "Sign In to your account",
+        "label_email": "Email",
+        "label_password": "Password",
+        "label_remember": "Remember Me",
+        "link_forgot_pass": "Forgot Password?",
+        "btn_login": "SIGN IN",
+        "label_or": "OR",
+        "label_quiestion_account": "Don't have an account?",
+        "link_create_account": "Create an account"
+    }
+}
