@@ -36,9 +36,9 @@
                         </div>
                       </div>
                       <div class="form-group is-empty">
-                        <label for="inputEmail" class="col-md-2 control-label">Email</label>
+                        <label for="inputEmail" class="col-md-2 control-label">ciudad</label>
                         <div class="col-md-10">
-                          <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                         <Cities />
                         </div>
                       </div>
                       <div class="form-group is-empty">
@@ -77,6 +77,7 @@ const {SERVER_URI,DB_USER_NAME}=require('@/config/index');
 const {DBLocal} =require('@/services/data_local');
 const {EventBus} =require('@/eventbus');
 import Countries from './componentCountries.vue';
+import Cities from './componentCities.vue';
 import { setTimeout } from 'timers';
 const dbLocal= new DBLocal(DB_USER_NAME);
 const axios = require('axios');
@@ -100,7 +101,8 @@ export default {
         }
     },
     components:{
-        Countries
+        Countries,
+        Cities
     },
     methods:{
     redirectUserLogin(){
