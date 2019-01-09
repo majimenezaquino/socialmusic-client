@@ -18,22 +18,27 @@
                           <div class="progress" style="width: 75%;">
                             <div class="progress-bar" style="width:0%;"></div>
                           </div>
-                          <ul class=" nav-pills">
-                            <li class=""><a href="#formuser" data-toggle="tab" aria-expanded="true">
+                          <ul class="grop-btn-wirza nav-pills">
+                            <li class="">
+                              <a href="#formuser" data-toggle="tab" aria-expanded="true" name="user_complete">
                               <span class="step"><i class="fa fa-check" aria-hidden="true"></i></span>
                                <span class="title">perfil</span></a></li>
-                            <li class=""><a href="#tab2" data-toggle="tab" aria-expanded="false">
+                            <li class="">
+                              <a href="#tab2" data-toggle="tab" aria-expanded="false" name="direccion">
                               <span class="step"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
                                <span class="title">Direccion</span></a></li>
-                                <li class=""><a href="#tab3" data-toggle="tab" aria-expanded="false">
+                              <li class="">
+                                  <a href="#tab3" data-toggle="tab" aria-expanded="false" name="upload">
                               <span class="step"><i class="fa fa-cloud-upload" aria-hidden="true"></i></span>
                                <span class="title">Subir</span></a>
                                </li>
-                            <li class="active"><a href="#tab3" data-toggle="tab" aria-expanded="false">
+                            <li class="active">
+                              <a href="#tab3" data-toggle="tab" aria-expanded="false" name="informacion">
                               <span class="step"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
                                <span class="title">Informacion</span></a></li>
                               
-                            <li class=""><a href="#tab5" data-toggle="tab" aria-expanded="false">
+                            <li class="">
+                              <a href="#tab5" data-toggle="tab" aria-expanded="false" name="confirmation">
                               <span class="step"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
                                <span class="title">Confirmation</span></a></li>
                           </ul>
@@ -49,6 +54,7 @@
                             </div>
                             <!--end #formuser -->
                             <div class="tab-pane" id="tab2">
+                              <FormAddress />
                             </div>
                             <!--end #tab2 -->
                             <div class="tab-pane" id="tab3">
@@ -103,6 +109,7 @@
 
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
+    import FormAddress from "@/components/forms/address.vue";
     import { setTimeout } from 'timers';
     export default {
         name: "upload-music",
@@ -113,16 +120,29 @@
         },
         components:{
           LayoutDashboard,
-          FormUser
+          FormUser,
+          FormAddress
         },
         methods: {
            checkUserUploadMusics(){
              let self=this;
              axios.get(`${SERVER_URI}/api/checkuseruploadmusics?token=${this.user_data.token}`).
             then(function(req){
-                let _user =req.data.user;
+                let uploadInfo =req.data.upload_info;
+                if(!uploadInfo.address){
+                  self.setBtnsByName("direccion");
+                  return;
+                }
+                if(!uploadInfo.user_complete){
+                  self.setBtnsByName("user_complete");
+                  return;
+                }
+
+        
+                  self.setBtnsByName("upload");
+                
             
-                    console.log("USER ===>> ",_user)
+                    console.log("USER ===>> ",uploadInfo)
         
                 
              
@@ -133,11 +153,20 @@
         redirectUserLogin(){
           if(dbLocal.checkDataLocalStorageOBject())
            this.user_data  =dbLocal.getDataLocalStorageOBject();
+         },
+         setBtnsByName(name){
+            let btns=document.querySelectorAll(".grop-btn-wirza li a");
+             for(let i in btns){
+               if(name== btns[i].name){
+                 btns[i].click();
+               }
+             }
          }
         },
         mounted(){
           this.redirectUserLogin()
           this.checkUserUploadMusics();
+          
         }
     
 	}
