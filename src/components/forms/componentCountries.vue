@@ -1,20 +1,16 @@
 <template>
- 
-    <select class="select form-control country" style="display:none" v-on:change="selecCountry">
-        <option value="no-selected">Elija su país</option>
-        <option v-for="_country in countries" :option="_country.lenguage" :key="_country._id">
-            {{_country.name}}
-        </option>
-       
+    <select class="form-control" v-on:change="selecCountry">
+      <option v-for="country in countries" :value="country.code" :key="country.code">
+          {{country.name}}
+      </option>
     </select>
-
 </template>
 <script>
  const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
   const {DBLocal} =require('@/services/data_local')
   const dbLocal= new DBLocal(DB_USER_NAME);
   const axios = require('axios');
-
+const {EventBus} =require('@/eventbus');
 export default {
     name: 'contry',
     data(){
@@ -25,11 +21,12 @@ export default {
     },
         methods:{
     redirectUserLogin(){
-        if(dbLocal.checkDataLocalStorageOBject());
+        if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
-    selecCountry(){
-            alert("hola")
+    selecCountry(event){
+        let code =event.target.value;
+            EventBus.$emit("country_code",code)
     }
 ,
     getContry(){
@@ -39,22 +36,44 @@ export default {
              .then(function (req) {
             //handle success
             self.countries =req.data.countries;
-  
+            console.log(self.countries)
              })
             .catch(function (err) {
             //handle error
             console.log("erro ", err);
         });
+    },
+    getSelect(){
+       let options= document.querySelectorAll(".component-country")[0] || [];
+          if(options!=undefined){
+              options.addEventListener("onchange",(event)=>{
+                  console.log(options)
+              })
+          }
+    
     }
- 
     },
     
     mounted(){
         this.redirectUserLogin();
          let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
          this.getContry();
+         this.getSelect();
     
+
         
     },
 }
 </script>
+<style>
+    .component-country{
+        width: 100%;
+        margin: 0px;
+        background: transparent;
+        border: none;
+        border-bottom: #ccc solid 1px;
+    }
+    .country{
+        display: flex;
+    }
+</style>

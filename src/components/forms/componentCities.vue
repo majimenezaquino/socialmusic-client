@@ -1,8 +1,8 @@
 <template>
  
-    <select class="select form-control country" style="display:none">
-        <option v-for="_country in countries" :option="_country.lenguage" :key="_country._id">
-            {{_country.name}}
+    <select class="form-control country">
+        <option v-for="city in cities" :option="city.country" :key="city._id">
+            {{city.name}}
         </option>
        
     </select>
@@ -13,33 +13,32 @@
   const {DBLocal} =require('@/services/data_local')
   const dbLocal= new DBLocal(DB_USER_NAME);
   const axios = require('axios');
-
+const {EventBus} =require('@/eventbus');
 export default {
     name: 'cities',
     data(){
         return{
             user_data: undefined,
-            countries: []
+            cities: []
         }
     },
         methods:{
     redirectUserLogin(){
-        if(dbLocal.checkDataLocalStorageOBject());
+        if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
 
-    getCities(code){
+    getCities(code=''){
         let self=this;
-             axios.get(`${SERVER_URI}/api/city/${code}?token=${this.user_data.token}`,
-            )
+             axios.get(`${SERVER_URI}/api/city/${code}?token=${this.user_data.token}`)
              .then(function (req) {
             //handle success
-            self.countries =req.data.countries
-            console.log("cities",  self.countries[0]);
+            self.cities =req.data.cities
+            console.log("cities",  self.cities[0]);
              })
             .catch(function (err) {
             //handle error
-            console.log("erro ", err);
+            console.log("error ====>", err);
         });
     }
  
@@ -48,8 +47,10 @@ export default {
     mounted(){
         this.redirectUserLogin();
          let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
-         this.getCities();
-    
+         let self=this;
+        EventBus.$on("country_code",function(data){
+            self.getCities(data);
+        })
         
     },
 }
