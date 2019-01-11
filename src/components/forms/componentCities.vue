@@ -1,8 +1,8 @@
 <template>
  
-    <select class="form-control country">
-        <option v-for="city in cities" :option="city.country" :key="city._id">
-            {{city.name}}
+    <select class="form-control country" v-on:change="selectCity">
+        <option v-for="_city in cities" :value="_city._id" :key="_city._id" :selected="city==_city._id">
+            {{_city.name}}
         </option>
        
     </select>
@@ -16,6 +16,12 @@
 const {EventBus} =require('@/eventbus');
 export default {
     name: 'cities',
+    props:{
+        city: {
+            type: String,
+            required: false
+        }
+    },
     data(){
         return{
             user_data: undefined,
@@ -41,6 +47,11 @@ export default {
             console.log("error ====>", err);
         });
     }
+    ,selectCity(event){
+              let city =event.target.value;
+              EventBus.$emit("city_id",city);
+
+    }
  
     },
     
@@ -49,7 +60,8 @@ export default {
          let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
          let self=this;
         EventBus.$on("country_code",function(data){
-            self.getCities(data);
+            self.getCities(data.code);
+            console.log(data)
         })
         
     },

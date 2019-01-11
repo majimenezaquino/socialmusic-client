@@ -129,6 +129,7 @@
              axios.get(`${SERVER_URI}/api/checkuseruploadmusics?token=${this.user_data.token}`).
             then(function(req){
                 let uploadInfo =req.data.upload_info;
+                 console.log(uploadInfo)
                 if(!uploadInfo.address){
                   self.setBtnsByName("direccion");
                   return;
@@ -166,6 +167,13 @@
         mounted(){
           this.redirectUserLogin()
           this.checkUserUploadMusics();
+          let self=this;
+           EventBus.$on("send_upload",(data)=>{
+             if(data===true){
+               console.log("dataddd====",data)
+               self.setBtnsByName("upload");
+             }
+           });
           
         }
     

@@ -1,7 +1,8 @@
 <template>
     <select class="form-control" v-on:change="selecCountry">
-      <option v-for="country in countries" :value="country.code" :key="country.code">
-          {{country.name}}
+        <option value="">Elija su pais</option>
+      <option v-for="_country in countries" :value="_country._id" :key="_country.code" :selected="country===_country._id">
+          {{_country.name}}
       </option>
     </select>
 </template>
@@ -13,6 +14,12 @@
 const {EventBus} =require('@/eventbus');
 export default {
     name: 'contry',
+    props:{
+        country: {
+            type: String,
+            required: false
+        }
+    },
     data(){
         return{
             user_data: undefined,
@@ -25,18 +32,28 @@ export default {
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
     selecCountry(event){
-        let code =event.target.value;
-            EventBus.$emit("country_code",code)
+        //get the country clicked
+        let  country=  this.countries.filter((country)=>{
+               return country._id ==event.target.value;
+           })[0]
+        
+        EventBus.$emit("country_code",country)
     }
 ,
     getContry(){
         let self=this;
-             axios.get(`${SERVER_URI}/api/countries?token=${this.user_data.token}`,
+             axios.get(`${SERVER_URI}/api/countries/?token=${this.user_data.token}`,
             )
              .then(function (req) {
             //handle success
             self.countries =req.data.countries;
-            console.log(self.countries)
+            let city_select = req.data.countries.filter((country)=>{
+                return country._id== self.country; 
+            })
+             //if isset props send data
+             if(self.country.length){
+                 EventBus.$emit("country_code",city_select[0])
+             }
              })
             .catch(function (err) {
             //handle error
@@ -59,6 +76,7 @@ export default {
          let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
          this.getContry();
          this.getSelect();
+         
     
 
         

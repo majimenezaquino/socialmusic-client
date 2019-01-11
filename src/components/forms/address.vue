@@ -30,38 +30,40 @@
                   <div class="card-body">
                     <form class="form-horizontal">
                       <div class="form-group is-empty">
-                        <label for="name" class="col-md-2 control-label">Elija su país</label>
+                        <label for="name" class="col-md-2 control-label">país <span class="required">*</span></label>
                         <div class="col-md-10">
-                            <Countries />
+                            <Countries :country="'5c36384f28267f81575611c9'"/>
                         </div>
                       </div>
                       <div class="form-group is-empty">
-                        <label for="inputEmail" class="col-md-2 control-label">ciudad</label>
+                        <label for="inputEmail" class="col-md-2 control-label">ciudad <span class="required">*</span></label>
                         <div class="col-md-10">
                          <Cities />
                         </div>
                       </div>
                       <div class="form-group is-empty">
-                        <label for="inputPassword" class="col-md-2 control-label">Password</label>
+                        <label for="inputPassword" class="col-md-2 control-label">Calle <span class="required">*</span></label>
                         <div class="col-md-10">
-                          <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                          <input type="text" class="form-control"  placeholder="cual es su calle?" v-model="address.street">
                         </div>
                       </div>
-                      <div class="form-group is-empty">
-                        <label for="disabledinput" class="col-sm-2 control-label">Disabled Input</label>
-                        <div class="col-sm-10">
-                          <input disabled="" type="text" class="form-control" id="disabledinput" placeholder="Disabled Input">
+                    <div class="form-card-address col-md-10">
+                        <div class="form-group">
+                        <label for="inputPassword" class="col-md-2 control-label">numero de casa <span class="required">*</span></label>
+                        <div class="col-md-5">
+                          <input type="text" class="form-control"  placeholder="#102" v-model="address.house_number">
                         </div>
                       </div>
-                      <div class="form-group is-empty">
-                        <label for="textArea" class="col-md-2 control-label">Textarea</label>
-                        <div class="col-md-10">
-                          <textarea class="form-control" rows="3" id="textArea"></textarea>
-                          <span class="help-block">A longer block of help text that breaks onto a new line and may extend beyond one line.</span>
+                      <div class="form-group ">
+                        <label for="inputPassword" class="col-md-2 control-label">codigo postal</label>
+                        <div class="col-md-5">
+                          <input type="text" class="form-control"  placeholder="0000" v-model="address.postcode">
                         </div>
                       </div>
-                      <div class="card-footer text-center">
-                    <button class="btn btn-primary btn-sm" v-on:click.prevent="saveUpdate" :disabled="btn_upload">Guardar </button>
+                        
+                    </div>
+                      <div class="">
+                    <button class="btn btn-primary btn-sm" :disabled="btnDisabled" v-on:click.prevent="sendData">Guardar </button>
                   </div>
                     </form>
                   </div>
@@ -87,7 +89,14 @@ export default {
     data(){
         return{
             user_data: undefined,
-            hiddenSave: true,
+            btnDisabled: true,
+            address:{
+                country: undefined,
+                city: undefined,
+                street: undefined,
+                house_number: undefined,
+                postcode: undefined,
+            },
             user_profile : undefined,
             req_surcess:false,
             surcess_message:'',
@@ -110,18 +119,85 @@ export default {
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
 
-  
-       
-       
-      
-       
+        address_complete(){
+           if((this.address.city!=undefined && this.address.city!='') &&
+               (this.address.country!=undefined && this.address.country!='') &&
+               (this.address.street!=undefined && this.address.street!='' && this.address.street.length>4 ) &&
+               (this.address.house_number!=undefined && this.address.house_number!='') 
+           ){
+               return true;
+           }
+        return false;
+        },
+
+        activeBtnbtnDisabled(){
+            this.btnDisabled=true;
+            if(this.address_complete()){
+                this.btnDisabled=false;
+            }
+                
+            
+        },
+        sendData(){
+            let self=this;
+             axios.put(`${SERVER_URI}/api/address?token=${this.user_data.token}`,this.address
+            )
+             .then(function (req) {
+            let city =req.data.address;
+                EventBus.$emit("send_upload",true);
+             })
+            .catch(function (err) {
+            //handle error
+            console.log("erro ", err);
+        });
+
+        },
+
+          getAddressByUserId(){
+            let self=this;
+             axios.get(`${SERVER_URI}/api/address?token=${this.user_data.token}`)
+             .then(function (req) {
+            self.address =req.data.address;
+             })
+            .catch(function (err) {
+            //handle error
+            console.log("erro ", err);
+        });
+
+        }
  
     },
-    
+    watch: {
+    // whenever question changes, this function will run
+   'address.street': function (newQuestion, oldQuestion) {
+    this.activeBtnbtnDisabled();
+    },
+    'address.country': function (newQuestion, oldQuestion) {
+    this.activeBtnbtnDisabled();
+    },
+    'address.city': function (newQuestion, oldQuestion) {
+    this.activeBtnbtnDisabled();
+    },
+    'address.house_number': function (newQuestion, oldQuestion) {
+    this.activeBtnbtnDisabled();
+    },
+     'address.postcode': function (newQuestion, oldQuestion) {
+    this.activeBtnbtnDisabled();
+    }
+  },
     mounted(){
         this.redirectUserLogin();
          let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
+         this.getAddressByUserId();
     
+      let self=this;
+        EventBus.$on("country_code",function(data){
+           self.address.country =data._id
+        })
+
+        EventBus.$on("city_id",function(data){
+           self.address.city =data
+        })
         
     },
   
@@ -153,6 +229,13 @@ export default {
     }
     .oardio input{
         border: #363636 solid 1px !important;
+    }
+    .form-card-address{
+        display: flex;
+        justify-content: space-between;
+    }
+    .required{
+        color: red;
     }
 </style>
 
