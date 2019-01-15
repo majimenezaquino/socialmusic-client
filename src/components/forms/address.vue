@@ -32,7 +32,7 @@
                       <div class="form-group is-empty">
                         <label for="name" class="col-md-2 control-label">país <span class="required">*</span></label>
                         <div class="col-md-10">
-                            <Countries :country="'5c36384f28267f81575611c9'"/>
+                            <Countries :country="address.country"/>
                         </div>
                       </div>
                       <div class="form-group is-empty">
@@ -131,6 +131,7 @@ export default {
         },
 
         activeBtnbtnDisabled(){
+            
             this.btnDisabled=true;
             if(this.address_complete()){
                 this.btnDisabled=false;
@@ -139,25 +140,49 @@ export default {
             
         },
         sendData(){
+            if(this.address._id!=undefined){
+                this.updateAddress();
+            }else{
+                this.sendAdrress();
+            }
+            
+        },
+        updateAddress(){
             let self=this;
              axios.put(`${SERVER_URI}/api/address?token=${this.user_data.token}`,this.address
             )
              .then(function (req) {
-            let city =req.data.address;
+            let address =req.data.address;
                 EventBus.$emit("send_upload",true);
              })
             .catch(function (err) {
             //handle error
             console.log("erro ", err);
         });
-
+        },
+        sendAdrress(){
+         let self=this;
+             axios.post(`${SERVER_URI}/api/address?token=${this.user_data.token}`,this.address
+            )
+             .then(function (req) {
+            let address =req.data.address;
+            
+              
+             })
+            .catch(function (err) {
+            //handle error
+            console.log("erro ", err);
+        });
         },
 
           getAddressByUserId(){
             let self=this;
              axios.get(`${SERVER_URI}/api/address?token=${this.user_data.token}`)
              .then(function (req) {
-            self.address =req.data.address;
+                 if(req.data.address!=undefined){
+                     self.address =req.data.address;
+                 }
+                console.log("=======  =====   ======",self.address)
              })
             .catch(function (err) {
             //handle error
@@ -174,6 +199,7 @@ export default {
     },
     'address.country': function (newQuestion, oldQuestion) {
     this.activeBtnbtnDisabled();
+    console.log("country====>",newQuestion)
     },
     'address.city': function (newQuestion, oldQuestion) {
     this.activeBtnbtnDisabled();
@@ -198,8 +224,9 @@ export default {
         EventBus.$on("city_id",function(data){
            self.address.city =data
         })
-        
+        console.log("address",this.address)
     },
+    
   
 }
 </script>

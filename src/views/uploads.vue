@@ -106,7 +106,7 @@
   const {DBLocal} =require('@/services/data_local')
   const dbLocal= new DBLocal(DB_USER_NAME);
   const axios = require('axios');
-
+  const {EventBus} =require('@/eventbus');
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
     import FormAddress from "@/components/forms/address.vue";

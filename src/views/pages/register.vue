@@ -80,6 +80,7 @@ const dbLocal = new DBLocal(DB_USER_NAME);
         },
         data(){
             return {
+              location,
               user: {
                 name: undefined,
                 email: undefined,
@@ -231,8 +232,8 @@ const dbLocal = new DBLocal(DB_USER_NAME);
 
 		},
 		mounted(){
-			this.redirectUserLogin();
-			
+      this.redirectUserLogin();
+ 
       },
       updated(){
      //   this.emailError=undefined;
