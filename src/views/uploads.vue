@@ -58,6 +58,7 @@
                             </div>
                             <!--end #tab2 -->
                             <div class="tab-pane" id="tab3">
+                              <UploadMusic />
                             </div>
                             <!--end #tab2 -->
                             <div class="tab-pane" id="tab5">
@@ -110,6 +111,7 @@
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
     import FormAddress from "@/components/forms/address.vue";
+    import UploadMusic from "@/components/forms/uploadmusic.vue";
     import { setTimeout } from 'timers';
     export default {
         name: "upload-music",
@@ -121,7 +123,8 @@
         components:{
           LayoutDashboard,
           FormUser,
-          FormAddress
+          FormAddress,
+          UploadMusic
         },
         methods: {
            checkUserUploadMusics(){

@@ -182,7 +182,7 @@ export default {
                  if(req.data.address!=undefined){
                      self.address =req.data.address;
                  }
-                console.log("=======  =====   ======",self.address)
+        
              })
             .catch(function (err) {
             //handle error
@@ -199,7 +199,7 @@ export default {
     },
     'address.country': function (newQuestion, oldQuestion) {
     this.activeBtnbtnDisabled();
-    console.log("country====>",newQuestion)
+
     },
     'address.city': function (newQuestion, oldQuestion) {
     this.activeBtnbtnDisabled();
@@ -224,7 +224,7 @@ export default {
         EventBus.$on("city_id",function(data){
            self.address.city =data
         })
-        console.log("address",this.address)
+        
     },
     
   
