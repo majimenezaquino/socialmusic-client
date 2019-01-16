@@ -13,7 +13,10 @@
                                <h3>Error to upload</h3>
                            </div>
                            </label>
-                       <input type="file" id="btn-upload" v-on:change="changeUpload">
+                       <input type="file" id="btn-upload" v-on:change="changeUpload" >
+                       <div class="hidd">
+                           <audio :src="urlAudio" id="player_validate"></audio>
+                       </div>
                    </div>
               </div>
         </div>
@@ -39,6 +42,7 @@ export default {
             urlImg: undefined,
             filename: undefined,
             user_found: false,
+            urlAudio: undefined,
             progress: 0,
             showproccess: false,
             active_btn_save: false,
@@ -57,6 +61,7 @@ export default {
                 let img_tmp =e.target.result;
                 self.filename=input.files[0];
                 self.active_btn_save =true; //activar btn save
+                self.urlAudio = e.target.result;
            }
            
 
@@ -120,6 +125,14 @@ redirectUserLogin(){
         });
     }
     },
+    watch: {
+        'urlAudio':function(oldUrl, newUrl){
+            let audio =document.querySelector(".container-upload-music audio");
+            audio.oncanplay = function() {
+            alert("Can start playing video");
+                  }
+        }
+    },
     mounted(){
         this.redirectUserLogin();
         
@@ -145,6 +158,11 @@ redirectUserLogin(){
 #btn-upload {
     width: 0px;
     height: 0px;
+}
+.hidd{
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
 }
 .upload-content{
     width: 100%;
