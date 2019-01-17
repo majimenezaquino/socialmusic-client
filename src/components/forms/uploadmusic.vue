@@ -13,9 +13,9 @@
                                <h3>Error to upload</h3>
                            </div>
                            </label>
-                       <input type="file" id="btn-upload" v-on:change="changeUpload" >
+                       <input type="file" id="btn-upload" v-on:change="uploadFilesForm" >
                        <div class="hidd">
-                           <audio :src="urlAudio" id="player_validate"></audio>
+                           <audio :src="urlAudio" v-if="urlAudio!=undefined"></audio>
                        </div>
                    </div>
               </div>
@@ -42,7 +42,6 @@ export default {
             urlImg: undefined,
             filename: undefined,
             user_found: false,
-            urlAudio: undefined,
             progress: 0,
             showproccess: false,
             active_btn_save: false,
@@ -50,71 +49,24 @@ export default {
         }
     },
     methods:{
-        uploadFiles(input){
-           let self=this;
-    if (input.files && input.files[0]) {
-        let reader = new FileReader();
-        reader.onload = function(e) {
-           let  sizekiloBytes = parseInt(input.files[0].size / 1024);
-           if(sizekiloBytes<=1024){
-                self.urlImg =e.target.result;
-                let img_tmp =e.target.result;
-                self.filename=input.files[0];
-                self.active_btn_save =true; //activar btn save
-                self.urlAudio = e.target.result;
-           }
-           
-
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-
-
-        },
-        changeUpload(event){
-            console.log(event)
-            this.uploadFiles(event.target);
-        },
+      
 redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
-    submitUpload(){
-        this.uploadFilesForm(this.filename)
-    },
-    uploadFilesForm(bodyFormData){
-      let contador =0;
-      if(bodyFormData===undefined)  {
-          throw new Error('erro file not found')
-          return;
-      }
-      this.showproccess=true;
-       let self=this;
-        let  config = {
-                onUploadProgress: function(progressEvent) {
-                let percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
-             let barElement = document.getElementById('progress'),
-                percent = parseInt(percentCompleted),
-                deg = 360*percent/100;
-                if(barElement!=null && barElement!=undefined){
-              if (percent > 50) barElement.classList.add('gt-50');
- 
-               document.querySelector('.ppc-progress-fill').style.transform=`rotate(${deg}deg)`;
-              document.querySelector('.ppc-percents span').innerHTML=percent+'%';
-                    self.active_btn_save=false;
-                    setTimeout(function(){
-                        self.showproccess=false;
-                    },1000)
-             
-                     }}
-            };
-
+   
+    uploadFilesForm(event){
+        let self=this;
         let formData = new FormData();
-      formData.append('image', bodyFormData);
-
-            axios.post(`${SERVER_URI}/api/upload/image?token=${this.user_data.token}`,
-                 formData,config
-            )
+        let music =event.target.files[0];
+        console.log(music)
+        formData.append('music',music );
+            axios.post(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
+             {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              })
              .then(function (response) {
             //handle success
             console.log(response);
@@ -124,14 +76,6 @@ redirectUserLogin(){
             console.log(response);
         });
     }
-    },
-    watch: {
-        'urlAudio':function(oldUrl, newUrl){
-            let audio =document.querySelector(".container-upload-music audio");
-            audio.oncanplay = function() {
-            alert("Can start playing video");
-                  }
-        }
     },
     mounted(){
         this.redirectUserLogin();
@@ -158,11 +102,6 @@ redirectUserLogin(){
 #btn-upload {
     width: 0px;
     height: 0px;
-}
-.hidd{
-    width: 0px;
-    height: 0px;
-    overflow: hidden;
 }
 .upload-content{
     width: 100%;
