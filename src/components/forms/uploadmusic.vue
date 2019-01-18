@@ -13,10 +13,7 @@
                                <h3>Error to upload</h3>
                            </div>
                            </label>
-                       <input type="file" id="btn-upload" v-on:change="uploadFilesForm" >
-                       <div class="hidd">
-                           <audio :src="urlAudio" v-if="urlAudio!=undefined"></audio>
-                       </div>
+                       <input type="file" id="btn-upload" v-on:change="uploadFilesForm" />
                    </div>
               </div>
         </div>
@@ -26,6 +23,7 @@
   const {DBLocal} =require('@/services/data_local')
   const dbLocal= new DBLocal(DB_USER_NAME);
   const axios = require('axios');
+    const {EventBus} =require('@/eventbus');
   import { setInterval, setImmediate } from 'timers';
 
 export default {
@@ -75,10 +73,27 @@ redirectUserLogin(){
             //handle error
             console.log(response);
         });
+    },
+    getMusicUploadIncompleteBYUser(){
+        axios.get(`${SERVER_URI}/api/musicspending?token=${this.user_data.token}`)
+             .then(function (req) {
+             let music_penging =req.data.musics;
+          
+                 if(music_penging.length>0){
+                    EventBus.$emit("send_music",true);
+                    console.log("coo")
+                 }
+            
+             })
+            .catch(function (response) {
+            //handle error
+            console.log(response);
+        });
     }
     },
     mounted(){
         this.redirectUserLogin();
+        this.getMusicUploadIncompleteBYUser();
         
     }
 }

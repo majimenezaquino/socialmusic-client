@@ -79,11 +79,13 @@
 </template>
 <script>
 const {SERVER_URI,DB_USER_NAME}=require('@/config/index');
+const {VPersons} =require('@/helpers/validate-persons');
 const {DBLocal} =require('@/services/data_local');
 const {EventBus} =require('@/eventbus');
 import UserAvatar from './userImage.vue';
 import { setTimeout } from 'timers';
 const dbLocal= new DBLocal(DB_USER_NAME);
+const VP= new VPersons();
 const axios = require('axios');
 
 export default {
@@ -100,12 +102,41 @@ export default {
                 error: false,
                 message: ''
             },
-            user: {},
+            user: {
+                name: undefined,
+               last_name: undefined,
+               birth_date: undefined,
+               phone: undefined,
+               gender: undefined,
+            },
             gender:{
                 male: false,
                 female: false,
             }
         }
+    },
+    watch: {
+        //validate name of person
+        'user.name':function(newValue){
+            this.show_error.error =false;
+            if(newValue.length>2){
+                if(!VP.name(newValue) ){
+                    this.show_error.error =true;
+                    this.show_error.message=`"${newValue}"  No es un nombre permitido`;
+                }
+            }           
+        },
+         //validate name of person
+        'user.last_name':function(newValue){
+            this.show_error.error =false;
+            if(newValue.length>2){
+                if(!VP.name(newValue) ){
+                    this.show_error.error =true;
+                    this.show_error.message=`"${newValue}"  No es un apellido permitido`;
+                }
+            }           
+        }
+
     },
     components:{
         UserAvatar
@@ -141,7 +172,7 @@ export default {
         },
         saveUpdate(){
             let self =this;
-            let input= document.querySelectorAll(".user-info-update input");
+            let input= document.querySelectorAll('.user-info-update input[type="radio"]');
              for( let i in input){
                  self.validateField(input[i].name,input[i].value)
              }
@@ -153,8 +184,6 @@ export default {
                phone: this.user.phone,
                gender: this.user.gender,
              }).then((req)=>{
-                 console.log("mensage recivido",req)
-                 
                  if(!req.data.error){
                      self.req_surcess =true;
                      self.surcess_message =req.data.message;
@@ -195,7 +224,7 @@ export default {
         },
         cheketImput(){
             let self =this;
-            let input= document.querySelectorAll(".card-user input");
+            let input= document.querySelectorAll(".user-info-update input");
              for( let i in input){
               if( input[i]!=undefined || input[i]!=null){
                      input[i].addEventListener("keyup",function(event){
@@ -209,10 +238,10 @@ export default {
                      self.validateField(formName,form_value)
                  },false);
              }
-              let inputRadio= document.querySelectorAll('input[name="gender"]')
+              let inputRadio= document.querySelectorAll('input[name="gender"]') || [];
                 if(inputRadio.length>0){
-             for(let i in inputRadio){
-                 inputRadio[i].addEventListener('click',function(event){
+             for(let i in inputRadio.length){
+                 inputRadio[i-1].addEventListener('click',function(event){
                  self.btn_upload=false;
              })
             }

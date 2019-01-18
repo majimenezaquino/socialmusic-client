@@ -32,13 +32,14 @@
                               <span class="step"><i class="fa fa-cloud-upload" aria-hidden="true"></i></span>
                                <span class="title">Subir</span></a>
                                </li>
-                            <li class="active">
-                              <a href="#tab3" data-toggle="tab" aria-expanded="false" name="informacion">
+                            <li class="">
+                              <a href="#tab4" data-toggle="tab" aria-expanded="false" name="informacion">
                               <span class="step"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
-                               <span class="title">Informacion</span></a></li>
+                               <span class="title">Informacion</span></a>
+                              </li>
                               
                             <li class="">
-                              <a href="#tab5" data-toggle="tab" aria-expanded="false" name="confirmation">
+                              <a href="#tab2" data-toggle="tab" aria-expanded="false" name="confirmation">
                               <span class="step"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
                                <span class="title">Confirmation</span></a></li>
                           </ul>
@@ -61,10 +62,11 @@
                               <UploadMusic />
                             </div>
                             <!--end #tab2 -->
-                            <div class="tab-pane" id="tab5">
+                            <div class="tab-pane" id="tab4">
+                              <FormAddress />
                             </div>
                             <!--end #tab3 -->
-                            <div class="tab-pane" id="tab4">
+                            <div class="tab-pane" id="tab5">
                             </div>
                           </div>
                         </div>
@@ -165,18 +167,30 @@
                  btns[i].click();
                }
              }
-         }
-        },
-        mounted(){
-          this.redirectUserLogin()
-          this.checkUserUploadMusics();
-          let self=this;
+         },
+         changeTab(){
+           let self=this;
+        EventBus.$on("send_music",(data)=>{
+              if(data===true){
+               self.setBtnsByName("confirmation");
+              }
+           });
+
            EventBus.$on("send_upload",(data)=>{
              if(data===true){
-               console.log("dataddd====",data)
+          
                self.setBtnsByName("upload");
              }
            });
+
+          
+         }
+        },
+        mounted(){
+          this.redirectUserLogin();
+          this.checkUserUploadMusics();
+            this.changeTab();
+          
           
         }
     

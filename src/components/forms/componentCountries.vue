@@ -76,9 +76,6 @@ export default {
          let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
          this.getContry();
          this.getSelect();
-         
-    
-
         
     },
 }
