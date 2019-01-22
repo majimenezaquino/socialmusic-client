@@ -61,9 +61,9 @@
                             <div class="tab-pane" id="tab3">
                               <UploadMusic />
                             </div>
-                            <!--end #tab2 -->
+                            <!--end #tab2 --> 
                             <div class="tab-pane" id="tab4">
-                              <FormAddress />
+                              <Information />
                             </div>
                             <!--end #tab3 -->
                             <div class="tab-pane" id="tab5">
@@ -114,6 +114,7 @@
     import FormUser from "@/components/forms/User.vue";
     import FormAddress from "@/components/forms/address.vue";
     import UploadMusic from "@/components/forms/uploadmusic.vue";
+    import Information from "@/components/forms/information-musics.vue";
     import { setTimeout } from 'timers';
     export default {
         name: "upload-music",
@@ -126,7 +127,8 @@
           LayoutDashboard,
           FormUser,
           FormAddress,
-          UploadMusic
+          UploadMusic,
+          Information
         },
         methods: {
            checkUserUploadMusics(){
@@ -170,12 +172,7 @@
          },
          changeTab(){
            let self=this;
-        EventBus.$on("send_music",(data)=>{
-              if(data===true){
-               self.setBtnsByName("confirmation");
-              }
-           });
-
+    
            EventBus.$on("send_upload",(data)=>{
              if(data===true){
           
@@ -184,11 +181,27 @@
            });
 
           
-         }
+         },
+         getMusicUploadIncompleteBYUser(){
+           let self =this;
+        axios.get(`${SERVER_URI}/api/musicspending?token=${this.user_data.token}`)
+             .then(function (req) {
+             let music_penging =req.data.musics;
+                 if(music_penging.length>0){
+                   self.setBtnsByName("informacion");
+                 }
+            
+             })
+            .catch(function (response) {
+            //handle error
+            console.log(response);
+        });
+    }
         },
         mounted(){
           this.redirectUserLogin();
           this.checkUserUploadMusics();
+          this.getMusicUploadIncompleteBYUser();
             this.changeTab();
           
           
