@@ -7,15 +7,20 @@
                        <label for="btn-upload" class="btn-label-upload">
                            <div class="header-title">
                                <h1>Suba su musica</h1>
+                               <div class="info">
+                                   <small v-if="music.file_name!=undefined">{{music.file_name}}</small>
+                                   <small v-if="music.size!=undefined">{{music.size}}</small>
+                                   <small v-if="music.type!=undefined">{{music.type}}</small>
+                               </div>
                            </div>
                            <span>
                                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                            </span>
                            <div class="footer-title">
-                               <h3>Error to upload</h3>
+                               <h3 style="display:none">Error to upload</h3>
                            </div>
                            </label>
-                       <input type="file" id="btn-upload" v-on:change="uploadFilesForm" />
+                       <input type="file" id="btn-upload" v-on:change="loadFile" />
                    </div>
               </div>
         </div>
@@ -24,6 +29,18 @@
                 <div class="card">
                   <header class="card-heading ">
                     <h2 class="card-title">Informacion de la cancion</h2>
+                        <div class="container-error">
+                         <div class="alert alert-danger" role="alert" v-if="error.error">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <strong>Oh snap! </strong> {{error.message}}
+                        </div>
+                         <div class="alert alert-success" role="alert" v-if="success.error">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <strong></strong> {{success.message}}
+                        </div>
+                        </div>
                   </header>
                   <div class="card-body">
 
@@ -61,7 +78,7 @@
                   </div>
                   <div class="card-footer text-right">
                     <button class="btn btn-info btn-flat">Cancel</button>
-                    <button class="btn btn-info">Submit</button>
+                    <button class="btn btn-info" v-on:click.prevent="uploadFilesForm">Guardar</button>
                   </div>
                 </div>
               </div>
@@ -92,7 +109,20 @@ export default {
                 title: undefined,
                 description: undefined,
                 tags: undefined,
-                genre: undefined
+                genre: undefined,
+                file: undefined,
+                size: undefined,
+                file_name: undefined,
+                type: undefined,
+
+            },
+            success:{
+                success: false,
+                message: undefined
+            },
+            error:{
+                message: undefined,
+                error: false
             },
             filename: undefined,
             user_found: false,
@@ -108,18 +138,25 @@ export default {
             this.showLavel=false;
             this.music.genre =event.target.value;
         },
+    
       
 redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
-   
-    uploadFilesForm(event){
+   loadFile(event){
+     this.music.file=  event.target.files[0];
+    this.music.file_name=(event.target.files[0].name).substr(0,30)+'...';
+    this.music.size=`${(event.target.files[0].size /1024/1024).toFixed(1)} MB`;
+    console.log(event.target.files[0])
+   },
+    uploadFilesForm(){
         let self=this;
         let formData = new FormData();
-        let music =event.target.files[0];
-        console.log(music)
-        formData.append('music',music );
+        formData.append('music',self.music.file);
+        formData.append('titulo',self.music.title);
+        formData.append('description',self.music.description);
+        formData.append('tags',self.music.tags);
             axios.post(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
              {
                 headers: {
@@ -151,6 +188,26 @@ redirectUserLogin(){
             console.log(response);
         });
     }, 
+    infoComplete(){
+        this.error.error=false;
+        if(this.music.title== undefined || this.music.title== ''){
+            this.error.error=true;
+            this.error.message=`El campo titulo es requerido`;
+            console.error("hay un error")
+        }
+
+        if(this.music.description== undefined || this.music.description== ''){
+            this.error.error=true;
+            this.error.message=`El campo descripcion es requerido`;
+            console.error("hay un error")
+        }
+
+        if(this.music.tags== undefined || this.music.tags== ''){
+            this.error.error=true;
+            this.error.message=`El campo etiqueta es requerido`;
+            console.error("hay un error")
+        }
+    },
     getGenres(){
         let self=this;
           axios.get(`${SERVER_URI}/api/genres?token=${this.user_data.token}`)
@@ -169,6 +226,14 @@ redirectUserLogin(){
         this.getMusicUploadIncompleteBYUser();
         this.getGenres();
         
+    },
+    watch:{
+        'music.title':function(value,oldv){
+           this.infoComplete();
+        },
+        'music.description':function(value,oldv){
+           this.infoComplete();
+        }
     }
 }
 </script>
@@ -224,9 +289,16 @@ align-items: center;
     width: 100%;
     position: absolute;
     top: 20px;
-    justify-content: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
     padding: 10px;
 }
+.header-title .info{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .footer-title {
 bottom: 0px;
 top:auto;
