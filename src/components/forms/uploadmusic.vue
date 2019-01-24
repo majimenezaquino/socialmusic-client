@@ -20,7 +20,7 @@
                                <h3 style="display:none">Error to upload</h3>
                            </div>
                            </label>
-                       <input type="file" id="btn-upload" v-on:change="loadFile" />
+                       <input type="file" id="btn-upload" v-on:change="loadFile" accept="audio/*" />
                    </div>
               </div>
         </div>
@@ -35,7 +35,7 @@
                                     <span aria-hidden="true">&times;</span></button>
                                 <strong>Oh snap! </strong> {{error.message}}
                         </div>
-                         <div class="alert alert-success" role="alert" v-if="success.error">
+                         <div class="alert alert-success" role="alert" v-if="success.success">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
                                     <span aria-hidden="true">&times;</span></button>
                                 <strong></strong> {{success.message}}
@@ -58,27 +58,27 @@
                       <div class="input-group">
                         <span class="input-group-addon"></span>
                         <label class="control-label">Titulo</label>
-                        <input type="text" class="form-control" v-model="music.title">
+                        <input type="text" class="form-control" v-model="music.title" required>
                       </div>
                     </div>
                     <div class="form-group label-floating is-empty">
                       <div class="input-group">
                         <span class="input-group-addon"></span>
                         <label class="control-label">Descripcion.</label>
-                        <input type="email" class="form-control" v-model="music.description">
+                        <input type="email" class="form-control" v-model="music.description" required>
                       </div>
                     </div>
                     <div class="form-group label-floating is-empty">
                       <div class="input-group">
                         <span class="input-group-addon"></span>
                         <label class="control-label">Etiquetas</label>
-                        <input type="text" class="form-control"  v-model="music.tags">
+                        <input type="text" class="form-control"  v-model="music.tags" required>
                       </div>
                     </div>
                   </div>
                   <div class="card-footer text-right">
                     <button class="btn btn-info btn-flat">Cancel</button>
-                    <button class="btn btn-info" v-on:click.prevent="uploadFilesForm">Guardar</button>
+                    <button class="btn btn-info" v-on:click.prevent="uploadFilesForm" :disabled="btn_disable">Guardar</button>
                   </div>
                 </div>
               </div>
@@ -105,6 +105,7 @@ export default {
         return {
             urlImg: undefined,
             genres: [],
+            btn_disable: false,
             music: {
                 title: undefined,
                 description: undefined,
@@ -114,6 +115,7 @@ export default {
                 size: undefined,
                 file_name: undefined,
                 type: undefined,
+                
 
             },
             success:{
@@ -136,6 +138,7 @@ export default {
     methods:{
         hiddenLabelGenres(event){
             this.showLavel=false;
+            this.error.error=false;
             this.music.genre =event.target.value;
         },
     
@@ -148,13 +151,14 @@ redirectUserLogin(){
      this.music.file=  event.target.files[0];
     this.music.file_name=(event.target.files[0].name).substr(0,30)+'...';
     this.music.size=`${(event.target.files[0].size /1024/1024).toFixed(1)} MB`;
-    console.log(event.target.files[0])
+       this.error.error=false;
    },
     uploadFilesForm(){
+        this.infoComplete()
         let self=this;
         let formData = new FormData();
         formData.append('music',self.music.file);
-        formData.append('titulo',self.music.title);
+        formData.append('title',self.music.title);
         formData.append('description',self.music.description);
         formData.append('tags',self.music.tags);
             axios.post(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
@@ -165,6 +169,12 @@ redirectUserLogin(){
               })
              .then(function (response) {
             //handle success
+            if(!response.data.error){
+                self.success.success=true;
+                self.success.message=`Musica subida`;
+                self.btn_disable=true;
+                EventBus.$emit("music_upload",true);
+            }
             console.log(response);
              })
             .catch(function (response) {
@@ -178,8 +188,7 @@ redirectUserLogin(){
              let music_penging =req.data.musics;
           
                  if(music_penging.length>0){
-                    EventBus.$emit("send_music",true);
-                    console.log("coo")
+                    EventBus.$emit("music_upload",true);
                  }
             
              })
@@ -190,22 +199,31 @@ redirectUserLogin(){
     }, 
     infoComplete(){
         this.error.error=false;
+          if(this.music.file_name== undefined || this.music.file_name== ''){
+            this.error.error=true;
+            this.error.message=`Debe subir un archivo con una de las siguientes extencion MP3 , OGG y WAV `;
+           return new Error(this.error.message)
+        }
+
         if(this.music.title== undefined || this.music.title== ''){
             this.error.error=true;
             this.error.message=`El campo titulo es requerido`;
-            console.error("hay un error")
+           return new Error(this.error.message)
         }
+
+       
+
 
         if(this.music.description== undefined || this.music.description== ''){
             this.error.error=true;
             this.error.message=`El campo descripcion es requerido`;
-            console.error("hay un error")
+         return  new Error(this.error.message)
         }
 
         if(this.music.tags== undefined || this.music.tags== ''){
             this.error.error=true;
             this.error.message=`El campo etiqueta es requerido`;
-            console.error("hay un error")
+            return new Error(this.error.message)
         }
     },
     getGenres(){
@@ -229,10 +247,13 @@ redirectUserLogin(){
     },
     watch:{
         'music.title':function(value,oldv){
-           this.infoComplete();
+            this.error.error=false;
         },
         'music.description':function(value,oldv){
-           this.infoComplete();
+           this.error.error=false;
+        },
+        'music.tags':function(value,oldv){
+           this.error.error=false;
         }
     }
 }

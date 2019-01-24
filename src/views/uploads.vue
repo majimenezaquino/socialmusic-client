@@ -173,9 +173,9 @@
          changeTab(){
            let self=this;
     
-           EventBus.$on("send_upload",(data)=>{
+           EventBus.$on("music_upload",(data)=>{
              if(data===true){
-          
+              console.log("music_upload")
                self.setBtnsByName("upload");
              }
            });
