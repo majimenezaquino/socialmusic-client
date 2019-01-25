@@ -35,13 +35,10 @@
                             <li class="">
                               <a href="#tab4" data-toggle="tab" aria-expanded="false" name="informacion">
                               <span class="step"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
-                               <span class="title">Informacion</span></a>
+                               <span class="title">Pubicar</span></a>
                               </li>
                               
-                            <li class="">
-                              <a href="#tab2" data-toggle="tab" aria-expanded="false" name="confirmation">
-                              <span class="step"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
-                               <span class="title">Confirmation</span></a></li>
+      
                           </ul>
                         </div>
                       </div>
@@ -64,9 +61,6 @@
                             <!--end #tab2 --> 
                             <div class="tab-pane" id="tab4">
                               <Information />
-                            </div>
-                            <!--end #tab3 -->
-                            <div class="tab-pane" id="tab5">
                             </div>
                           </div>
                         </div>

@@ -6,7 +6,7 @@
                    <div class="upload-content">
                        <label for="btn-upload" class="btn-label-upload">
                            <div class="header-title">
-                               <h1>Suba su musica</h1>
+                              <h2>suba una imagen para esta canción</h2>
                                <div class="info">
                                    <small v-if="music.file_name!=undefined">{{music.file_name}}</small>
                                    <small v-if="music.size!=undefined">{{music.size}}</small>
@@ -20,6 +20,7 @@
                                <h3 style="display:none">Error to upload</h3>
                            </div>
                            </label>
+                           <input type="file" name="ffff" accept="image/*" class="btn-upload" />
                    </div>
               </div>
         </div>
@@ -27,7 +28,7 @@
          <div class="col-xs-12 col-sm-6">
                 <div class="card">
                   <header class="card-heading ">
-                    <h2 class="card-title">Informacion de la cancion</h2>
+                    <h2 class="card-title">publicar la canción</h2>
                         <div class="container-error">
                          <div class="alert alert-danger" role="alert" v-if="error.error">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
@@ -42,38 +43,44 @@
                         </div>
                   </header>
                   <div class="card-body">
+                       <div class="form-group is-empty">
+                        <label for="name" class="col-md-4 control-label">Título de la canción </label>
+                        <div class="col-md-8">
+                       
+                          <input type="text" v-model="music.title" disabled="true" class="form-control" />
+                        </div>
+                      </div>
 
-                     
                       <div class="form-group is-empty">
-                      <div class="input-group">
-                          <span class="input-group-addon"> </span>
+                        <label for="name" class="col-md-4 control-label">Quien puede ver esta canción? </label>
+                        <div class="col-md-8">
+                       
                           <select class="form-control" v-on:change="hiddenLabelGenres" id="value-content">
-                            <option v-if="showLavel">seleciones su genero musical</option>
-                            <option v-for="gen in genres" :key="gen._id" :value="gen._id">{{gen.name}}</option>
+                            <option v-for="privacy in privacies" :key="privacy._id" :value="privacy._id">{{privacy.name}}</option>
                           </select>
                         </div>
                       </div>
-                     <div class="form-group label-floating is-empty">
-                      <div class="input-group">
-                        <span class="input-group-addon"></span>
-                        <label class="control-label">Titulo</label>
-                        <input type="text" class="form-control" v-model="music.title" required>
+                        
+                        <div class="form-group is-empty">
+                        <label for="name" class="col-md-4 control-label">Quiere que los usuarios puedan descargar esta canción.? </label>
+                        <div class="col-md-8">
+                       
+                          <select class="form-control" v-on:change="hiddenLabelGenres" id="value-content">
+                            <option :value="true">NO</option>
+                            <option :value="false">SI</option>
+                          </select>
+                        
+                        </div>
                       </div>
-                    </div>
-                    <div class="form-group label-floating is-empty">
-                      <div class="input-group">
-                        <span class="input-group-addon"></span>
-                        <label class="control-label">Descripcion.</label>
-                        <input type="email" class="form-control" v-model="music.description" required>
+
+                       <div class="form-group is-empty">
+                        <label for="name" class="col-md-4 control-label">
+                           </label>
+                        <div class="col-md-8">
+                        
+                        </div>
                       </div>
-                    </div>
-                    <div class="form-group label-floating is-empty">
-                      <div class="input-group">
-                        <span class="input-group-addon"></span>
-                        <label class="control-label">Etiquetas</label>
-                        <input type="text" class="form-control"  v-model="music.tags" required>
-                      </div>
-                    </div>
+                      
                   </div>
                   <div class="card-footer text-right">
                     <button class="btn btn-info btn-flat">Cancel</button>
@@ -103,7 +110,7 @@ export default {
     data(){
         return {
             urlImg: undefined,
-            genres: [],
+            privacies: [],
             btn_disable: false,
             music: {
                 title: undefined,
@@ -182,13 +189,32 @@ redirectUserLogin(){
         });
     },
     getMusicUploadIncompleteBYUser(){
+      let self=this;
         axios.get(`${SERVER_URI}/api/musicspending?token=${this.user_data.token}`)
              .then(function (req) {
              let music_penging =req.data.musics;
-          
                  if(music_penging.length>0){
-                    EventBus.$emit("music_upload",true);
+                   self.music =music_penging[0];
+                   console.log("Music Pendding",self.music)
+                 }else{
+                   EventBus.$emit("music_upload",true);
                  }
+            
+             })
+            .catch(function (error) {
+            //handle error
+            console.log("error",error.response);
+        });
+    }, 
+
+
+        getPrivacies(){
+          let self=this;
+        axios.get(`${SERVER_URI}/api/privacies?token=${this.user_data.token}`)
+             .then(function (req) {
+             self.privacies =req.data.privacies;
+          
+                console.log("privacies ",self.privacies)
             
              })
             .catch(function (response) {
@@ -242,6 +268,7 @@ redirectUserLogin(){
         this.redirectUserLogin();
         this.getMusicUploadIncompleteBYUser();
         this.getGenres();
+        this.getPrivacies();
         
     },
     watch:{
@@ -278,7 +305,7 @@ redirectUserLogin(){
     background: #fff;
     padding: 20px;
 }
-#btn-upload {
+.btn-upload {
     width: 0px;
     height: 0px;
 }

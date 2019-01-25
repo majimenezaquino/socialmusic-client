@@ -161,6 +161,7 @@ redirectUserLogin(){
         formData.append('title',self.music.title);
         formData.append('description',self.music.description);
         formData.append('tags',self.music.tags);
+        formData.append('genre',self.music.genre);
             axios.post(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
              {
                 headers: {
@@ -177,9 +178,13 @@ redirectUserLogin(){
             }
             console.log(response);
              })
-            .catch(function (response) {
+            .catch(function (err) {
             //handle error
-            console.log(response);
+            
+            if(err.response.data.error){
+                self.error.error=true;
+                self.error.message = err.response.data.message;
+            }
         });
     },
     getMusicUploadIncompleteBYUser(){
