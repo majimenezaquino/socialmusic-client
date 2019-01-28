@@ -57,7 +57,7 @@
                         <label for="name" class="col-md-4 control-label">Quien puede ver esta canción? </label>
                         <div class="col-md-8">
                        
-                          <select class="form-control" v-on:change="hiddenLabelGenres" id="value-content">
+                          <select class="form-control" v-on:change="changePrivacy" id="value-content">
                             <option v-for="privacy in privacies" :key="privacy._id" :value="privacy._id">{{privacy.name}}</option>
                           </select>
                         </div>
@@ -67,7 +67,7 @@
                         <label for="name" class="col-md-4 control-label">Quiere que los usuarios puedan descargar esta canción.? </label>
                         <div class="col-md-8">
                        
-                          <select class="form-control" v-on:change="hiddenLabelGenres" id="value-content">
+                          <select class="form-control" v-on:change="changeAllowerChange" id="value-content">
                             <option :value="true">NO</option>
                             <option :value="false">SI</option>
                           </select>
@@ -117,13 +117,10 @@ export default {
             error_label: '',
             music: {
                 title: undefined,
-                description: undefined,
-                tags: undefined,
-                genre: undefined,
-                file: undefined,
-                size: undefined,
                 file_name: undefined,
-                type: undefined,
+                file: undefined,
+                privacy: undefined,
+                download_allowed: false,
                 
 
             },
@@ -145,10 +142,13 @@ export default {
         }
     },
     methods:{
-        hiddenLabelGenres(event){
-            this.showLavel=false;
-            this.error.error=false;
-            this.music.genre =event.target.value;
+        changePrivacy(event){
+            this.music.privacy =event.target.value;
+            console.log(this.music.privacy)
+        },
+
+          changeAllowerChange(event){
+            this.music.download_allowed =event.target.value;
         },
     
     drag(event){
@@ -172,11 +172,12 @@ redirectUserLogin(){
         this.infoComplete()
         let self=this;
         let formData = new FormData();
-        formData.append('music',self.music.file);
+        formData.append('image',self.music.file);
+        formData.append('id',self.music._id);
         formData.append('title',self.music.title);
-        formData.append('description',self.music.description);
-        formData.append('tags',self.music.tags);
-            axios.post(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
+        formData.append('privacy',self.music.privacy);
+        formData.append('download_allowed',self.music.download_allowed);
+            axios.put(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
              {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -309,6 +310,8 @@ redirectUserLogin(){
                return new Error("Este formato no es una imagen");
            }
            self.music.file_name = file.name;
+           self.music.file = file;
+           
 
           self.music.size = (file.size/1204/1024).toFixed(1);
            ev.target.classList.remove('md-bg-green-A700');
