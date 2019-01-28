@@ -4,7 +4,9 @@
             <div class="col-xs-12 col-sm-6">
               <div class="upload-music">
                    <div class="upload-content">
-                       <label for="btn-upload" class="btn-label-upload">
+                       <label for="btn-upload" class="btn-label-upload"
+                        id="uploads-image"
+                        >
                            <div class="header-title">
                               <h2>suba una imagen para esta canción</h2>
                                <div class="info">
@@ -17,10 +19,10 @@
                                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                            </span>
                            <div class="footer-title">
-                               <h3 style="display:none">Error to upload</h3>
+                               <h3 style="display">{{error_label}}</h3>
                            </div>
                            </label>
-                           <input type="file" name="ffff" accept="image/*" class="btn-upload" />
+                           <input type="file" name="upload-image" id="upload-image" accept="mage/*" class="btn-upload" />
                    </div>
               </div>
         </div>
@@ -112,6 +114,7 @@ export default {
             urlImg: undefined,
             privacies: [],
             btn_disable: false,
+            error_label: '',
             music: {
                 title: undefined,
                 description: undefined,
@@ -148,7 +151,13 @@ export default {
             this.music.genre =event.target.value;
         },
     
-      
+    drag(event){
+        event.prevenDefault();
+        console.log("evento",event.dataTransfer)
+    },
+      elementInto(e){
+          console.log("evento",e)
+      },
 redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
@@ -262,13 +271,50 @@ redirectUserLogin(){
             //handle error
             console.log(response);
         });
-    }
+    },
+    loadImage(file){
+        let fromData =new fromData();
+    },
     },
     mounted(){
         this.redirectUserLogin();
         this.getMusicUploadIncompleteBYUser();
         this.getGenres();
         this.getPrivacies();
+    let self=this;
+        document.addEventListener("DOMContentLoaded",function(){
+       let zonedrag =document.getElementById("uploads-image");
+       zonedrag.ondragover =function(ev){
+           ev.target.classList.add('md-bg-green-A700');
+           return false;
+       }
+
+        zonedrag.ondragleave =function(ev){
+           ev.target.classList.remove('md-bg-green-A700');
+           return false;
+       }
+
+       zonedrag.ondrop =function(ev){
+           ev.preventDefault();
+           let file =ev.dataTransfer.files[0];
+           
+           //check estenxion of file 
+           let extension =file.name.split('.');
+          extension=  extension[extension.length-1];
+           if(extension=='jpg' || extension=='png' || extension=='gif'){
+               self.error_label = "";
+           }else{
+             self.error_label = "Este formato no es una imagen";
+             ev.target.classList.remove('md-bg-green-A700');
+               return new Error("Este formato no es una imagen");
+           }
+           self.music.file_name = file.name;
+
+          self.music.size = (file.size/1204/1024).toFixed(1);
+           ev.target.classList.remove('md-bg-green-A700');
+           return false;
+       }
+});
         
     },
     watch:{
