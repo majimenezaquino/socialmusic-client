@@ -15,11 +15,19 @@
                                    <small v-if="music.type!=undefined">{{music.type}}</small>
                                </div>
                            </div>
-                           <span>
+                           <span class="btn-upload">
                                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                            </span>
                            <div class="footer-title">
                                <h3 style="display">{{error_label}}</h3>
+                           </div>
+                           <div class="thumb-previes" v-if="urlImg.length>0">
+                               <button class="btn-close"
+                               v-on:click.prevent="closeImage"
+                               >
+                                   <i class="fa fa-times" aria-hidden="true"></i>
+                                   </button>
+                               <img :src="urlImg" alt="">
                            </div>
                            </label>
                            <input type="file" name="upload-image" id="upload-image" accept="mage/*" class="btn-upload" />
@@ -111,7 +119,7 @@ export default {
     },
     data(){
         return {
-            urlImg: undefined,
+            urlImg: "",
             privacies: [],
             btn_disable: false,
             error_label: '',
@@ -146,7 +154,10 @@ export default {
             this.music.privacy =event.target.value;
             console.log(this.music.privacy)
         },
-
+        closeImage(){
+            this.urlImg ='';
+            this.music={};
+        },
           changeAllowerChange(event){
             this.music.download_allowed =event.target.value;
         },
@@ -191,7 +202,6 @@ redirectUserLogin(){
                 self.btn_disable=true;
                 EventBus.$emit("music_upload",true);
             }
-            console.log(response);
              })
             .catch(function (response) {
             //handle error
@@ -203,9 +213,9 @@ redirectUserLogin(){
         axios.get(`${SERVER_URI}/api/musicspending?token=${this.user_data.token}`)
              .then(function (req) {
              let music_penging =req.data.musics;
+             
                  if(music_penging.length>0){
                    self.music =music_penging[0];
-                   console.log("Music Pendding",self.music)
                  }else{
                    EventBus.$emit("music_upload",true);
                  }
@@ -246,9 +256,6 @@ redirectUserLogin(){
            return new Error(this.error.message)
         }
 
-       
-
-
         if(this.music.description== undefined || this.music.description== ''){
             this.error.error=true;
             this.error.message=`El campo descripcion es requerido`;
@@ -277,6 +284,7 @@ redirectUserLogin(){
         let fromData =new fromData();
     },
     },
+  
     mounted(){
         this.redirectUserLogin();
         this.getMusicUploadIncompleteBYUser();
@@ -311,6 +319,17 @@ redirectUserLogin(){
            }
            self.music.file_name = file.name;
            self.music.file = file;
+
+           //data
+            let reader = new FileReader();
+        reader.onload = function(e) {
+           
+                self.urlImg =e.target.result;
+           
+           
+
+        }
+        reader.readAsDataURL(file);
            
 
           self.music.size = (file.size/1204/1024).toFixed(1);
@@ -353,6 +372,7 @@ redirectUserLogin(){
     position: relative;
     background: #fff;
     padding: 20px;
+   
 }
 .btn-upload {
     width: 0px;
@@ -367,6 +387,7 @@ redirectUserLogin(){
     display: flex;
     justify-content: center;
     align-items: center;
+   
      
 }
 .btn-label-upload{
@@ -374,10 +395,38 @@ redirectUserLogin(){
     width: 100%;
     height: 100%;
     position: relative;
-justify-content: center;
-align-items: center;
-   border: #42a5f5 dotted;
-   flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border: #42a5f5 dotted;
+    flex-wrap: wrap;
+    background-repeat: no-repeat;
+    background-size:100%  100%;
+    z-index: 10;
+}
+.thumb-previes{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    z-index: 10;
+    background: #fff;
+    
+}
+.btn-close{
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    padding: 10px;
+    background: transparent;
+    border-radius: 50%;
+    font-size: 22px;
+    background: #fff;
+        border: #ccc solid 1px;
+
 }
 .header-title ,.footer-title {
     display: flex;
