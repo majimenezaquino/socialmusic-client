@@ -1,44 +1,34 @@
 <template>
 <div class="container__music">
         <div class="container-upload-music">
-            <div class="col-xs-12 col-sm-6">
+            
               <div class="upload-music">
-                   <div class="upload-content">
-                       <label for="btn-upload" class="btn-label-upload"
-                        id="uploads-image"
-                        >
+                   <div class="upload-content"> 
+                       <label for="btn-upload" class="btn-label-upload zonedrop">
                            <div class="header-title">
-                              <h2>suba una imagen para esta canción</h2>
+                               <h1>Suba su musica</h1>
                                <div class="info">
                                    <small v-if="music.file_name!=undefined">{{music.file_name}}</small>
                                    <small v-if="music.size!=undefined">{{music.size}}</small>
                                    <small v-if="music.type!=undefined">{{music.type}}</small>
                                </div>
                            </div>
-                           <span class="btn-upload">
+                           <span>
                                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                            </span>
                            <div class="footer-title">
-                               <h3 style="display">{{error_label}}</h3>
-                           </div>
-                           <div class="thumb-previes" v-if="urlImg.length>0">
-                               <button class="btn-close"
-                               v-on:click.prevent="closeImage"
-                               >
-                                   <i class="fa fa-times" aria-hidden="true"></i>
-                                   </button>
-                               <img :src="urlImg" alt="">
+                               <h3 >{{error_label}}</h3>
                            </div>
                            </label>
-                           <input type="file" name="upload-image" id="upload-image" accept="mage/*" class="btn-upload" />
+                       <input type="file" id="btn-upload" v-on:change="loadFile" accept="audio/*" />
                    </div>
-              </div>
+
         </div>
 </div>
-         <div class="col-xs-12 col-sm-6">
+     
                 <div class="card">
                   <header class="card-heading ">
-                    <h2 class="card-title">publicar la canción</h2>
+                    <h2 class="card-title">Informacion de la cancion</h2>
                         <div class="container-error">
                          <div class="alert alert-danger" role="alert" v-if="error.error">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
@@ -53,50 +43,44 @@
                         </div>
                   </header>
                   <div class="card-body">
-                       <div class="form-group is-empty">
-                        <label for="name" class="col-md-4 control-label">Título de la canción </label>
-                        <div class="col-md-8">
-                       
-                          <input type="text" v-model="music.title" disabled="true" class="form-control" />
-                        </div>
-                      </div>
 
+                     
                       <div class="form-group is-empty">
-                        <label for="name" class="col-md-4 control-label">Quien puede ver esta canción? </label>
-                        <div class="col-md-8">
-                       
-                          <select class="form-control" v-on:change="changePrivacy" id="value-content">
-                            <option v-for="privacy in privacies" :key="privacy._id" :value="privacy._id">{{privacy.name}}</option>
+                      <div class="input-group">
+                          <span class="input-group-addon"> </span>
+                          <select class="form-control" v-on:change="hiddenLabelGenres" id="value-content">
+                            <option v-if="showLavel">seleciones su genero musical</option>
+                            <option v-for="gen in genres" :key="gen._id" :value="gen._id">{{gen.name}}</option>
                           </select>
                         </div>
                       </div>
-                        
-                        <div class="form-group is-empty">
-                        <label for="name" class="col-md-4 control-label">Quiere que los usuarios puedan descargar esta canción.? </label>
-                        <div class="col-md-8">
-                       
-                          <select class="form-control" v-on:change="changeAllowerChange" id="value-content">
-                            <option :value="true">NO</option>
-                            <option :value="false">SI</option>
-                          </select>
-                        
-                        </div>
+                     <div class="form-group label-floating is-empty">
+                      <div class="input-group">
+                        <span class="input-group-addon"></span>
+                        <label class="control-label">Titulo</label>
+                        <input type="text" class="form-control" v-model="music.title" required>
                       </div>
-
-                       <div class="form-group is-empty">
-                        <label for="name" class="col-md-4 control-label">
-                           </label>
-                        <div class="col-md-8">
-                        
-                        </div>
+                    </div>
+                    <div class="form-group label-floating is-empty">
+                      <div class="input-group">
+                        <span class="input-group-addon"></span>
+                        <label class="control-label">Descripcion.</label>
+                        <input type="email" class="form-control" v-model="music.description" required>
                       </div>
-                      
+                    </div>
+                    <div class="form-group label-floating is-empty">
+                      <div class="input-group">
+                        <span class="input-group-addon"></span>
+                        <label class="control-label">Etiquetas</label>
+                        <input type="text" class="form-control"  v-model="music.tags" required>
+                      </div>
+                    </div>
                   </div>
                   <div class="card-footer text-right">
                     <button class="btn btn-info btn-flat">Cancel</button>
                     <button class="btn btn-info" v-on:click.prevent="uploadFilesForm" :disabled="btn_disable">Guardar</button>
                   </div>
-                </div>
+         
               </div>
 </div>
 </template>
@@ -119,16 +103,20 @@ export default {
     },
     data(){
         return {
-            urlImg: "",
-            privacies: [],
+            urlImg: undefined,
+            draging: false,
+            genres: [],
             btn_disable: false,
             error_label: '',
             music: {
                 title: undefined,
-                file_name: undefined,
+                description: undefined,
+                tags: undefined,
+                genre: undefined,
                 file: undefined,
-                privacy: undefined,
-                download_allowed: false,
+                size: undefined,
+                file_name: undefined,
+                type: undefined,
                 
 
             },
@@ -150,25 +138,20 @@ export default {
         }
     },
     methods:{
-        changePrivacy(event){
-            this.music.privacy =event.target.value;
-            console.log(this.music.privacy)
-        },
-        closeImage(){
-            this.urlImg ='';
-            this.music={};
-        },
-          changeAllowerChange(event){
-            this.music.download_allowed =event.target.value;
+        hiddenLabelGenres(event){
+            this.showLavel=false;
+            this.error.error=false;
+            this.music.genre =event.target.value;
         },
     
-    drag(event){
-        event.prevenDefault();
-        console.log("evento",event.dataTransfer)
+    handlDrop(event){
+        console.log(event)
+        return false;
     },
-      elementInto(e){
-          console.log("evento",e)
-      },
+    handlDropEnter(ev){
+        return false;
+    },
+      
 redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
@@ -183,12 +166,12 @@ redirectUserLogin(){
         this.infoComplete()
         let self=this;
         let formData = new FormData();
-        formData.append('image',self.music.file);
-        formData.append('id',self.music._id);
+        formData.append('music',self.music.file);
         formData.append('title',self.music.title);
-        formData.append('privacy',self.music.privacy);
-        formData.append('download_allowed',self.music.download_allowed);
-            axios.put(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
+        formData.append('description',self.music.description);
+        formData.append('tags',self.music.tags);
+        formData.append('genre',self.music.genre);
+            axios.post(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
              {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -202,39 +185,25 @@ redirectUserLogin(){
                 self.btn_disable=true;
                 EventBus.$emit("music_upload",true);
             }
-             })
-            .catch(function (response) {
-            //handle error
             console.log(response);
+             })
+            .catch(function (err) {
+            //handle error
+            
+            if(err.response.data.error){
+                self.error.error=true;
+                self.error.message = err.response.data.message;
+            }
         });
     },
     getMusicUploadIncompleteBYUser(){
-      let self=this;
         axios.get(`${SERVER_URI}/api/musicspending?token=${this.user_data.token}`)
              .then(function (req) {
              let music_penging =req.data.musics;
-             
-                 if(music_penging.length>0){
-                   self.music =music_penging[0];
-                 }else{
-                   EventBus.$emit("music_upload",true);
-                 }
-            
-             })
-            .catch(function (error) {
-            //handle error
-            console.log("error",error.response);
-        });
-    }, 
-
-
-        getPrivacies(){
-          let self=this;
-        axios.get(`${SERVER_URI}/api/privacies?token=${this.user_data.token}`)
-             .then(function (req) {
-             self.privacies =req.data.privacies;
           
-                console.log("privacies ",self.privacies)
+                 if(music_penging.length>0){
+                    EventBus.$emit("music_upload",true);
+                 }
             
              })
             .catch(function (response) {
@@ -255,6 +224,9 @@ redirectUserLogin(){
             this.error.message=`El campo titulo es requerido`;
            return new Error(this.error.message)
         }
+
+       
+
 
         if(this.music.description== undefined || this.music.description== ''){
             this.error.error=true;
@@ -279,64 +251,53 @@ redirectUserLogin(){
             //handle error
             console.log(response);
         });
+    }
     },
-    loadImage(file){
-        let fromData =new fromData();
-    },
-    },
-  
     mounted(){
         this.redirectUserLogin();
         this.getMusicUploadIncompleteBYUser();
         this.getGenres();
-        this.getPrivacies();
-    let self=this;
-        document.addEventListener("DOMContentLoaded",function(){
-       let zonedrag =document.getElementById("uploads-image");
-       zonedrag.ondragover =function(ev){
-           ev.target.classList.add('md-bg-green-A700');
-           return false;
-       }
+    let _this=this;
+        //    //drap en drop 
+        let zonedrop =document.querySelectorAll(".zonedrop") || [];
+        if(zonedrop.length>0){
+            for(let i in zonedrop){
 
-        zonedrag.ondragleave =function(ev){
-           ev.target.classList.remove('md-bg-green-A700');
-           return false;
-       }
+                zonedrop[i].ondragover=function(ev){
+                    ev.preventDefault();
+                    _this.draging=true;
+                    return false;
+                };
 
-       zonedrag.ondrop =function(ev){
-           ev.preventDefault();
-           let file =ev.dataTransfer.files[0];
-           
-           //check estenxion of file 
-           let extension =file.name.split('.');
-          extension=  extension[extension.length-1];
-           if(extension=='jpg' || extension=='png' || extension=='gif'){
-               self.error_label = "";
+                 zonedrop[i].ondragleave=function(ev){
+                    ev.preventDefault();
+                    _this.draging=false;
+                    return false;
+                };
+
+                zonedrop[i].ondrop=function(ev){
+            ev.preventDefault();
+            _this.draging=false;
+            let file =ev.dataTransfer.files[0];
+            _this.music.file=file;
+            let extension =file.name.split('.');
+            extension=  extension[extension.length-1];
+
+           if(extension=='mp3' || extension=='wpw' || extension=='ogg' || extension=='mp3' ){
+                _this.error_label = "";
+                _this.music.file_name=(file.name).substr(0,30)+'...';
+                _this.music.size=`${(file.size /1024/1024).toFixed(1)} MB`;
            }else{
-             self.error_label = "Este formato no es una imagen";
-             ev.target.classList.remove('md-bg-green-A700');
-               return new Error("Este formato no es una imagen");
+            _this.error_label = "Este formato no es una musica";
+            ev.target.classList.remove('md-bg-green-A700');
+            return new Error("Este formato no es una imagen");
            }
-           self.music.file_name = file.name;
-           self.music.file = file;
 
-           //data
-            let reader = new FileReader();
-        reader.onload = function(e) {
-           
-                self.urlImg =e.target.result;
-           
-           
-
+                    return false;
+                };
+            }
         }
-        reader.readAsDataURL(file);
-           
 
-          self.music.size = (file.size/1204/1024).toFixed(1);
-           ev.target.classList.remove('md-bg-green-A700');
-           return false;
-       }
-});
         
     },
     watch:{
@@ -353,6 +314,6 @@ redirectUserLogin(){
 }
 </script>
 <style>
+@import url("./styles.css");
 
- @import url('./styles.css');
 </style>

@@ -133,7 +133,11 @@ redirectUserLogin(){
             //handle error
             console.log(response);
         });
-    }
+    },
+    handlDrop(ev){
+        console.log("drop===>",ev)
+        ev.preventDefault();
+    },
     },
     mounted(){
         this.redirectUserLogin();
@@ -142,151 +146,5 @@ redirectUserLogin(){
 }
 </script>
 <style>
-.avatar-upload{
-    width: 200px;
-    height: 200px;
-    position: relative;
-    border: #eee solid 3px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.imagePreview{
-    width: 170px;
-    height: 170px;
-    overflow: hidden;
-     border-radius: 50%;
-    box-sizing: border-box;
-    z-index: 10;
-}
-.imagePreview img{
-    min-width: 100% !important;
-    min-height: 100% !important;
-}
-#imageUpload {
-    display: none;
-    
-}
-.avatar-edit {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    position: absolute;
-     border: #ccc solid 1px;
-     background: #42a5f5;
-    top: 50px;
-    right: -15px;
-    z-index: 10;
-}
-.avatar-edit  label{
-  color: #fff;
-}
-/* progress*/
-.container-progres{
-    position: absolute;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    padding: 0px;
-    margin: 0px;
-    justify-content: center;
-    align-items: center;
-}
-.container-progres .progress-pie-chart {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background-color: #E5E5E5;
-  position: relative;
-  margin: 0px !important;
-}
-.progress-pie-chart.gt-50 {
-  background-color: rgba(67, 209, 62, 0.6);
-  z-index: 10;
-}
-
-.ppc-progress {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  left: calc(50% - 100px);
-  top: calc(50% - 100px);
-  width: 200px;
-  height: 200px;
-  clip: rect(0, 200px, 200px, 100px);
-}
-.ppc-progress .ppc-progress-fill {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  left: calc(50% - 100px);
-  top: calc(50% - 100px);
-  width: 200px;
-  height: 200px;
-  clip: rect(0, 100px, 200px, 0);
-  background: #81CE97;
-  transform: rotate(0deg);
-}
-.gt-50 .ppc-progress {
-  clip: rect(0, 100px, 200px, 0);
-}
-.gt-50 .ppc-progress .ppc-progress-fill {
-  clip: rect(0, 200px, 200px, 100px);
-  background: #E5E5E5;
-}
-
-.ppc-percents {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  left: calc(50% - 173.9130434783px/2);
-  top: calc(50% - 173.9130434783px/2);
-  width: 173.9130434783px;
-  height: 173.9130434783px;
-  background: transparent;
-  text-align: center;
-  display: table;
-  z-index: -1;
-}
-.ppc-percents span {
-  display: block;
-  font-size: 28px;
-  font-weight: bold;
-  color: #363636;
-  z-index: 10;
-}
-
-.pcc-percents-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-body {
-  font-family: Arial;
-  background: #f7f7f7;
-}
-
-.progress-pie-chart {
-  margin: 50px auto 0;
-}
-.continer-save{
-    position:absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-}
-.continer-save .control{
-    display: flex;
-    z-index: 10;
-    margin-bottom: 10px;
-}
-
+ @import url('./styles.css');
 </style>
