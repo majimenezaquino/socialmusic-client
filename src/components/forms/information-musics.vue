@@ -1,44 +1,35 @@
 <template>
 <div class="container__music">
-        <div class="container-upload-music">
-            <div class="col-xs-12 col-sm-6">
-              <div class="upload-music">
-                   <div class="upload-content">
-                       <label for="btn-upload" class="btn-label-upload"
-                        id="uploads-image"
-                        >
-                           <div class="header-title">
-                              <h2>suba una imagen para esta canción</h2>
-                               <div class="info">
-                                   <small v-if="music.file_name!=undefined">{{music.file_name}}</small>
-                                   <small v-if="music.size!=undefined">{{music.size}}</small>
-                                   <small v-if="music.type!=undefined">{{music.type}}</small>
-                               </div>
-                           </div>
-                           <span class="btn-upload">
-                               <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                           </span>
-                           <div class="footer-title">
-                               <h3 style="display">{{error_label}}</h3>
-                           </div>
-                           <div class="thumb-previes" v-if="urlImg.length>0">
-                               <button class="btn-close"
-                               v-on:click.prevent="closeImage"
-                               >
-                                   <i class="fa fa-times" aria-hidden="true"></i>
-                                   </button>
-                               <img :src="urlImg" alt="">
-                           </div>
-                           </label>
-                           <input type="file" name="upload-image" id="upload-image" accept="mage/*" class="btn-upload" />
-                   </div>
-              </div>
-        </div>
-</div>
-         <div class="col-xs-12 col-sm-6">
+    <div class="col-music">
+         <div class="zone_drop" id="update-music-info" >
+                <div class="thumb-previes" v-if="upload_image.length>0">
+                    <a href="" class="btn btn-danger btn-fab btn-fab-sm"
+                    v-on:click.prevent="handlClosePrevies"
+                    >
+                        <i class="fa fa-times" aria-hidden="true"></i></a>
+                    <img :src="upload_image" alt="">
+                </div>
+                <div class="form-contro ">
+                     <label for="btn-upload" class="btn-upload">
+                         <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                     </label>
+                <input type="file"  id="btn-upload" style="display:none" name="pic" accept="image/*"
+                 v-on:change="loadFile" />
+                </div>
+                <div class="upload-error">
+                    <h3>{{message_upload}}</h3>
+                </div>
+                <div class="upload-info">
+                    <p>{{music.file_name}}</p>
+                    <small v-if="music.size>0">{{(music.size/1024/1024).toFixed(1)}} MB</small>
+                </div>
+         </div>
+    </div>
+     <div class="col-music">
+            <div class="form-upload">
                 <div class="card">
                   <header class="card-heading ">
-                    <h2 class="card-title">publicar la canción</h2>
+                    <h2 class="card-title">Informacion de la cancion</h2>
                         <div class="container-error">
                          <div class="alert alert-danger" role="alert" v-if="error.error">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
@@ -94,10 +85,13 @@
                   </div>
                   <div class="card-footer text-right">
                     <button class="btn btn-info btn-flat">Cancel</button>
-                    <button class="btn btn-info" v-on:click.prevent="uploadFilesForm" :disabled="btn_disable">Guardar</button>
+                    <button class="btn btn-info" v-on:click.prevent="uploadFilesForm">Guardar</button>
                   </div>
-                </div>
+         
               </div>
+            </div>
+    </div>
+    <!-- <LimitUpladMusic> </LimitUpladMusic> -->
 </div>
 </template>
 <script>
@@ -106,109 +100,163 @@
   const dbLocal= new DBLocal(DB_USER_NAME);
   const axios = require('axios');
     const {EventBus} =require('@/eventbus');
+    import LimitUpladMusic from './limit-upload-music.vue';
   import { setInterval, setImmediate } from 'timers';
 
 export default {
     name: 'avatar',
-    props:{
-        propImageUrl: {
-            type: String,
-            required: false
-        },
-
+    components:{
+        LimitUpladMusic
     },
     data(){
-        return {
-            urlImg: "",
-            privacies: [],
-            btn_disable: false,
-            error_label: '',
-            music: {
+        return{
+            isDraging:false,
+            upload_image: '',
+            user_data: {},
+            message_upload:'selecciones una imagen para esta música.',
+            extension:["png","jpg","jpeg"],
+            genres_label: true,
+            genres: [],
+               music: {
                 title: undefined,
-                file_name: undefined,
+                description: undefined,
+                tags: undefined,
+                genre: undefined,
                 file: undefined,
-                privacy: undefined,
-                download_allowed: false,
-                
+                size: 0,
+                description:undefined,
+                file_name: undefined,
+                type: undefined, 
+                tags: undefined,
+                download_allowed: false
 
-            },
-            success:{
-                success: false,
-                message: undefined
             },
             error:{
-                message: undefined,
-                error: false
+                error:false,
+                message: undefined
             },
-            filename: undefined,
-            user_found: false,
-            progress: 0,
-            showproccess: false,
-            active_btn_save: false,
-            showLavel: true
-
+            success:{
+                success:false,
+                message:undefined
+            }
         }
     },
     methods:{
-        changePrivacy(event){
-            this.music.privacy =event.target.value;
-            console.log(this.music.privacy)
-        },
-        closeImage(){
-            this.urlImg ='';
-            this.music={};
-        },
-          changeAllowerChange(event){
-            this.music.download_allowed =event.target.value;
-        },
-    
-    drag(event){
-        event.prevenDefault();
-        console.log("evento",event.dataTransfer)
-    },
-      elementInto(e){
-          console.log("evento",e)
-      },
-redirectUserLogin(){
-        if(dbLocal.checkDataLocalStorageOBject())
-        this.user_data  =dbLocal.getDataLocalStorageOBject();
-    },
-   loadFile(event){
-     this.music.file=  event.target.files[0];
-    this.music.file_name=(event.target.files[0].name).substr(0,30)+'...';
-    this.music.size=`${(event.target.files[0].size /1024/1024).toFixed(1)} MB`;
-       this.error.error=false;
-   },
-    uploadFilesForm(){
-        this.infoComplete()
-        let self=this;
-        let formData = new FormData();
-        formData.append('image',self.music.file);
-        formData.append('id',self.music._id);
-        formData.append('title',self.music.title);
-        formData.append('privacy',self.music.privacy);
-        formData.append('download_allowed',self.music.download_allowed);
-            axios.put(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
-             {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-              })
-             .then(function (response) {
-            //handle success
-            if(!response.data.error){
-                self.success.success=true;
-                self.success.message=`Musica subida`;
-                self.btn_disable=true;
-                EventBus.$emit("music_upload",true);
+        file_allower(file,extension_array){
+        let extension =file.split('.');
+            extension=  extension[extension.length-1];
+        if(extension_array.length>0){
+            for(let i in extension_array){
+                if(extension_array[i]==extension){
+                    return true;
+                }             
             }
+        }
+        return false;
+        },
+        //============================================================
+        //LOADF MUSIC
+        //============================================================
+loadFile(event){
+    let _this=this;
+     let zoneDrop =document.getElementById("update-music-info");
+    let file =  event.target.files[0];
+if(_this.file_allower(file.name,_this.extension)){                       
+        _this.music.file=file;
+        _this.music.file_name=file.name;
+        _this.music.size =file.size;
+//load file url 
+    let reader = new FileReader();
+        reader.onload = function(e) {        
+       _this.upload_image =e.target.result;    
+        }
+    reader.readAsDataURL(file);
+           
+
+
+    zoneDrop.classList.remove("active_drop");
+    zoneDrop.classList.remove("active_error");
+    _this.message_upload=''
+}else{
+    _this.message_upload='Este archivo no es una musica.';
+    zoneDrop.classList.add("active_error");
+    _this.music.file=undefined;
+    _this.music.file_name=undefined;
+    _this.upload_image='';
+    _this.music.size =0;
+
+}
+   },
+   handlSelectGenrens(ev){
+         this.genres_label=false; 
+         this.music.genre =ev.target.value;
+   },
+   handlClosePrevies(){
+        this.upload_image='';
+        this.music.file=undefined;
+        this.music.file_name=undefined;
+        this.upload_image='';
+        this.music.size =0;
+   },
+      getPrivacies(){
+          let self=this;
+        axios.get(`${SERVER_URI}/api/privacies?token=${this.user_data.token}`)
+             .then(function (req) {
+             self.privacies =req.data.privacies;        
              })
             .catch(function (response) {
             //handle error
             console.log(response);
         });
+    }, 
+    redirectUserLogin(){
+        if(dbLocal.checkDataLocalStorageOBject())
+        this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
-    getMusicUploadIncompleteBYUser(){
+      checkInfoMusic(){
+        this.error.error=false;
+        this.success.success=false;
+          if(this.music.file_name== undefined || this.music.file_name== ''){
+            this.error.error=true;
+            this.error.message=`Debe subir un archivo con una de las siguientes extencion MP3 , OGG y WAV `;
+           return false;
+        }
+
+        if(this.music.genre == undefined || this.music.genre== ''){
+            this.error.error=true;
+            this.error.message=`Debe selecionar un  genero musical.`;
+           return false;
+        }
+
+        if(this.music.title== undefined || this.music.title== ''){
+            this.error.error=true;
+            this.error.message=`El campo titulo es requerido`;
+           return false;
+        }
+
+       
+
+
+        if(this.music.description== undefined || this.music.description== ''){
+            this.error.error=true;
+            this.error.message=`El campo descripcion es requerido`;
+         return false;
+        }
+
+        if(this.music.tags== undefined || this.music.tags== ''){
+            this.error.error=true;
+            this.error.message=`El campo etiqueta es requerido`;
+           return false;
+        }
+        return true;
+    },
+    changePrivacy(event){
+            this.music.privacy =event.target.value;
+        },
+         changeAllowerChange(event){
+            this.music.download_allowed =event.target.value;
+        },
+     getMusicUploadIncompleteBYUser(){
       let self=this;
         axios.get(`${SERVER_URI}/api/musicspending?token=${this.user_data.token}`)
              .then(function (req) {
@@ -227,132 +275,128 @@ redirectUserLogin(){
         });
     }, 
 
-
-        getPrivacies(){
-          let self=this;
-        axios.get(`${SERVER_URI}/api/privacies?token=${this.user_data.token}`)
-             .then(function (req) {
-             self.privacies =req.data.privacies;
-          
-                console.log("privacies ",self.privacies)
-            
-             })
-            .catch(function (response) {
-            //handle error
-            console.log(response);
-        });
-    }, 
-    infoComplete(){
-        this.error.error=false;
-          if(this.music.file_name== undefined || this.music.file_name== ''){
-            this.error.error=true;
-            this.error.message=`Debe subir un archivo con una de las siguientes extencion MP3 , OGG y WAV `;
-           return new Error(this.error.message)
-        }
-
-        if(this.music.title== undefined || this.music.title== ''){
-            this.error.error=true;
-            this.error.message=`El campo titulo es requerido`;
-           return new Error(this.error.message)
-        }
-
-        if(this.music.description== undefined || this.music.description== ''){
-            this.error.error=true;
-            this.error.message=`El campo descripcion es requerido`;
-         return  new Error(this.error.message)
-        }
-
-        if(this.music.tags== undefined || this.music.tags== ''){
-            this.error.error=true;
-            this.error.message=`El campo etiqueta es requerido`;
-            return new Error(this.error.message)
-        }
-    },
-    getGenres(){
+     uploadFilesForm(){
+        if(this.checkInfoMusic()){
+        
         let self=this;
-          axios.get(`${SERVER_URI}/api/genres?token=${this.user_data.token}`)
-             .then(function (req) {
-             let genres =req.data.genres;
-            self.genres =genres;      
-             })
-            .catch(function (response) {
-            //handle error
+        let formData = new FormData();
+        formData.append('music',self.music.file);
+        formData.append('title',self.music.title);
+        formData.append('description',self.music.description);
+        formData.append('tags',self.music.tags);
+        formData.append('genre',self.music.genre);
+            axios.post(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
+             {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              })
+             .then(function (response) {
+            //handle success
+            if(!response.data.error){
+                self.success.success=true;
+                self.success.message=`Musica subida`;
+                self.btn_disable=true;
+                EventBus.$emit("music_upload",true);
+            }
             console.log(response);
+             })
+            .catch(function (err) {
+            //handle error
+            
+            if(err.response.data.error){
+                self.error.error=true;
+                self.error.message = err.response.data.message;
+            }
         });
+        }
+    }
     },
-    loadImage(file){
-        let fromData =new fromData();
-    },
-    },
-  
     mounted(){
         this.redirectUserLogin();
-        this.getMusicUploadIncompleteBYUser();
-        this.getGenres();
-        this.getPrivacies();
-    let self=this;
-        document.addEventListener("DOMContentLoaded",function(){
-       let zonedrag =document.getElementById("uploads-image");
-       zonedrag.ondragover =function(ev){
-           ev.target.classList.add('md-bg-green-A700');
-           return false;
-       }
+         this.getPrivacies();
+         this.getMusicUploadIncompleteBYUser();
+         //===================================================================
+        //set drag en drop
+        //====================================================================
+        let zoneDrop =document.querySelectorAll(".zone_drop") || [];
+        let _this=this;
+        if(zoneDrop.length>0){
+            for(let i in zoneDrop){
 
-        zonedrag.ondragleave =function(ev){
-           ev.target.classList.remove('md-bg-green-A700');
-           return false;
-       }
+                zoneDrop[i].ondragover=function(ev){
+                    ev.target.classList.add("active_drop")
+                    return false;
+                };
+                zoneDrop[i].ondragleave=function(ev){
+                    ev.target.classList.remove("active_drop");
+                     ev.target.classList.remove("active_error");
+                    return false;
+                };
 
-       zonedrag.ondrop =function(ev){
-           ev.preventDefault();
-           let file =ev.dataTransfer.files[0];
-           
-           //check estenxion of file 
-           let extension =file.name.split('.');
-          extension=  extension[extension.length-1];
-           if(extension=='jpg' || extension=='png' || extension=='gif'){
-               self.error_label = "";
-           }else{
-             self.error_label = "Este formato no es una imagen";
-             ev.target.classList.remove('md-bg-green-A700');
-               return new Error("Este formato no es una imagen");
-           }
-           self.music.file_name = file.name;
-           self.music.file = file;
+                zoneDrop[i].ondrop=function(ev){
+                    ev.preventDefault();
+                    let file =ev.dataTransfer.files[0];
+                    ev.target.classList.remove("active_drop");
+                    if(_this.file_allower(file.name,_this.extension)){                       
+                            _this.music.file=file;
+                            _this.music.file_name=file.name;
+                            _this.music.size =file.size;
+                     ev.target.classList.remove("active_drop");
+                     ev.target.classList.remove("active_error");
+                      _this.message_upload=''
 
-           //data
-            let reader = new FileReader();
-        reader.onload = function(e) {
-           
-                self.urlImg =e.target.result;
-           
-           
+                    let reader = new FileReader();
+                    reader.onload = function(e) {        
+                    _this.upload_image =e.target.result;   
+                    }
+                    reader.readAsDataURL(file);
+                    }else{
+                        _this.message_upload='Este archivo no es una musica.';
+                        ev.target.classList.add("active_error");
+                        _this.music.file=undefined;
+                        _this.music.file_name=undefined;
+                        _this.music.size =0;
+                        _this.upload_image='';
 
+                    }
+                    return false;
+                };
+            }
         }
-        reader.readAsDataURL(file);
-           
+        //END DRAG AND DROP
 
-          self.music.size = (file.size/1204/1024).toFixed(1);
-           ev.target.classList.remove('md-bg-green-A700');
-           return false;
-       }
-});
-        
+       
     },
     watch:{
-        'music.title':function(value,oldv){
-            this.error.error=false;
+        'music.title':function(){
+        this.error.error=false;
+        this.success.success=false;
         },
-        'music.description':function(value,oldv){
-           this.error.error=false;
+         'music.tags':function(){
+        this.error.error=false;
+        this.success.success=false;
         },
-        'music.tags':function(value,oldv){
-           this.error.error=false;
+         'music.genre':function(){
+        this.error.error=false;
+        this.success.success=false;
+        },
+         'music.file':function(){
+        this.error.error=false;
+        this.success.success=false;
+        },
+        'music.description':function(){
+        this.error.error=false;
+        this.success.success=false;
+        },
+        'music.file_name':function(){
+        this.error.error=false;
+        this.success.success=false;
         }
     }
 }
 </script>
 <style>
+@import url("./styles.css");
 
- @import url('./styles.css');
 </style>

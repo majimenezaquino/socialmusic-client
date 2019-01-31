@@ -56,7 +56,7 @@
                             </div>
                             <!--end #tab2 -->
                             <div class="tab-pane" id="tab3">
-                              <UploadMusic />
+                              <!-- <UploadMusic /> -->
                             </div>
                             <!--end #tab2 --> 
                             <div class="tab-pane" id="tab4">

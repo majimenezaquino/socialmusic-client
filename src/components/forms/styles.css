@@ -47,6 +47,7 @@
     z-index: 10;
     left: 50%;
     top: 0px;
+    bottom: 0px;
     transform: translateX(-50%);
     background: #42a5f5;
     border: #fff dashed 8px;
@@ -58,10 +59,32 @@
     z-index: 10;
     left: 50%;
     top: 0px;
+    bottom: 0px;
     transform: translateX(-50%);
     background: #f00;
     border: #fff dashed 8px;
+    color: #fff;
     
+ }
+ .container__music .col-music  .upload-info {
+    position: absolute;
+    z-index: 10;
+    top: 20px;
+    padding: 10px;
+    width: 100%;
+    left: 0px;
+    display: flex;
+    flex-direction: column;
+    line-height: 20px;
+ }
+ .container__music .col-music  .upload-info p{
+     line-height: 20px;
+     font-size: 18px;
+     margin: 0px;
+ }
+ .active_error .upload-error h3 {
+color: #fff;
+font-size: 25px;
  }
 
  .container__music .col-music .btn-upload{
@@ -88,4 +111,40 @@
     position: absolute;
     top: 20px;
     padding: 10px;
+}
+.form-upload{
+    width: 100%;
+}
+/**/
+.container-limit-upload{
+    position: absolute;
+    width: 100%;
+    height: auto;
+    top:0px;
+    left: 0px;
+    bottom: 0px;
+    z-index: 10;
+    background: red;
+}
+.thumb-previes{
+    position: absolute;
+    background: rgba(255, 255, 255, 0.7);
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: #f55;
+    z-index: 15;
+}
+.thumb-previes img{
+    border-radius: 10px;
+    z-index: -1;
+    max-width: 90%;
+}
+.thumb-previes .btn{
+    position: absolute;
 }
