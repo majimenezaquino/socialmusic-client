@@ -137,7 +137,6 @@ font-size: 25px;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    background: #f55;
     z-index: 15;
 }
 .thumb-previes img{
@@ -147,4 +146,7 @@ font-size: 25px;
 }
 .thumb-previes .btn{
     position: absolute;
+}
+.disabled{
+    color: #999 !important;
 }

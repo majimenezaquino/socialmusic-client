@@ -1,0 +1,92 @@
+.winza-header{
+    margin: 0px auto;
+    width: 100%;
+    padding: 0px 50px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: #fff;
+    overflow: hidden;
+}
+.winza-header .item-header{
+flex-grow: 1;
+width: 100px;
+height: 80px;
+background: #fff;
+display: flex;
+justify-content: center;
+align-items: center;
+position: relative;
+text-align: center;
+margin-bottom: 20px;
+}
+.winza-header .item-header .botton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    border: none;
+    font-size: 20px;
+    border-radius: 50%;
+    background: #eee;
+    color: rgb(51, 51, 51);
+    position: relative;
+}
+.winza-header .item-header .botton i{
+    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1 !important;
+}
+.winza-header .item-header .wizan-label{
+display: block;
+width: 100%;
+position: absolute;
+bottom: 0px;
+font-size: 14px;
+padding: 0px;
+line-height: 15px;
+padding: 0px 10px;
+color: rgb(51, 51, 51);
+}
+.winza-header .item-header:first-child > .botton{
+    left: 10px;
+    position: absolute;
+ }
+ .winza-header .item-header:first-child .wizan-label{
+     text-align: left;
+ }
+
+ .winza-header .item-header:last-child > .botton{
+    right: 10px;
+    position: absolute;
+ }
+ .winza-header .item-header:last-child  .wizan-label{
+     text-align: right;
+ }
+.winza-header .item-header  .line-progress{
+width: 100%;
+height: 5px;
+position: absolute;
+background: #ccc;
+
+ }
+ .winza-header  .active .line-progress{
+    background: #311b92!important;
+}
+.winza-header  .active .botton{
+    background: #ff1744;
+    color: #fff;
+}   
+.winza-header .item-header:hover  .line-progress{
+    background: #2196f3;
+}
+
+.winza-header .item-header:hover .botton{
+    background: #2196f3;
+    color: #fff;
+} 

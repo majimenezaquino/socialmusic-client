@@ -1,96 +1,36 @@
 <template>
 
      <LayoutDashboard> 
-		 <div slot="content">
-        <section id="content_outer_wrapper">
-            	<div class="playlist-body">
-                    <div class="content-playlist">
-                         <div class="header">
-                                    <h1>Musicians</h1>
-                                </div>
-                            <div class=" card-musician">
-                                 <div class="container-upload">
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="card" id="rootwizard">
-                    <div class="card-heading">
-                        <div class="form-wizard-nav">
-                          <div class="progress" style="width: 75%;">
-                            <div class="progress-bar" style="width:0%;"></div>
-                          </div>
-                          <ul class="grop-btn-wirza nav-pills">
-                            <li class="">
-                              <a href="#formuser" data-toggle="tab" aria-expanded="true" name="user_complete">
-                              <span class="step"><i class="fa fa-check" aria-hidden="true"></i></span>
-                               <span class="title">perfil</span></a></li>
-                            <li class="">
-                              <a href="#tab2" data-toggle="tab" aria-expanded="false" name="direccion">
-                              <span class="step"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
-                               <span class="title">Direccion</span></a></li>
-                              <li class="">
-                                  <a href="#tab3" data-toggle="tab" aria-expanded="false" name="upload">
-                              <span class="step"><i class="fa fa-cloud-upload" aria-hidden="true"></i></span>
-                               <span class="title">Subir</span></a>
-                               </li>
-                            <li class="">
-                              <a href="#tab4" data-toggle="tab" aria-expanded="false" name="informacion">
-                              <span class="step"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
-                               <span class="title">Pubicar</span></a>
-                              </li>
-                              
-      
-                          </ul>
-                        </div>
-                      </div>
-                      <div class="card-body p-0">
-                        <div class="form-wizard form-wizard-horizontal">
-                          <div class="tab-content clearfix p-30">
-                            <div class="tab-pane" id="formuser">
-                              <div class="table-responsive border-grey-bottom-1px m-b-20">
-                               <FormUser />
-                              </div>
-                            </div>
-                            <!--end #formuser -->
-                            <div class="tab-pane" id="tab2">
-                              <FormAddress />
-                            </div>
-                            <!--end #tab2 -->
-                            <div class="tab-pane" id="tab3">
-                              <!-- <UploadMusic /> -->
-                            </div>
-                            <!--end #tab2 --> 
-                            <div class="tab-pane" id="tab4">
-                              <Information />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card-footer">
-                        <ul class="pager wizard">
-                          <li class="previous disabled"><a class="btn btn-primary btn-round" href="javascript:void(0);">Previous</a></li>
-                          <li class="next"><a class="btn btn-primary btn-round" href="javascript:void(0);">Next</a></li>
-                          <li class="finish"><button class="btn btn-green btn-round pull-right">Place Order</button></li>
-                        </ul>
-                     
-                    </div>
-                  </div>
-                </div>
+		 <div slot="content" id="content_outer_wrapper">
+        <section id="content_wrapper">
+          <div id="header_wrapper">
+              <div class="container-fluid">
+                  <h1>Uplads Music</h1>
               </div>
-        </div>
-
-                           
-                       
-                         
-                                <div class="show-more">
-                                    <a href="" v-on:click.prevent="getPlaylistByUser">show more</a>
-                                </div>
-                            </div>
-                    </div>
-
-                   
-				</div>
-	
-    </section>
+          </div>
+          <div class="content-body">
+            <div class="row">
+               <div class="col-xs-12">
+                  <div class="winza-header">                     
+                     <WizanItem v-for="wiz 
+                     in winzan" 
+                     :key="wiz.title" 
+                     :content="wiz" 
+                     v-on:click.prevent="handlClick"
+                     />
+                  </div>
+               </div>
+               <div class="row">
+                 <div class="col-xs-12">
+                    <FormUser v-if="componentsRender.user_info" />
+                    <FormAddress v-if="componentsRender.address"/>
+                    <UploadMusic v-if="componentsRender.upload"/>
+                    <UploadPending v-if="componentsRender.pending"/>
+                 </div>
+               </div>
+            </div>
+          </div> 
+      </section>
 		 </div>
      </LayoutDashboard>
 
@@ -107,96 +47,76 @@
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
     import FormAddress from "@/components/forms/address.vue";
+    import WizanItem from "@/components/forms/wizan-btns.vue";
     import UploadMusic from "@/components/forms/uploadmusic.vue";
-    import Information from "@/components/forms/information-musics.vue";
+    import UploadPending from "@/components/forms/information-musics.vue";
     import { setTimeout } from 'timers';
     export default {
         name: "upload-music",
         data(){
           return{
-            user_data: undefined
+            user_data: undefined,
+            componentsRender:{
+               user_info: false,
+               upload: false,
+               address: false,
+               pending: false,
+            },
+            winzan: [
+              {
+                active: false,
+                hover: false,
+                title: 'perfil',
+                icon_class: 'fa fa-cloud-upload',
+                action: 'user'
+              }
+            ]
           }
         },
         components:{
+          WizanItem,
           LayoutDashboard,
           FormUser,
           FormAddress,
           UploadMusic,
-          Information
+          UploadPending
         },
         methods: {
-           checkUserUploadMusics(){
-             let self=this;
-             axios.get(`${SERVER_URI}/api/checkuseruploadmusics?token=${this.user_data.token}`).
-            then(function(req){
-                let uploadInfo =req.data.upload_info;
-                 console.log(uploadInfo)
-                if(!uploadInfo.address){
-                  self.setBtnsByName("direccion");
-                  return;
-                }
-                if(!uploadInfo.user_complete){
-                  self.setBtnsByName("user_complete");
-                  return;
-                }
-
-        
-                  self.setBtnsByName("upload");
-                
-            
-                    console.log("USER ===>> ",uploadInfo)
-        
-                
-             
-            }).catch(function(err){
-                console.log(`error--->${err}`)
-            });
-           },
+          
         redirectUserLogin(){
           if(dbLocal.checkDataLocalStorageOBject())
            this.user_data  =dbLocal.getDataLocalStorageOBject();
          },
-         setBtnsByName(name){
-            let btns=document.querySelectorAll(".grop-btn-wirza li a");
-             for(let i in btns){
-               if(name== btns[i].name){
-                 btns[i].click();
-               }
-             }
-         },
-         changeTab(){
-           let self=this;
-    
-           EventBus.$on("music_upload",(data)=>{
-             if(data===true){
-              console.log("music_upload")
-               self.setBtnsByName("upload");
-             }
-           });
+        //==========================================================================
+        //METHOD TO SET WIZAN
+        //==========================================================================
+        handlClick(ev){
+          console.log("ffff",ev)
+        }
+     
+        },
+        beforeMount(){
+          if(this.$route.params.component=='user'){
+            this.componentsRender.user_info=true;
+          }
 
-          
-         },
-         getMusicUploadIncompleteBYUser(){
-           let self =this;
-        axios.get(`${SERVER_URI}/api/musicspending?token=${this.user_data.token}`)
-             .then(function (req) {
-             let music_penging =req.data.musics;
-                 if(music_penging.length>0){
-                   self.setBtnsByName("informacion");
-                 }
-            
-             })
-            .catch(function (response) {
-            //handle error
-            console.log(response);
-        });
-    }
+          if(this.$route.params.component=='upload'){
+            this.componentsRender.upload=true;
+          }
+
+          if(this.$route.params.component=='address'){
+            this.componentsRender.address=true;
+          }
+
+           if(this.$route.params.component=='pending'){
+            this.componentsRender.pending=true;
+          }
         },
         mounted(){
           this.redirectUserLogin();
-          this.checkUserUploadMusics();
-          this.getMusicUploadIncompleteBYUser();
-            this.changeTab();
+          // this.checkUserUploadMusics();
+          // this.getMusicUploadIncompleteBYUser();
+          //  this.changeTab();
           
           
         }
@@ -206,41 +126,5 @@
 
 </script>
 <style>
-    .card-musician{
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        margin: 0px auto;
-        justify-content: flex-start;
-       flex-wrap: wrap;
-       background: #eee;
-    }
-    .container-upload{
-      width: 100%;
-      margin: auto;
-    }
-  .container-upload   .form-wizard-nav{
-    display: flex;
-    align-items: center;
-    position: relative;
-     }
-    .container-upload  .progress{
-       position: absolute;
-       top:50% !important;
-       width: 100%;
-        transform: translateY(-50%);
-        margin: 0px;
-     } 
-      .container-upload .nav-pills {
-        display: flex;
-        width: 100%;
-        margin: 0px auto;
-        justify-content: space-between;
-       
-     }
- .container-upload .nav-pills span{
-       display: flex !important;
-       justify-content: center;
-       align-items: center;
-     }
+  @import url("uploads.css");
 </style>

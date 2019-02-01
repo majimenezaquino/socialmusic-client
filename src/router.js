@@ -50,7 +50,7 @@ export default new Router({
       component: Muiscs
     },
     {
-      path: "/uploads/:file?",
+      path: "/uploads/:component?",
       name: "uploads",
       component: Uploads
     },

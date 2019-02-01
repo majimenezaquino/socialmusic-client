@@ -21,7 +21,7 @@
                 </div>
                 <div class="upload-info">
                     <p>{{music.file_name}}</p>
-                    <small v-if="music.size>0">{{(music.size/1024/1024).toFixed(1)}} MB</small>
+                    <small v-if="music.size_tmp>0">{{(music.size_tmp/1024/1024).toFixed(1)}} MB</small>
                 </div>
          </div>
     </div>
@@ -48,7 +48,7 @@
                         <label for="name" class="col-md-4 control-label">Título de la canción </label>
                         <div class="col-md-8">
                        
-                          <input type="text" v-model="music.title" disabled="true" class="form-control" />
+                          <input type="text" v-model="music.title" disabled="true" class="form-control disabled" />
                         </div>
                       </div>
 
@@ -85,7 +85,7 @@
                   </div>
                   <div class="card-footer text-right">
                     <button class="btn btn-info btn-flat">Cancel</button>
-                    <button class="btn btn-info" v-on:click.prevent="uploadFilesForm">Guardar</button>
+                    <button class="btn btn-info" v-on:click.prevent="updateMusicUpload">Guardar</button>
                   </div>
          
               </div>
@@ -123,7 +123,7 @@ export default {
                 tags: undefined,
                 genre: undefined,
                 file: undefined,
-                size: 0,
+                size_tmp: 0,
                 description:undefined,
                 file_name: undefined,
                 type: undefined, 
@@ -164,7 +164,7 @@ loadFile(event){
 if(_this.file_allower(file.name,_this.extension)){                       
         _this.music.file=file;
         _this.music.file_name=file.name;
-        _this.music.size =file.size;
+        _this.music.size_tmp =file.size;
 //load file url 
     let reader = new FileReader();
         reader.onload = function(e) {        
@@ -183,7 +183,7 @@ if(_this.file_allower(file.name,_this.extension)){
     _this.music.file=undefined;
     _this.music.file_name=undefined;
     _this.upload_image='';
-    _this.music.size =0;
+    _this.music.size_tmp =0;
 
 }
    },
@@ -196,6 +196,7 @@ if(_this.file_allower(file.name,_this.extension)){
         this.music.file=undefined;
         this.music.file_name=undefined;
         this.upload_image='';
+        this.music.size_tmp=0;
         this.music.size =0;
    },
       getPrivacies(){
@@ -212,6 +213,35 @@ if(_this.file_allower(file.name,_this.extension)){
     redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
+    },
+     updateMusicUpload(){
+  
+        let self=this;
+        let formData = new FormData();
+        formData.append('image',self.music.file);
+        formData.append('id',self.music._id);
+        formData.append('title',self.music.title);
+        formData.append('privacy',self.music.privacy);
+        formData.append('download_allowed',self.music.download_allowed);
+            axios.put(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
+             {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              })
+             .then(function (response) {
+            //handle success
+            if(!response.data.error){
+                self.success.success=true;
+                self.success.message=`Musica subida`;
+                self.btn_disable=true;
+                EventBus.$emit("music_upload",true);
+            }
+             })
+            .catch(function (response) {
+            //handle error
+            console.log("error",response);
+        });
     },
       checkInfoMusic(){
         this.error.error=false;
@@ -264,6 +294,8 @@ if(_this.file_allower(file.name,_this.extension)){
              
                  if(music_penging.length>0){
                    self.music =music_penging[0];
+                   self.music.size_tmp=0;
+                   console.log("================={}=========================", self.music)
                  }else{
                    EventBus.$emit("music_upload",true);
                  }
