@@ -1,16 +1,9 @@
 <template>
 <div :class="'item-header '+clss">
 <span class="line-progress"></span>
-<router-link 
-class="botton"
-:to="content.action"
-v-on:click.prevent="handlClick"
-v-on:mouseover="handlHover"
-v-on:mouseleave="handlLeave"
-
->
+<button class="botton" v-on:click.prevent="fn">
     <i :class="content.icon_class"></i>
-</router-link>
+</button>
 <a href="" class="wizan-label">{{content.title}}</a>
 </div>
 </template>
@@ -24,38 +17,30 @@ export default {
     },
     props:{
         content:{
-            active: Boolean,
-            hover: Boolean,
             title: String,
             icon_class: String,
-        }
+        },
+        active: Boolean,
+        method: Function,
     },
     methods:{
+        fn(ev){
+            this.handlClick();
+            this.method(ev);
+        },
         handlClick(){
-            this.content.active=!this.content.active;
              this.clss='';
-            if(this.content.hover){
+            if(this.active){
                 this.clss='active';
-                this.$router.push("./"+content.action)
             }
             
         },
-         handlHover(){
-            this.content.hover=!this.content.hover;
-            
-            if(!this.content.active){
-                 this.clss='';
-            
-            if(this.content.hover){
-                this.clss='hover';
-            }
-            }
-        },
-         handlLeave(){
-            if(!this.content.active){
-             this.clss='';
-            }
-        }
-    }
+        
+    },
+    mounted(){
+        this.handlClick();
+
+    },
+   
 }
 </script>

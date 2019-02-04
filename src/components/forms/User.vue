@@ -1,363 +1,485 @@
 <template>
-      <div class="card-user user-info-update">
-                  <div class="card-body">
-                        <div class="gropu-image">
-                            <UserAvatar :propImageUrl="user_profile"/>
-                        </div>
-
+<div class="container__music">
+    <div class="col-music">
+         <div class="zone_drop" id="update-music-info" >
+                <div class="thumb-previes" v-if="upload_image.length>0">
+                    <a href="" class="btn btn-danger btn-fab btn-fab-sm"
+                    v-on:click.prevent="handlClosePrevies"
+                    >
+                        <i class="fa fa-times" aria-hidden="true"></i></a>
+                    <img :src="upload_image" alt="">
+                </div>
+                <div class="form-contro ">
+                     <label for="btn-upload" class="btn-upload">
+                         <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                     </label>
+                <input type="file"  id="btn-upload" style="display:none" name="pic" accept="image/*"
+                 v-on:change="loadFile" />
+                </div>
+                <div class="upload-error">
+                    <h3>{{message_upload}}</h3>
+                </div>
+                <div class="upload-info">
+                    <p>{{music.file_name}}</p>
+                    <small v-if="music.size_tmp>0">{{(music.size_tmp/1024/1024).toFixed(1)}} MB</small>
+                </div>
+         </div>
+    </div>
+     <div class="col-music">
+            <div class="form-upload">
+                <div class="card">
+                  <header class="card-heading ">
+                    <h2 class="card-title">Informacion de la cancion</h2>
                         <div class="container-error">
-                         <div class="alert alert-danger" role="alert" v-if="show_error.error">
+                         <div class="alert alert-danger" role="alert" v-if="error.error">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
                                     <span aria-hidden="true">&times;</span></button>
-                                <strong>Oh snap! </strong> {{show_error.message}}
+                                <strong>Oh snap! </strong> {{error.message}}
                         </div>
-                         <div class="alert alert-success" role="alert" v-if="req_surcess">
+                         <div class="alert alert-success" role="alert" v-if="success.success">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
                                     <span aria-hidden="true">&times;</span></button>
-                                <strong></strong> {{surcess_message}}
+                                <strong></strong> {{success.message}}
                         </div>
                         </div>
+                  </header>
+                  <div class="card-body">
                 <div class="group-card-user">
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
-                        <input type="text" class="form-control" placeholder=" Nombre " v-model="user.name" name="user_name">
+                        <input type="text" class="form-control" placeholder=" Nombre " name="user_name">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
-                        <input type="text" class="form-control" placeholder="Apellidos" v-model="user.last_name" name="last_name">
+                        <input type="text" class="form-control" placeholder="Apellidos" name="last_name">
                     </div>
                 </div>
                 </div>
-                <div class="group-card-user">
+                  <div class="group-card-user">
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="zmdi zmdi-email" ></i></span>
-                        <input type="email" class="form-control" placeholder="Su correo electrónico." v-model="user.email" name="user_email" disabled>
+                        <input type="email" class="form-control" placeholder="Su correo electrónico."  name="user_email" disabled>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="zmdi zmdi-phone"></i></span>
-                        <input type="text" class="form-control" placeholder="Su número de teléfono. " 
-                        v-model="user.phone" v-on:keyup="checkPhone" name="user_phone"
+                        <input type="text" class="form-control" placeholder="Su número de teléfono. " name="user_phone"
                         maxlength="12" minlength="6">
                       </div>
                     </div>
                 </div>
-                    <div class="group-card-user">
+
+
+                <div class="group-card-user">
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
-                        <input type="date" class="form-control" max="2018-02-10" min="1960-01-02" :value="user.birth_date" placeholder="YYYY-MM-DD"
+                        <input type="date" class="form-control" max="2018-02-10" min="1960-01-02"  placeholder="YYYY-MM-DD"
                          v-on:change="setBirthDate" name="user_birth_date"
                          >
                       </div>
                     </div>
-                    <div class="form-group oardio">
+                    <div class="form-group">
+                    <div class="container-genres">
                      
-                        <label class="radio-inline"> Sexo: </label>
+                        <label class="group-genres"> Sexo: </label>
                         
-                          <label class="radio-inline">
-                            <input type="radio" name="gender" id="male" value="male" :checked="gender.male">
-                            Masculino 
-                          </label>
-                          <label class="radio-inline">
-                            <input type="radio" name="gender" id="female" value="female" :checked="gender.female">
-                            Femenino 
-                          </label>
+                          <div class="group-genres">
+                              <input type="radio" name="gender" id="male" value="male" class="checkmark" /> 
+                              <small>Femenino.</small>
+                          </div>
+
+                          <div class="group-genres">
+                              <input type="radio" name="gender" id="male" value="male"  class="checkmark"/> 
+                              <small>Maculino</small>
+                          </div>
+
+                    </div>
                       </div>
         
-                </div>
+                </div> 
+
+                      
                   </div>
                   <div class="card-footer text-right">
-                    <button class="btn btn-primary btn-sm" v-on:click.prevent="saveUpdate" :disabled="btn_upload">Guardar </button>
+                    <button class="btn btn-info btn-flat">Cancel</button>
+                    <button class="btn btn-info" v-on:click.prevent="updateMusicUpload">Guardar</button>
                   </div>
+         
+              </div>
             </div>
+    </div>
+    <!-- <LimitUpladMusic> </LimitUpladMusic> -->
+</div>
 </template>
 <script>
-const {SERVER_URI,DB_USER_NAME}=require('@/config/index');
-const {VPersons} =require('@/helpers/validate-persons');
-const {DBLocal} =require('@/services/data_local');
-const {EventBus} =require('@/eventbus');
-import UserAvatar from './userImage.vue';
-import { setTimeout } from 'timers';
-const dbLocal= new DBLocal(DB_USER_NAME);
-const VP= new VPersons();
-const axios = require('axios');
+  const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
+  const {DBLocal} =require('@/services/data_local')
+  const dbLocal= new DBLocal(DB_USER_NAME);
+  const axios = require('axios');
+    const {EventBus} =require('@/eventbus');
+    import LimitUpladMusic from './limit-upload-music.vue';
+  import { setInterval, setImmediate } from 'timers';
 
 export default {
-    name: 'user-form',
+    name: 'avatar',
+    components:{
+        LimitUpladMusic
+    },
     data(){
         return{
-            user_data: undefined,
-            hiddenSave: true,
-            user_profile : undefined,
-            req_surcess:false,
-            surcess_message:'',
-            btn_upload:true,
-            show_error: {
-                error: false,
-                message: ''
+            isDraging:false,
+            upload_image: '',
+            user_data: {},
+            message_upload:'selecciones una imagen para esta música.',
+            extension:["png","jpg","jpeg"],
+            genres_label: true,
+            genres: [],
+               music: {
+                title: undefined,
+                description: undefined,
+                tags: undefined,
+                genre: undefined,
+                file: undefined,
+                size_tmp: 0,
+                description:undefined,
+                file_name: undefined,
+                type: undefined, 
+                tags: undefined,
+                download_allowed: false
+
             },
-            user: {
-                name: undefined,
-               last_name: undefined,
-               birth_date: undefined,
-               phone: undefined,
-               gender: undefined,
+            error:{
+                error:false,
+                message: undefined
             },
-            gender:{
-                male: false,
-                female: false,
+            success:{
+                success:false,
+                message:undefined
             }
         }
     },
-    watch: {
-        //validate name of person
-        'user.name':function(newValue){
-            this.show_error.error =false;
-            if(newValue.length>2){
-                if(!VP.name(newValue) ){
-                    this.show_error.error =true;
-                    this.show_error.message=`"${newValue}"  No es un nombre permitido`;
-                }
-            }           
-        },
-         //validate name of person
-        'user.last_name':function(newValue){
-            this.show_error.error =false;
-            if(newValue.length>2){
-                if(!VP.name(newValue) ){
-                    this.show_error.error =true;
-                    this.show_error.message=`"${newValue}"  No es un apellido permitido`;
-                }
-            }           
-        }
-
-    },
-    components:{
-        UserAvatar
-    },
     methods:{
+        file_allower(file,extension_array){
+        let extension =file.split('.');
+            extension=  extension[extension.length-1];
+        if(extension_array.length>0){
+            for(let i in extension_array){
+                if(extension_array[i]==extension){
+                    return true;
+                }             
+            }
+        }
+        return false;
+        },
+        //============================================================
+        //LOADF MUSIC
+        //============================================================
+loadFile(event){
+    let _this=this;
+     let zoneDrop =document.getElementById("update-music-info");
+    let file =  event.target.files[0];
+if(_this.file_allower(file.name,_this.extension)){                       
+        _this.music.file=file;
+        _this.music.file_name=file.name;
+        _this.music.size_tmp =file.size;
+//load file url 
+    let reader = new FileReader();
+        reader.onload = function(e) {        
+       _this.upload_image =e.target.result;    
+        }
+    reader.readAsDataURL(file);
+           
+
+
+    zoneDrop.classList.remove("active_drop");
+    zoneDrop.classList.remove("active_error");
+    _this.message_upload=''
+}else{
+    _this.message_upload='Este archivo no es una musica.';
+    zoneDrop.classList.add("active_error");
+    _this.music.file=undefined;
+    _this.music.file_name=undefined;
+    _this.upload_image='';
+    _this.music.size_tmp =0;
+
+}
+   },
+   handlSelectGenrens(ev){
+         this.genres_label=false; 
+         this.music.genre =ev.target.value;
+   },
+   handlClosePrevies(){
+        this.upload_image='';
+        this.music.file=undefined;
+        this.music.file_name=undefined;
+        this.upload_image='';
+        this.music.size_tmp=0;
+        this.music.size =0;
+   },
+      getPrivacies(){
+          let self=this;
+        axios.get(`${SERVER_URI}/api/privacies?token=${this.user_data.token}`)
+             .then(function (req) {
+             self.privacies =req.data.privacies;        
+             })
+            .catch(function (response) {
+            //handle error
+            console.log(response);
+        });
+    }, 
     redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
-       async   getUserPublicById(userId){
-            let self = this
-           await axios.get(`${SERVER_URI}/api/public/user/${userId}`).
-            then(function(req){
-                let _user =req.data.user;
-                if(_user.length>0){
-                    self.user =_user[0];
-                    self.user_profile =`${SERVER_URI}/api/files/image/${_user[0].profile_picture}`; //image 
-                    self.user.birth_date = self.changeDate(self.user.birth_date);
-                    if(String(self.user.gender).toLowerCase()==='male'){
-                        self.gender.male=true;
-                    }
-                     if(String(self.user.gender).toLowerCase()==='female'){
-                        self.gender.female=true;
-                    }
+     updateMusicUpload(){
+  
+        let self=this;
+        let formData = new FormData();
+        formData.append('image',self.music.file);
+        formData.append('id',self.music._id);
+        formData.append('title',self.music.title);
+        formData.append('privacy',self.music.privacy);
+        formData.append('download_allowed',self.music.download_allowed);
+            axios.put(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
+             {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
                 }
-                
-             
-            }).catch(function(err){
-                console.log(`error--->${err}`)
-            })
-            
-           // console.log(this.musics)
-        },
-        saveUpdate(){
-            let self =this;
-            let input= document.querySelectorAll('.user-info-update input[type="radio"]');
-             for( let i in input){
-                 self.validateField(input[i].name,input[i].value)
-             }
-             //send data uplodad this.user
-             axios.put(`${SERVER_URI}/api/user?token=${this.user_data.token}`,{
-               name: this.user.name,
-               last_name: this.user.last_name,
-               birth_date: this.user.birth_date,
-               phone: this.user.phone,
-               gender: this.user.gender,
-             }).then((req)=>{
-                 if(!req.data.error){
-                     self.req_surcess =true;
-                     self.surcess_message =req.data.message;
-                     self.btn_upload=true;
-                     setTimeout(function(){
-                            self.req_surcess =false;
-                     },2000)
-                 }
-            }).catch((err)=>{
-                console.log("error",err)
-            })
-
-        },
-       
-        changeDate(form_date){
-            let dateFormat;
-            dateFormat =new Date(form_date).toLocaleString('en-GB', { timeZone: 'UTC' });
-            dateFormat =dateFormat.split(",")[0];
-            let tmp=   dateFormat.split("/");
-            return `${tmp[2]}-${tmp[1]}-${tmp[0]}`;
-        },
-        setBirthDate(event){
-            this.user.birth_date = event.target.value;
-        }
-        ,
-        checkPhone(){
-            console.log('chek font')
-        },
-        save(){
-        
-            axios.post(`${SERVER_URI}/api/public/user`,function(req){
-
-            }).catch((err)=>{
-                console.log(err)
-            })
-    
-
-        },
-        cheketImput(){
-            let self =this;
-            let input= document.querySelectorAll(".user-info-update input");
-             for( let i in input){
-              if( input[i]!=undefined || input[i]!=null){
-                     input[i].addEventListener("keyup",function(event){
-                     let formName =event.target.name || undefined;
-                     let form_value =event.target.value || undefined;
-                      if(formName===undefined){
-                          throw new Error('tag not allowed');
-                          return;
-                      }
-                       
-                     self.validateField(formName,form_value)
-                 },false);
-             }
-              let inputRadio= document.querySelectorAll('input[name="gender"]') || [];
-                if(inputRadio.length>0){
-             for(let i in inputRadio.length){
-                 inputRadio[i-1].addEventListener('click',function(event){
-                 self.btn_upload=false;
-             })
+              })
+             .then(function (response) {
+            //handle success
+            if(!response.data.error){
+                self.success.success=true;
+                self.success.message=`Musica subida`;
+                self.btn_disable=true;
+                EventBus.$emit("music_upload",true);
             }
-                }
-             }
-
-          
-
-        },
-        validateField(formName,form_value){
-             //validate name and last name
-           
-                        let self =this;
-                        if(formName=='user_name' || formName=='last_name'){
-                            let re = /(^([A-Za-zÁÉÍÓÚñáéíóúÑ]{3,12}[\s]?([A-Za-zÁÉÍÓÚñáéíóúÑ]{2,12})?[\s]*$))/ig;
-                            if(!re.test(form_value) || !form_value.length>0){
-                            self.show_error.error= true;
-                            self.show_error.message= `"El nombre o apellido no es válido.  ${form_value}" `;
-                            throw new Error( self.show_error.message);
-                            }else{
-                                self.show_error.error= false;
-                            }
-                        }
-                        // validate email 
-                         if(formName=='user_email'){
-                            let re = /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/ig;
-                            if(!re.test(form_value) || !form_value.length>0){
-                            self.show_error.error= true;
-                            self.show_error.message= `"El correo electrónico no es válido.  ${form_value}"`;
-                            throw new Error( self.show_error.message);
-                            }else{
-                                self.show_error.error= false;
-                            }
-                        }
-                        //validate
-                         if(formName=='user_phone'){
-                            let re = /^[1?+]?[0-9]{0,12}$/ig;
-                            if(!re.test(form_value) || !form_value.length>0){
-                            self.show_error.error= true;
-                            self.show_error.message= `"El numero de teléfono no es válido  ${form_value}" `;
-                            throw new Error( self.show_error.message);
-                            }else{
-                                self.show_error.error= false;
-                            }
-                        }
-
-                        if(formName=='gender'){
-                        let  gender=   document.querySelectorAll('input[name="gender"]')
-                           let _gender=undefined;
-                           let ifcheck=false;
-                           for(let i in gender){
-                               if(gender[i].checked){
-                                _gender=gender[i];
-                                self.user.gender =_gender.value
-                                ifcheck=true;
-                               }
-                           }
-                           if(!ifcheck){
-                            self.show_error.error= true;
-                            self.show_error.message= `"No ha seleccionado su sexo." `;
-                            throw new Error( self.show_error.message); 
-                           }
-                        }
-                        self.btn_upload =false;
-
-        }
-        
+             })
+            .catch(function (response) {
+            //handle error
+            console.log("error",response);
+        });
     },
-    
+      checkInfoMusic(){
+        this.error.error=false;
+        this.success.success=false;
+          if(this.music.file_name== undefined || this.music.file_name== ''){
+            this.error.error=true;
+            this.error.message=`Debe subir un archivo con una de las siguientes extencion MP3 , OGG y WAV `;
+           return false;
+        }
+
+        if(this.music.genre == undefined || this.music.genre== ''){
+            this.error.error=true;
+            this.error.message=`Debe selecionar un  genero musical.`;
+           return false;
+        }
+
+        if(this.music.title== undefined || this.music.title== ''){
+            this.error.error=true;
+            this.error.message=`El campo titulo es requerido`;
+           return false;
+        }
+
+       
+
+
+        if(this.music.description== undefined || this.music.description== ''){
+            this.error.error=true;
+            this.error.message=`El campo descripcion es requerido`;
+         return false;
+        }
+
+        if(this.music.tags== undefined || this.music.tags== ''){
+            this.error.error=true;
+            this.error.message=`El campo etiqueta es requerido`;
+           return false;
+        }
+        return true;
+    },
+    changePrivacy(event){
+            this.music.privacy =event.target.value;
+        },
+         changeAllowerChange(event){
+            this.music.download_allowed =event.target.value;
+        },
+     getMusicUploadIncompleteBYUser(){
+      let self=this;
+        axios.get(`${SERVER_URI}/api/musicspending?token=${this.user_data.token}`)
+             .then(function (req) {
+             let music_penging =req.data.musics;
+             
+                 if(music_penging.length>0){
+                   self.music =music_penging[0];
+                   self.music.size_tmp=0;
+
+                 }else{
+                   EventBus.$emit("music_upload",true);
+                 }
+            
+             })
+            .catch(function (error) {
+            //handle error
+            console.log("error",error.response);
+        });
+    }, 
+
+     uploadFilesForm(){
+        if(this.checkInfoMusic()){
+        
+        let self=this;
+        let formData = new FormData();
+        formData.append('music',self.music.file);
+        formData.append('title',self.music.title);
+        formData.append('description',self.music.description);
+        formData.append('tags',self.music.tags);
+        formData.append('genre',self.music.genre);
+            axios.post(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
+             {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              })
+             .then(function (response) {
+            //handle success
+            if(!response.data.error){
+                self.success.success=true;
+                self.success.message=`Musica subida`;
+                self.btn_disable=true;
+                EventBus.$emit("music_upload",true);
+            }
+            console.log(response);
+             })
+            .catch(function (err) {
+            //handle error
+            
+            if(err.response.data.error){
+                self.error.error=true;
+                self.error.message = err.response.data.message;
+            }
+        });
+        }
+    }
+    },
     mounted(){
         this.redirectUserLogin();
-         let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
-         this.getUserPublicById(user_id);
-         let self =this;
-         EventBus.$on('LOAIMAGEPROFILE', function(data){
-             self.user.profile_picture =data.url;
-             console.log( self.user);
-         });
-         //check imput
-         this.cheketImput();
+         this.getPrivacies();
+         this.getMusicUploadIncompleteBYUser();
+         //===================================================================
+        //set drag en drop
+        //====================================================================
+        let zoneDrop =document.querySelectorAll(".zone_drop") || [];
+        let _this=this;
+        if(zoneDrop.length>0){
+            for(let i in zoneDrop){
 
-         ///probar exprexion
-        
-    
-        
+                zoneDrop[i].ondragover=function(ev){
+                    ev.target.classList.add("active_drop")
+                    return false;
+                };
+                zoneDrop[i].ondragleave=function(ev){
+                    ev.target.classList.remove("active_drop");
+                     ev.target.classList.remove("active_error");
+                    return false;
+                };
+
+                zoneDrop[i].ondrop=function(ev){
+                    ev.preventDefault();
+                    let file =ev.dataTransfer.files[0];
+                    ev.target.classList.remove("active_drop");
+                    if(_this.file_allower(file.name,_this.extension)){                       
+                            _this.music.file=file;
+                            _this.music.file_name=file.name;
+                            _this.music.size =file.size;
+                     ev.target.classList.remove("active_drop");
+                     ev.target.classList.remove("active_error");
+                      _this.message_upload=''
+
+                    let reader = new FileReader();
+                    reader.onload = function(e) {        
+                    _this.upload_image =e.target.result;   
+                    }
+                    reader.readAsDataURL(file);
+                    }else{
+                        _this.message_upload='Este archivo no es una musica.';
+                        ev.target.classList.add("active_error");
+                        _this.music.file=undefined;
+                        _this.music.file_name=undefined;
+                        _this.music.size =0;
+                        _this.upload_image='';
+
+                    }
+                    return false;
+                };
+            }
+        }
+        //END DRAG AND DROP
+
+       
     },
-  
+    watch:{
+        'music.title':function(){
+        this.error.error=false;
+        this.success.success=false;
+        },
+         'music.tags':function(){
+        this.error.error=false;
+        this.success.success=false;
+        },
+         'music.genre':function(){
+        this.error.error=false;
+        this.success.success=false;
+        },
+         'music.file':function(){
+        this.error.error=false;
+        this.success.success=false;
+        },
+        'music.description':function(){
+        this.error.error=false;
+        this.success.success=false;
+        },
+        'music.file_name':function(){
+        this.error.error=false;
+        this.success.success=false;
+        }
+    }
 }
 </script>
 <style>
-.card-user{
-    max-width: 800px;
-    margin: 0px auto;
-    background: #fff;
+@import url("./styles.css");
+.container-genres{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
-    .group-card-user{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-   .group-card-user .form-group{
-       flex-grow: 1;
-    }
-    .gropu-image{
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-    .container-error{
-        width: 100%;
-        height: 30px;
-    }
-    .oardio input{
-        border: #363636 solid 1px !important;
-    }
+
+.container-genres .group-genres{
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.container-genres .group-genres small{
+display: flex;
+width: 100%;
+justify-content: center;
+}
+.container-genres .group-genres input{
+    display: block;
+    width: 20px;
+    background: #f88;
+}
+.checkmark {
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
 </style>
-
-

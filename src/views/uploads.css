@@ -1,3 +1,7 @@
+#content_wrapper{
+    background: #fff;
+}
+
 .winza-header{
     margin: 0px auto;
     width: 100%;
@@ -8,6 +12,11 @@
     align-items: center;
     background: #fff;
     overflow: hidden;
+}
+.header_wrapper{
+    padding: 0px 10px;
+    background: #fff;
+    text-align: center;
 }
 .winza-header .item-header{
 flex-grow: 1;

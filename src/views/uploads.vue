@@ -3,10 +3,10 @@
      <LayoutDashboard> 
 		 <div slot="content" id="content_outer_wrapper">
         <section id="content_wrapper">
-          <div id="header_wrapper">
-              <div class="container-fluid">
+          <div class="header_wrapper">
+           
                   <h1>Uplads Music</h1>
-              </div>
+     
           </div>
           <div class="content-body">
             <div class="row">
@@ -16,16 +16,17 @@
                      in winzan" 
                      :key="wiz.title" 
                      :content="wiz" 
-                     v-on:click.prevent="handlClick"
+                     :active="wiz.active"
+                     :method="wiz.action"
                      />
                   </div>
                </div>
                <div class="row">
                  <div class="col-xs-12">
-                    <FormUser v-if="componentsRender.user_info" />
-                    <FormAddress v-if="componentsRender.address"/>
-                    <UploadMusic v-if="componentsRender.upload"/>
-                    <UploadPending v-if="componentsRender.pending"/>
+                    <FormUser v-if="show_vies.user_info" />
+                    <FormAddress v-if="show_vies.address"/>
+                    <UploadMusic v-if="show_vies.upload"/>
+                    <UploadPending v-if="show_vies.pending"/>
                  </div>
                </div>
             </div>
@@ -56,7 +57,7 @@
         data(){
           return{
             user_data: undefined,
-            componentsRender:{
+            show_vies:{
                user_info: false,
                upload: false,
                address: false,
@@ -65,12 +66,30 @@
             winzan: [
               {
                 active: false,
-                hover: false,
-                title: 'perfil',
+                title: 'Mi información',
+                icon_class: 'fa fa-user',
+                action: this.toggleUser
+              },
+
+               {
+                active: false,
+                title: 'Dirección',
                 icon_class: 'fa fa-cloud-upload',
-                action: 'user'
+                action: this.toggleAddress
+              },
+              {
+                active: false,
+                title: 'Subir',
+                icon_class: 'fa fa-cloud-upload',
+                action: this.toggleUpload
+              },
+              {
+                active: false,
+                title: 'Publicar',
+                icon_class: 'fa fa-cloud-upload',
+                action: this.togglePending
               }
-            ]
+            ] 
           }
         },
         components:{
@@ -92,26 +111,34 @@
         //==========================================================================
         handlClick(ev){
           console.log("ffff",ev)
-        }
-     
         },
-        beforeMount(){
-          if(this.$route.params.component=='user'){
-            this.componentsRender.user_info=true;
-          }
-
-          if(this.$route.params.component=='upload'){
-            this.componentsRender.upload=true;
-          }
-
-          if(this.$route.params.component=='address'){
-            this.componentsRender.address=true;
-          }
-
-           if(this.$route.params.component=='pending'){
-            this.componentsRender.pending=true;
-          }
+        clearVies(){
+              this.show_vies={
+               user_info: false,
+               upload: false,
+               address: false,
+               pending: false,
+            }
         },
+      toggleUser(ev){
+        this.clearVies()
+        this.show_vies.user_info=true;
+      },
+       toggleAddress(ev){
+        this.clearVies()
+        this.show_vies.address=true;
+      },
+       toggleUpload(ev){
+        this.clearVies()
+        this.show_vies.upload=true;
+      }
+      ,
+      togglePending(ev){
+        this.clearVies()
+        this.show_vies.pending=true;
+      }
+        },
+ 
         mounted(){
           this.redirectUserLogin();
           // this.checkUserUploadMusics();
