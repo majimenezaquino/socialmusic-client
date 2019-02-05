@@ -1,38 +1,29 @@
 <template>
-
-    
-   
-    <div class="avatar-upload">
-            <div class="imagePreview">
-                <img :src="urlImg || propImageUrl" alt="">
-            </div>
-        <div class="avatar-edit">
-            <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg"  v-on:change="changeUpload"/>
-            <label for="imageUpload"><i class="fa fa-pencil" aria-hidden="true"></i></label>
-        </div>
-           <div class="container-progres" v-if="showproccess">
-                <div  id="progress" class="progress-pie-chart" :data-percent="progress">
-                <div class="ppc-progress">
-                    <div class="ppc-progress-fill"></div>
+          <div class="zone_drop uploadzone" id="update-upload-info" v-on:drop.prevent="handlerDrop">
+                <div class="thumb-previes user-preven" v-if="urlImg || propImageUrl">
+                    <a href="" class="btn btn-danger btn-fab btn-fab-sm"
+                    v-on:click.prevent="handlClosePrevies"
+                    >
+                        <i class="fa fa-times" aria-hidden="true"></i></a>
+                    <img :src="urlImg || propImageUrl" alt="" class="thumb-prevent">
+                    <button class="btn btn-primary save-image" v-if="btn_save">
+                        <i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
                 </div>
-                <div class="ppc-percents">
-                     <div class="pcc-percents-wrapper">
-                     <span>%</span>
-                    </div>
+                <div class="form-contro ">
+                     <label for="btn-upload" class="btn-upload">
+                         <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                     </label>
+                <input type="file"  id="btn-upload" style="display:none" name="pic" accept="image/*"
+                 v-on:change="loadFile" />
                 </div>
-            </div>
-           </div>
-
-           <div class="continer-save" v-if="active_btn_save">
-                    <div class="control">
-                        <button 
-                        v-on:click.prevent="submitUpload"
-                        class="btn btn-primary btn-fab"><i class="fa fa-floppy-o"></i> </button>
-                    </div>
-           </div>
-       
-    </div>
-
+                <div class="upload-error">
+                    <h3>{{message_upload}}</h3>
+                </div>
+                <div class="upload-info">
+                    <p>{{upload.file_name}}</p>
+                    <small v-if="upload.size>0">{{(upload.size/1024/1024).toFixed(1)}} MB</small>
+                </div>
+         </div>
 </template>
 <script>
   const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
@@ -52,17 +43,85 @@ export default {
     },
     data(){
         return {
+             message_upload:'selecciones una imagen.',
+            extension:["png","jpg","jpeg"],
+            upload: {
+                file: undefined,
+                file_name: undefined,
+                size: 0,
+            },
             urlImg: undefined,
             filename: undefined,
             user_found: false,
             progress: 0,
             showproccess: false,
             active_btn_save: false,
+            btn_save:false
 
         }
     },
     methods:{
-        uploadFiles(input){
+        file_allower(file,extension_array){
+        let extension =file.split('.');
+            extension=  extension[extension.length-1];
+        if(extension_array.length>0){
+            for(let i in extension_array){
+                if(extension_array[i]==extension){
+                    return true;
+                }             
+            }
+        }
+        return false;
+        },
+     handlClosePrevies(){
+        this.upload_image='';
+        this.urlImg= undefined,
+        this.propImageUrl= undefined,
+        this.upload.file=undefined;
+        this.upload.file_name=undefined;
+        this.upload_image='';
+        this.upload.size =0;
+        this.btn_save=false;
+   },
+   handlerDrop(event){
+       console.log("drop", drop)
+       return false;
+   },
+
+loadFile(event){
+    let _this=this;
+    let file =  event.target.files[0];
+if(_this.file_allower(file.name,_this.extension)){                       
+        _this.upload.file=file;
+        _this.upload.file_name=file.name;
+        _this.upload.size =file.size;
+        _this.btn_save=true;
+//load file url 
+    let reader = new FileReader();
+        reader.onload = function(e) {        
+       _this.urlImg =e.target.result;   
+       console.log( _this.urlImg) 
+        }
+    reader.readAsDataURL(file);
+           
+
+     let zoneDrop =document.getElementById("update-music-info");
+    zoneDrop.classList.remove("active_drop");
+    zoneDrop.classList.remove("active_error");
+    _this.message_upload=''
+}else{
+    _this.message_upload='Este archivo no es una musica.';
+    zoneDrop.classList.add("active_error");
+    _this.upload.file=undefined;
+    _this.upload.file_name=undefined;
+    _this.upload_image='';
+    _this.upload.size_tmp =0;
+    _this.btn_save=false;
+
+}
+   }
+   ,
+uploadFiles(input){
            let self=this;
     if (input.files && input.files[0]) {
         let reader = new FileReader();
@@ -79,68 +138,17 @@ export default {
         }
         reader.readAsDataURL(input.files[0]);
     }
-
-
         },
-        changeUpload(event){
-            this.uploadFiles(event.target);
-        },
+
 redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
-    submitUpload(){
-        this.uploadFilesForm(this.filename)
-    },
-    uploadFilesForm(bodyFormData){
-      let contador =0;
-      if(bodyFormData===undefined)  {
-          throw new Error('erro file not found')
-          return;
-      }
-      this.showproccess=true;
-       let self=this;
-        let  config = {
-                onUploadProgress: function(progressEvent) {
-                let percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
-             let barElement = document.getElementById('progress'),
-                percent = parseInt(percentCompleted),
-                deg = 360*percent/100;
-                if(barElement!=null && barElement!=undefined){
-              if (percent > 50) barElement.classList.add('gt-50');
- 
-               document.querySelector('.ppc-progress-fill').style.transform=`rotate(${deg}deg)`;
-              document.querySelector('.ppc-percents span').innerHTML=percent+'%';
-                    self.active_btn_save=false;
-                    setTimeout(function(){
-                        self.showproccess=false;
-                    },1000)
-             
-                     }}
-            };
-
-        let formData = new FormData();
-      formData.append('image', bodyFormData);
-
-            axios.post(`${SERVER_URI}/api/upload/image?token=${this.user_data.token}`,
-                 formData,config
-            )
-             .then(function (response) {
-            //handle success
-            console.log(response);
-             })
-            .catch(function (response) {
-            //handle error
-            console.log(response);
-        });
-    },
-    handlDrop(ev){
-        console.log("drop===>",ev)
-        ev.preventDefault();
-    },
     },
     mounted(){
         this.redirectUserLogin();
+        //this.loadSetUp();
+     
         
     }
 }

@@ -146,6 +146,15 @@ font-size: 25px;
 }
 .thumb-previes .btn{
     position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+.thumb-previes  .save-image {
+    display: inline-block;
+    top: auto;
+    right: auto;
+    bottom: 20px;
 }
 .disabled{
     color: #999 !important;

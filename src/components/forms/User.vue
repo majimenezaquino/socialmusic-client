@@ -1,29 +1,7 @@
 <template>
 <div class="container__music">
     <div class="col-music">
-         <div class="zone_drop" id="update-music-info" >
-                <div class="thumb-previes" v-if="upload_image.length>0">
-                    <a href="" class="btn btn-danger btn-fab btn-fab-sm"
-                    v-on:click.prevent="handlClosePrevies"
-                    >
-                        <i class="fa fa-times" aria-hidden="true"></i></a>
-                    <img :src="upload_image" alt="">
-                </div>
-                <div class="form-contro ">
-                     <label for="btn-upload" class="btn-upload">
-                         <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                     </label>
-                <input type="file"  id="btn-upload" style="display:none" name="pic" accept="image/*"
-                 v-on:change="loadFile" />
-                </div>
-                <div class="upload-error">
-                    <h3>{{message_upload}}</h3>
-                </div>
-                <div class="upload-info">
-                    <p>{{music.file_name}}</p>
-                    <small v-if="music.size_tmp>0">{{(music.size_tmp/1024/1024).toFixed(1)}} MB</small>
-                </div>
-         </div>
+        <UserAvatar :propImageUrl="user_profile" />
     </div>
      <div class="col-music">
             <div class="form-upload">
@@ -44,71 +22,63 @@
                         </div>
                   </header>
                   <div class="card-body">
+                     <div class="group-card-user">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                        <input type="text" class="form-control" placeholder=" Nombre " v-model="user.name" name="user_name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                        <input type="text" class="form-control" placeholder="Apellidos" v-model="user.last_name" name="last_name">
+                    </div>
+                </div>
+                </div>
                 <div class="group-card-user">
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
-                        <input type="text" class="form-control" placeholder=" Nombre " name="user_name">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
-                        <input type="text" class="form-control" placeholder="Apellidos" name="last_name">
-                    </div>
-                </div>
-                </div>
-                  <div class="group-card-user">
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="zmdi zmdi-email" ></i></span>
-                        <input type="email" class="form-control" placeholder="Su correo electrónico."  name="user_email" disabled>
+                        <input type="email" class="form-control" placeholder="Su correo electrónico." v-model="user.email" name="user_email" disabled>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="zmdi zmdi-phone"></i></span>
-                        <input type="text" class="form-control" placeholder="Su número de teléfono. " name="user_phone"
+                        <input type="text" class="form-control" placeholder="Su número de teléfono. " 
+                        v-model="user.phone"  name="user_phone"
                         maxlength="12" minlength="6">
                       </div>
                     </div>
                 </div>
-
-
-                <div class="group-card-user">
+                    <div class="group-card-user">
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
-                        <input type="date" class="form-control" max="2018-02-10" min="1960-01-02"  placeholder="YYYY-MM-DD"
-                         v-on:change="setBirthDate" name="user_birth_date"
+                        <input type="date" class="form-control" max="2018-02-10" min="1960-01-02" :value="user.birth_date" placeholder="YYYY-MM-DD"
+                          name="user_birth_date"
                          >
                       </div>
                     </div>
-                    <div class="form-group">
-                    <div class="container-genres">
+                    <div class="form-group oardio">
                      
-                        <label class="group-genres"> Sexo: </label>
+                        <label class="radio-inline"> Sexo: </label>
                         
-                          <div class="group-genres">
-                              <input type="radio" name="gender" id="male" value="male" class="checkmark" /> 
-                              <small>Femenino.</small>
-                          </div>
-
-                          <div class="group-genres">
-                              <input type="radio" name="gender" id="male" value="male"  class="checkmark"/> 
-                              <small>Maculino</small>
-                          </div>
-
-                    </div>
+                          <label class="radio-inline">
+                            <input type="radio" name="gender" id="male" value="male" :checked="gender.male">
+                            Masculino 
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" name="gender" id="female" value="female" :checked="gender.female">
+                            Femenino 
+                          </label>
                       </div>
         
-                </div> 
-
-                      
+                </div>
                   </div>
                   <div class="card-footer text-right">
-                    <button class="btn btn-info btn-flat">Cancel</button>
-                    <button class="btn btn-info" v-on:click.prevent="updateMusicUpload">Guardar</button>
+                    <button class="btn btn-primary btn-sm" v-on:click.prevent="saveUpdate">Guardar </button>
                   </div>
          
               </div>
@@ -124,35 +94,36 @@
   const axios = require('axios');
     const {EventBus} =require('@/eventbus');
     import LimitUpladMusic from './limit-upload-music.vue';
-  import { setInterval, setImmediate } from 'timers';
-
+    import UserAvatar from './userImage.vue';
+    import { setInterval, setImmediate } from 'timers';
 export default {
     name: 'avatar',
     components:{
-        LimitUpladMusic
+        LimitUpladMusic,
+        UserAvatar
     },
     data(){
         return{
             isDraging:false,
-            upload_image: '',
-            user_data: {},
+  
+            user_profile: undefined,
+            user: {
+                name: undefined,
+               last_name: undefined,
+               birth_date: undefined,
+               phone: undefined,
+               gender: undefined,
+            },
+            gender:{
+                male: false,
+                female: false,
+            },
             message_upload:'selecciones una imagen para esta música.',
             extension:["png","jpg","jpeg"],
             genres_label: true,
             genres: [],
-               music: {
-                title: undefined,
-                description: undefined,
-                tags: undefined,
-                genre: undefined,
-                file: undefined,
-                size_tmp: 0,
-                description:undefined,
-                file_name: undefined,
-                type: undefined, 
-                tags: undefined,
-                download_allowed: false
-
+               user: {
+                
             },
             error:{
                 error:false,
@@ -165,106 +136,47 @@ export default {
         }
     },
     methods:{
-        file_allower(file,extension_array){
-        let extension =file.split('.');
-            extension=  extension[extension.length-1];
-        if(extension_array.length>0){
-            for(let i in extension_array){
-                if(extension_array[i]==extension){
-                    return true;
-                }             
-            }
-        }
-        return false;
-        },
+     
         //============================================================
         //LOADF MUSIC
         //============================================================
-loadFile(event){
-    let _this=this;
-     let zoneDrop =document.getElementById("update-music-info");
-    let file =  event.target.files[0];
-if(_this.file_allower(file.name,_this.extension)){                       
-        _this.music.file=file;
-        _this.music.file_name=file.name;
-        _this.music.size_tmp =file.size;
-//load file url 
-    let reader = new FileReader();
-        reader.onload = function(e) {        
-       _this.upload_image =e.target.result;    
-        }
-    reader.readAsDataURL(file);
-           
 
-
-    zoneDrop.classList.remove("active_drop");
-    zoneDrop.classList.remove("active_error");
-    _this.message_upload=''
-}else{
-    _this.message_upload='Este archivo no es una musica.';
-    zoneDrop.classList.add("active_error");
-    _this.music.file=undefined;
-    _this.music.file_name=undefined;
-    _this.upload_image='';
-    _this.music.size_tmp =0;
-
-}
-   },
    handlSelectGenrens(ev){
          this.genres_label=false; 
          this.music.genre =ev.target.value;
    },
-   handlClosePrevies(){
-        this.upload_image='';
-        this.music.file=undefined;
-        this.music.file_name=undefined;
-        this.upload_image='';
-        this.music.size_tmp=0;
-        this.music.size =0;
-   },
-      getPrivacies(){
-          let self=this;
-        axios.get(`${SERVER_URI}/api/privacies?token=${this.user_data.token}`)
-             .then(function (req) {
-             self.privacies =req.data.privacies;        
-             })
-            .catch(function (response) {
-            //handle error
-            console.log(response);
-        });
-    }, 
+    
+       async   getUserPublicById(userId){
+            let self = this
+           await axios.get(`${SERVER_URI}/api/public/user/${userId}`).
+            then(function(req){
+                let _user =req.data.user;
+                if(_user.length>0){
+                    self.user =_user[0];
+                    self.user_profile =`${SERVER_URI}/api/files/image/${_user[0].profile_picture}`; //image 
+                  //  self.user.birth_date = self.changeDate(self.user.birth_date);
+                    if(String(self.user.gender).toLowerCase()==='male'){
+                        self.gender.male=true;
+                    }
+                     if(String(self.user.gender).toLowerCase()==='female'){
+                        self.gender.female=true;
+                    }
+                }
+                
+             
+            }).catch(function(err){
+                console.log(`error--->${err}`)
+            })
+            
+           // console.log(this.musics)
+        },
+    
     redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
      updateMusicUpload(){
   
-        let self=this;
-        let formData = new FormData();
-        formData.append('image',self.music.file);
-        formData.append('id',self.music._id);
-        formData.append('title',self.music.title);
-        formData.append('privacy',self.music.privacy);
-        formData.append('download_allowed',self.music.download_allowed);
-            axios.put(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
-             {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-              })
-             .then(function (response) {
-            //handle success
-            if(!response.data.error){
-                self.success.success=true;
-                self.success.message=`Musica subida`;
-                self.btn_disable=true;
-                EventBus.$emit("music_upload",true);
-            }
-             })
-            .catch(function (response) {
-            //handle error
-            console.log("error",response);
-        });
     },
       checkInfoMusic(){
         this.error.error=false;
@@ -303,124 +215,18 @@ if(_this.file_allower(file.name,_this.extension)){
         }
         return true;
     },
-    changePrivacy(event){
-            this.music.privacy =event.target.value;
-        },
-         changeAllowerChange(event){
-            this.music.download_allowed =event.target.value;
-        },
-     getMusicUploadIncompleteBYUser(){
-      let self=this;
-        axios.get(`${SERVER_URI}/api/musicspending?token=${this.user_data.token}`)
-             .then(function (req) {
-             let music_penging =req.data.musics;
-             
-                 if(music_penging.length>0){
-                   self.music =music_penging[0];
-                   self.music.size_tmp=0;
-
-                 }else{
-                   EventBus.$emit("music_upload",true);
-                 }
-            
-             })
-            .catch(function (error) {
-            //handle error
-            console.log("error",error.response);
-        });
-    }, 
+   
+ 
 
      uploadFilesForm(){
-        if(this.checkInfoMusic()){
+       
         
-        let self=this;
-        let formData = new FormData();
-        formData.append('music',self.music.file);
-        formData.append('title',self.music.title);
-        formData.append('description',self.music.description);
-        formData.append('tags',self.music.tags);
-        formData.append('genre',self.music.genre);
-            axios.post(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
-             {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-              })
-             .then(function (response) {
-            //handle success
-            if(!response.data.error){
-                self.success.success=true;
-                self.success.message=`Musica subida`;
-                self.btn_disable=true;
-                EventBus.$emit("music_upload",true);
-            }
-            console.log(response);
-             })
-            .catch(function (err) {
-            //handle error
-            
-            if(err.response.data.error){
-                self.error.error=true;
-                self.error.message = err.response.data.message;
-            }
-        });
-        }
     }
     },
     mounted(){
         this.redirectUserLogin();
-         this.getPrivacies();
-         this.getMusicUploadIncompleteBYUser();
-         //===================================================================
-        //set drag en drop
-        //====================================================================
-        let zoneDrop =document.querySelectorAll(".zone_drop") || [];
-        let _this=this;
-        if(zoneDrop.length>0){
-            for(let i in zoneDrop){
-
-                zoneDrop[i].ondragover=function(ev){
-                    ev.target.classList.add("active_drop")
-                    return false;
-                };
-                zoneDrop[i].ondragleave=function(ev){
-                    ev.target.classList.remove("active_drop");
-                     ev.target.classList.remove("active_error");
-                    return false;
-                };
-
-                zoneDrop[i].ondrop=function(ev){
-                    ev.preventDefault();
-                    let file =ev.dataTransfer.files[0];
-                    ev.target.classList.remove("active_drop");
-                    if(_this.file_allower(file.name,_this.extension)){                       
-                            _this.music.file=file;
-                            _this.music.file_name=file.name;
-                            _this.music.size =file.size;
-                     ev.target.classList.remove("active_drop");
-                     ev.target.classList.remove("active_error");
-                      _this.message_upload=''
-
-                    let reader = new FileReader();
-                    reader.onload = function(e) {        
-                    _this.upload_image =e.target.result;   
-                    }
-                    reader.readAsDataURL(file);
-                    }else{
-                        _this.message_upload='Este archivo no es una musica.';
-                        ev.target.classList.add("active_error");
-                        _this.music.file=undefined;
-                        _this.music.file_name=undefined;
-                        _this.music.size =0;
-                        _this.upload_image='';
-
-                    }
-                    return false;
-                };
-            }
-        }
-        //END DRAG AND DROP
-
+        this.getUserPublicById(this.user_data.user.id);
+        
        
     },
     watch:{
@@ -453,33 +259,5 @@ if(_this.file_allower(file.name,_this.extension)){
 </script>
 <style>
 @import url("./styles.css");
-.container-genres{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-}
 
-.container-genres .group-genres{
-    display: flex;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-}
-.container-genres .group-genres small{
-display: flex;
-width: 100%;
-justify-content: center;
-}
-.container-genres .group-genres input{
-    display: block;
-    width: 20px;
-    background: #f88;
-}
-.checkmark {
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
-}
 </style>
