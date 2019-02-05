@@ -12,12 +12,11 @@
             <div class="row">
                <div class="col-xs-12">
                   <div class="winza-header">                     
-                     <WizanItem v-for="wiz 
-                     in winzan" 
-                     :key="wiz.title" 
-                     :content="wiz" 
-                     :active="wiz.active"
-                     :method="wiz.action"
+                     <WizanItem  
+                     :key="btn_address.title" 
+                     :content="btn_address" 
+                     :active="btn_address.active"
+                     :method="btn_address.action"
                      />
                   </div>
                </div>
@@ -63,30 +62,43 @@
                address: false,
                pending: false,
             },
+
+             allower_upload: false,
+              btn_address:  {
+                active: false,
+                title: 'Dirección',
+                disabled: false,
+                icon_class: 'fa fa-map-marker',
+                action: this.toggleAddress
+              },
             winzan: [
               {
                 active: false,
                 title: 'Mi información',
-                icon_class: 'fa fa-user',
+                icon_class: 'fa fa-address-card',
+                disabled: false,
                 action: this.toggleUser
               },
 
                {
                 active: false,
                 title: 'Dirección',
-                icon_class: 'fa fa-cloud-upload',
+                disabled: false,
+                icon_class: 'fa fa-map-marker',
                 action: this.toggleAddress
               },
               {
                 active: false,
                 title: 'Subir',
+                disabled: !this.allower_upload,
                 icon_class: 'fa fa-cloud-upload',
                 action: this.toggleUpload
               },
               {
                 active: false,
                 title: 'Publicar',
-                icon_class: 'fa fa-cloud-upload',
+                disabled: true,
+                icon_class: 'fa fa-floppy-o',
                 action: this.togglePending
               }
             ] 
@@ -112,6 +124,22 @@
         handlClick(ev){
           console.log("ffff",ev)
         },
+         getMusicUploadIncompleteBYUser(){
+        axios.get(`${SERVER_URI}/api/musicspending?token=${this.user_data.token}`)
+        
+             .then(function (req) {
+             let music_penging =req.data.musics;
+                console.log(music_penging)
+                 if(music_penging.length>0){
+                    _this.allower_upload =true;
+                 }
+            
+             })
+            .catch(function (response) {
+            //handle error
+            console.log(response);
+        });
+    },
         clearVies(){
               this.show_vies={
                user_info: false,
@@ -142,7 +170,7 @@
         mounted(){
           this.redirectUserLogin();
           // this.checkUserUploadMusics();
-          // this.getMusicUploadIncompleteBYUser();
+           this.getMusicUploadIncompleteBYUser();
           //  this.changeTab();
           
           
