@@ -12,11 +12,35 @@
             <div class="row">
                <div class="col-xs-12">
                   <div class="winza-header">                     
-                     <WizanItem  
-                     :key="btn_address.title" 
-                     :content="btn_address" 
-                     :active="btn_address.active"
-                     :method="btn_address.action"
+                   
+                     <WizanItem                
+                     :key="btn_info.title" 
+                     :content="btn_info" 
+                     :active="btn_info.active"
+                     :method="btn_info.action"
+                     :status="!allower_info"
+                     />
+                     <WizanItem                
+                     :key="btn_adress.title" 
+                     :content="btn_adress" 
+                     :active="btn_adress.active"
+                     :method="btn_adress.action"
+                     :status="!allower_address"
+                     />
+                     <WizanItem                
+                     :key="btn_upload.title" 
+                     :content="btn_upload" 
+                     :active="btn_upload.active"
+                     :method="btn_upload.action"
+                     :status="!allower_upload"
+                     />
+                   
+                     <WizanItem                
+                     :key="btn_publishe.title" 
+                     :content="btn_publishe" 
+                     :active="btn_publishe.active"
+                     :method="btn_publishe.action"
+                     :status="!allower_publishe"
                      />
                   </div>
                </div>
@@ -62,46 +86,44 @@
                address: false,
                pending: false,
             },
-
-             allower_upload: false,
-              btn_address:  {
-                active: false,
+             allower_info: true,
+             allower_address: true,
+             allower_upload: true,
+             allower_publishe: true,
+             //====================================================
+             //SET BUTTON 
+             //====================================================
+             btn_adress: {
+                active: true,
                 title: 'Dirección',
                 disabled: false,
                 icon_class: 'fa fa-map-marker',
                 action: this.toggleAddress
               },
-            winzan: [
-              {
-                active: false,
+              btn_info:  {
+                active: true,
                 title: 'Mi información',
                 icon_class: 'fa fa-address-card',
-                disabled: false,
                 action: this.toggleUser
               },
-
-               {
-                active: false,
-                title: 'Dirección',
-                disabled: false,
-                icon_class: 'fa fa-map-marker',
-                action: this.toggleAddress
-              },
-              {
-                active: false,
+    
+            btn_upload:  {
+                active: true,
                 title: 'Subir',
-                disabled: !this.allower_upload,
+                disabled: this.allower_info,
                 icon_class: 'fa fa-cloud-upload',
                 action: this.toggleUpload
               },
-              {
-                active: false,
+              btn_publishe: 
+                 {
+                active: true,
                 title: 'Publicar',
                 disabled: true,
                 icon_class: 'fa fa-floppy-o',
                 action: this.togglePending
               }
-            ] 
+              
+            
           }
         },
         components:{
@@ -125,13 +147,16 @@
           console.log("ffff",ev)
         },
          getMusicUploadIncompleteBYUser(){
+           let _this =this;
         axios.get(`${SERVER_URI}/api/musicspending?token=${this.user_data.token}`)
         
              .then(function (req) {
              let music_penging =req.data.musics;
                 console.log(music_penging)
                  if(music_penging.length>0){
-                    _this.allower_upload =true;
+                    _this.allower_upload =false;
+                 }else{
+                   _this.allower_publishe =false;
                  }
             
              })
@@ -168,12 +193,18 @@
         },
  
         mounted(){
+          
           this.redirectUserLogin();
           // this.checkUserUploadMusics();
            this.getMusicUploadIncompleteBYUser();
           //  this.changeTab();
           
           
+        },
+        beforeMount(){
+          this.redirectUserLogin();
+          // this.checkUserUploadMusics();
+           this.getMusicUploadIncompleteBYUser();
         }
     
 	}

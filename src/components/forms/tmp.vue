@@ -1,39 +1,18 @@
 <template>
-<div class="container__music">
-        <div class="container-upload-music">
-            
-              <div class="upload-music">
-                   <div class="upload-content"> 
-                       <label for="btn-upload" class="btn-label-upload zonedrop">
-                           <div class="header-title">
-                               <h1>Suba su musica</h1>
-                               <div class="info">
-                                   <small v-if="music.file_name!=undefined">{{music.file_name}}</small>
-                                   <small v-if="music.size!=undefined">{{music.size}}</small>
-                                   <small v-if="music.type!=undefined">{{music.type}}</small>
-                               </div>
-                           </div>
-                           <span>
-                               <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                           </span>
-                           <div class="footer-title">
-                               <h3 >{{error_label}}</h3>
-                           </div>
-                           </label>
-                       <input type="file" id="btn-upload" v-on:change="loadFile" accept="audio/*" />
-                   </div>
+      <div class="card-user user-info-update">
+                  <div class="card-body">
 
-        </div>
-</div>
-     
-                <div class="card">
+                       
+                
+                <div class="col-xs-12 col-sm-12">
+                <div class="card p-b-20">
                   <header class="card-heading ">
-                    <h2 class="card-title">Informacion de la cancion</h2>
-                        <div class="container-error">
-                         <div class="alert alert-danger" role="alert" v-if="error.error">
+                    <h2 class="card-title">Informacion de su direccion</h2>
+                     <div class="container-error">
+                         <div class="alert alert-danger" role="alert" v-if="show_error.error">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
                                     <span aria-hidden="true">&times;</span></button>
-                                <strong>Oh snap! </strong> {{error.message}}
+                                <strong>Oh snap! </strong> {{show_error.message}}
                         </div>
                          <div class="alert alert-success" role="alert" v-if="success.success">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
@@ -41,279 +20,254 @@
                                 <strong></strong> {{success.message}}
                         </div>
                         </div>
+                    <ul class="card-actions icons right-top">
+                      <li>
+                        <a href="javascript:void(0)" data-toggle-view="code">
+                          <i class="zmdi zmdi-code"></i>
+                        </a>
+                      </li>
+                    </ul>
                   </header>
                   <div class="card-body">
-
-                     
+                    <form class="form-horizontal">
                       <div class="form-group is-empty">
-                      <div class="input-group">
-                          <span class="input-group-addon"> </span>
-                          <select class="form-control" v-on:change="hiddenLabelGenres" id="value-content">
-                            <option v-if="showLavel">seleciones su genero musical</option>
-                            <option v-for="gen in genres" :key="gen._id" :value="gen._id">{{gen.name}}</option>
-                          </select>
+                        <label for="name" class="col-md-2 control-label">país <span class="required">*</span></label>
+                        <div class="col-md-10">
+                            <Countries :country="address.country"/>
                         </div>
                       </div>
-                     <div class="form-group label-floating is-empty">
-                      <div class="input-group">
-                        <span class="input-group-addon"></span>
-                        <label class="control-label">Titulo</label>
-                        <input type="text" class="form-control" v-model="music.title" required>
+                      <div class="form-group is-empty">
+                        <label for="inputEmail" class="col-md-2 control-label">ciudad <span class="required">*</span></label>
+                        <div class="col-md-10">
+                         <Cities />
+                        </div>
                       </div>
-                    </div>
-                    <div class="form-group label-floating is-empty">
-                      <div class="input-group">
-                        <span class="input-group-addon"></span>
-                        <label class="control-label">Descripcion.</label>
-                        <input type="email" class="form-control" v-model="music.description" required>
+                      <div class="form-group is-empty">
+                        <label for="inputPassword" class="col-md-2 control-label">Calle <span class="required">*</span></label>
+                        <div class="col-md-10">
+                          <input type="text" class="form-control"  placeholder="cual es su calle?" v-model="address.street">
+                        </div>
                       </div>
-                    </div>
-                    <div class="form-group label-floating is-empty">
-                      <div class="input-group">
-                        <span class="input-group-addon"></span>
-                        <label class="control-label">Etiquetas</label>
-                        <input type="text" class="form-control"  v-model="music.tags" required>
+                    <div class="form-card-address col-md-10">
+                        <div class="form-group">
+                        <label for="inputPassword" class="col-md-2 control-label">numero de casa <span class="required">*</span></label>
+                        <div class="col-md-5">
+                          <input type="text" class="form-control"  placeholder="#102" v-model="address.house_number">
+                        </div>
                       </div>
+                      <div class="form-group ">
+                        <label for="inputPassword" class="col-md-2 control-label">codigo postal</label>
+                        <div class="col-md-5">
+                          <input type="text" class="form-control"  placeholder="0000" v-model="address.postcode">
+                        </div>
+                      </div>
+                        
                     </div>
+                      <div class="">
+                    <button class="btn btn-primary btn-sm" :disabled="btnDisabled" v-on:click.prevent="sendData">Guardar </button>
                   </div>
-                  <div class="card-footer text-right">
-                    <button class="btn btn-info btn-flat">Cancel</button>
-                    <button class="btn btn-info" v-on:click.prevent="uploadFilesForm" :disabled="btn_disable">Guardar</button>
+                    </form>
                   </div>
-         
-              </div>
-</div>
+                </div>
+        </div>
+                
+                  
+            </div>
+      </div>
 </template>
 <script>
-  const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
-  const {DBLocal} =require('@/services/data_local')
-  const dbLocal= new DBLocal(DB_USER_NAME);
-  const axios = require('axios');
-    const {EventBus} =require('@/eventbus');
-  import { setInterval, setImmediate } from 'timers';
+const {SERVER_URI,DB_USER_NAME}=require('@/config/index');
+const {DBLocal} =require('@/services/data_local');
+const {EventBus} =require('@/eventbus');
+import Countries from './componentCountries.vue';
+import Cities from './componentCities.vue';
+import { setTimeout } from 'timers';
+const dbLocal= new DBLocal(DB_USER_NAME);
+const axios = require('axios');
 
 export default {
-    name: 'avatar',
-    props:{
-        propImageUrl: {
-            type: String,
-            required: false
-        },
-
-    },
+    name: 'user-form',
     data(){
-        return {
-            urlImg: undefined,
-            draging: false,
-            genres: [],
-            btn_disable: false,
-            error_label: '',
-            music: {
-                title: undefined,
-                description: undefined,
-                tags: undefined,
-                genre: undefined,
-                file: undefined,
-                size: undefined,
-                file_name: undefined,
-                type: undefined,
-                
-
+        return{
+            user_data: undefined,
+            btnDisabled: true,
+            address:{
+                country: undefined,
+                city: undefined,
+                street: undefined,
+                house_number: undefined,
+                postcode: undefined,
             },
-            success:{
+            user_profile : undefined,
+            success: {
                 success: false,
-                message: undefined
-            },
-            error:{
                 message: undefined,
-                error: false
             },
-            filename: undefined,
-            user_found: false,
-            progress: 0,
-            showproccess: false,
-            active_btn_save: false,
-            showLavel: true
-
+            btn_upload:true,
+            show_error: {
+                error: false,
+                message: ''
+            },
+            user: {},
+           
         }
     },
+    components:{
+        Countries,
+        Cities
+    },
     methods:{
-        hiddenLabelGenres(event){
-            this.showLavel=false;
-            this.error.error=false;
-            this.music.genre =event.target.value;
-        },
-    
-    handlDrop(event){
-        console.log(event)
-        return false;
-    },
-    handlDropEnter(ev){
-        return false;
-    },
-      
-redirectUserLogin(){
-        if(dbLocal.checkDataLocalStorageOBject())
+    redirectUserLogin(){
+        if(dbLocal.checkDataLocalStorageOBject());
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
-   loadFile(event){
-     this.music.file=  event.target.files[0];
-    this.music.file_name=(event.target.files[0].name).substr(0,30)+'...';
-    this.music.size=`${(event.target.files[0].size /1024/1024).toFixed(1)} MB`;
-       this.error.error=false;
-   },
-    uploadFilesForm(){
-        this.infoComplete()
-        let self=this;
-        let formData = new FormData();
-        formData.append('music',self.music.file);
-        formData.append('title',self.music.title);
-        formData.append('description',self.music.description);
-        formData.append('tags',self.music.tags);
-        formData.append('genre',self.music.genre);
-            axios.post(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
-             {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-              })
-             .then(function (response) {
-            //handle success
-            if(!response.data.error){
-                self.success.success=true;
-                self.success.message=`Musica subida`;
-                self.btn_disable=true;
-                EventBus.$emit("music_upload",true);
+
+        address_complete(){
+           if((this.address.city!=undefined && this.address.city!='') &&
+               (this.address.country!=undefined && this.address.country!='') &&
+               (this.address.street!=undefined && this.address.street!='' && this.address.street.length>4 ) &&
+               (this.address.house_number!=undefined && this.address.house_number!='') 
+           ){
+               return true;
+           }
+        return false;
+        },
+
+        activeBtnbtnDisabled(){
+            
+            this.btnDisabled=true;
+            if(this.address_complete()){
+                this.btnDisabled=false;
             }
-            console.log(response);
+                
+            
+        },
+        sendData(){
+            if(this.address._id!=undefined){
+                this.updateAddress();
+            }else{
+                this.sendAdrress();
+            }
+            
+        },
+        updateAddress(){
+            let self=this;
+             axios.put(`${SERVER_URI}/api/address?token=${this.user_data.token}`,this.address
+            )
+             .then(function (req) {
+            let address =req.data.address;
+                self.success.success=true;
+                self.success.message=`Su dirección fue guardada`;
              })
             .catch(function (err) {
             //handle error
-            
-            if(err.response.data.error){
-                self.error.error=true;
-                self.error.message = err.response.data.message;
-            }
+            console.log("erro ", err);
         });
-    },
-    getMusicUploadIncompleteBYUser(){
-        axios.get(`${SERVER_URI}/api/musicspending?token=${this.user_data.token}`)
+        },
+        sendAdrress(){
+         let self=this;
+             axios.post(`${SERVER_URI}/api/address?token=${this.user_data.token}`,this.address
+            )
              .then(function (req) {
-             let music_penging =req.data.musics;
-          
-                 if(music_penging.length>0){
-                    EventBus.$emit("music_upload",true);
+            let address =req.data.address;
+            
+              
+             })
+            .catch(function (err) {
+            //handle error
+            console.log("erro ", err);
+        });
+        },
+
+          getAddressByUserId(){
+            let self=this;
+             axios.get(`${SERVER_URI}/api/address?token=${this.user_data.token}`)
+             .then(function (req) {
+                 if(req.data.address!=undefined){
+                     self.address =req.data.address;
                  }
-            
+        
              })
-            .catch(function (response) {
+            .catch(function (err) {
             //handle error
-            console.log(response);
+            console.log("erro ", err);
         });
-    }, 
-    infoComplete(){
-        this.error.error=false;
-          if(this.music.file_name== undefined || this.music.file_name== ''){
-            this.error.error=true;
-            this.error.message=`Debe subir un archivo con una de las siguientes extencion MP3 , OGG y WAV `;
-           return new Error(this.error.message)
+
         }
-
-        if(this.music.title== undefined || this.music.title== ''){
-            this.error.error=true;
-            this.error.message=`El campo titulo es requerido`;
-           return new Error(this.error.message)
-        }
-
-       
-
-
-        if(this.music.description== undefined || this.music.description== ''){
-            this.error.error=true;
-            this.error.message=`El campo descripcion es requerido`;
-         return  new Error(this.error.message)
-        }
-
-        if(this.music.tags== undefined || this.music.tags== ''){
-            this.error.error=true;
-            this.error.message=`El campo etiqueta es requerido`;
-            return new Error(this.error.message)
-        }
+ 
     },
-    getGenres(){
-        let self=this;
-          axios.get(`${SERVER_URI}/api/genres?token=${this.user_data.token}`)
-             .then(function (req) {
-             let genres =req.data.genres;
-            self.genres =genres;      
-             })
-            .catch(function (response) {
-            //handle error
-            console.log(response);
-        });
+    watch: {
+    // whenever question changes, this function will run
+   'address.street': function (newQuestion, oldQuestion) {
+    this.activeBtnbtnDisabled();
+    },
+    'address.country': function (newQuestion, oldQuestion) {
+    this.activeBtnbtnDisabled();
+
+    },
+    'address.city': function (newQuestion, oldQuestion) {
+    this.activeBtnbtnDisabled();
+    },
+    'address.house_number': function (newQuestion, oldQuestion) {
+    this.activeBtnbtnDisabled();
+    },
+     'address.postcode': function (newQuestion, oldQuestion) {
+    this.activeBtnbtnDisabled();
     }
-    },
+  },
     mounted(){
         this.redirectUserLogin();
-        this.getMusicUploadIncompleteBYUser();
-        this.getGenres();
-    let _this=this;
-        //    //drap en drop 
-        let zonedrop =document.querySelectorAll(".zonedrop") || [];
-        if(zonedrop.length>0){
-            for(let i in zonedrop){
+         let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
+         this.getAddressByUserId();
+    
+      let self=this;
+        EventBus.$on("country_code",function(data){
+           self.address.country =data._id
+        })
 
-                zonedrop[i].ondragover=function(ev){
-                    ev.preventDefault();
-                    _this.draging=true;
-                    return false;
-                };
-
-                 zonedrop[i].ondragleave=function(ev){
-                    ev.preventDefault();
-                    _this.draging=false;
-                    return false;
-                };
-
-                zonedrop[i].ondrop=function(ev){
-            ev.preventDefault();
-            _this.draging=false;
-            let file =ev.dataTransfer.files[0];
-            _this.music.file=file;
-            let extension =file.name.split('.');
-            extension=  extension[extension.length-1];
-
-           if(extension=='mp3' || extension=='wpw' || extension=='ogg' || extension=='mp3' ){
-                _this.error_label = "";
-                _this.music.file_name=(file.name).substr(0,30)+'...';
-                _this.music.size=`${(file.size /1024/1024).toFixed(1)} MB`;
-           }else{
-            _this.error_label = "Este formato no es una musica";
-            ev.target.classList.remove('md-bg-green-A700');
-            return new Error("Este formato no es una imagen");
-           }
-
-                    return false;
-                };
-            }
-        }
-
+        EventBus.$on("city_id",function(data){
+           self.address.city =data
+        })
         
     },
-    watch:{
-        'music.title':function(value,oldv){
-            this.error.error=false;
-        },
-        'music.description':function(value,oldv){
-           this.error.error=false;
-        },
-        'music.tags':function(value,oldv){
-           this.error.error=false;
-        }
-    }
+    
+  
 }
 </script>
 <style>
-@import url("./styles.css");
-
+.card-user{
+    max-width: 800px;
+    margin: 0px auto;
+    background: #fff;
+}
+    .group-card-user{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+   .group-card-user .form-group{
+       flex-grow: 1;
+    }
+    .gropu-image{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .container-error{
+        width: 100%;
+        height: 30px;
+    }
+    .oardio input{
+        border: #363636 solid 1px !important;
+    }
+    .form-card-address{
+        display: flex;
+        justify-content: space-between;
+    }
+    .required{
+        color: red;
+    }
 </style>
+
+

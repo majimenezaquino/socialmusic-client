@@ -1,7 +1,7 @@
 <template>
 <div :class="'item-header '+clss">
 <span class="line-progress"></span>
-<button class="botton" v-on:click.prevent="fn" :disabled="content.disabled">
+<button class="botton" v-on:click.prevent="fn" :disabled="status">
     <i :class="content.icon_class"></i>
 </button>
 <a href="" class="wizan-label">{{content.title}}</a>
@@ -19,15 +19,17 @@ export default {
         content:{
             title: String,
             icon_class: String,
-            disabled: Boolean,
+            status: Boolean,
         },
+
+        status: Boolean,
         active: Boolean,
         method: Function,
     },
     methods:{
         fn(ev){
             this.handlClick();
-            if(!this.content.disabled){
+            if(!this.status){
             this.method(ev);
             }
         },
@@ -36,17 +38,27 @@ export default {
             if(this.active){
                 this.clss='active';
             }
+
+            if(this.status){
+            this.clss="btn-disable";
+        }
             
         },
         
     },
     mounted(){
         this.handlClick();
-        if(this.content.disabled){
-            this.clss="btn-disable";
-        }
+        
 
     },
+    watch:{
+        'status':function(value){
+             this.handlClick();
+             if(this.status){
+            this.clss="btn-disable";
+             }
+        }
+    }
    
 }
 </script>
