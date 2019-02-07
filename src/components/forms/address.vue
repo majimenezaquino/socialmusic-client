@@ -26,19 +26,23 @@
                       <div class="form-group is-empty">
                         <label for="name" class="col-md-2 control-label">país <span class="required">*</span></label>
                         <div class="col-md-10">
-                            <FormSelect 
-                            :label="'Seleccione su país'"
-                            :name="'country'"
-                            :id="'country'"
-                            :onchage="handlSelectCountry"
-                            :options="countries"
-                            />
+                            <select class="form-control" v-on:change="handlSelectCountry">
+                                    <option :value="country_select.code">{{ country_select.name || 'Selecciones su país'}}</option>
+                                    <option v-for="country in countries"  :key="country._id" :value="country.code">
+                                        {{country.name}}
+                                    </option>
+                            </select>
                         </div>
                       </div>
                       <div class="form-group is-empty">
                         <label for="inputEmail" class="col-md-2 control-label">ciudad <span class="required">*</span></label>
                         <div class="col-md-10">
-                         <!-- <Cities /> -->
+                         <select class="form-control" v-on:change="handlSelectSities">
+                             <option v-if="city_select">{{ city_select}}</option>
+                                    <option v-for="city in cities"  :key="city._id" :value="city._id">
+                                        {{city.name}}
+                                    </option>
+                            </select>
                         </div>
                       </div>
                       <div class="form-group is-empty">
@@ -47,7 +51,7 @@
                           <input type="text" class="form-control"  placeholder="cual es su calle?" v-model="address.street">
                         </div>
                       </div>
-                    <div class="form-card-address col-md-10">
+                    <div class="form-card-address col-md-12">
                         <div class="form-group">
                         <label for="inputPassword" class="col-md-2 control-label">numero de casa <span class="required">*</span></label>
                         <div class="col-md-5">
@@ -62,14 +66,12 @@
                       </div>
                         
                     </div>
-                      <div class="">
-                    <button class="btn btn-primary btn-sm" :disabled="btnDisabled" v-on:click.prevent="sendData">Guardar </button>
+                        <div class="card-footer text-right">
+                    <button class="btn btn-primary btn-sm" v-on:click.prevent="updateAddress">Guardar </button>
                   </div>
                     </form>
                   </div>
-                  <div class="card-footer text-right">
-                    <button class="btn btn-primary btn-sm" v-on:click.prevent="saveUpdate">Guardar </button>
-                  </div>
+                  
          
               </div>
             </div>
@@ -84,20 +86,26 @@
   const axios = require('axios');
     const {EventBus} =require('@/eventbus');
     import LimitUpladMusic from './limit-upload-music.vue';
-    import FormSelect from './FormSelect.vue';
+
     import { setInterval, setImmediate } from 'timers';
 export default {
     name: 'avatar',
     components:{
         LimitUpladMusic,
-        FormSelect
+        
     },
     data(){
         return{
            
             user_data: undefined,
-            
+            country_select: {
+                code: undefined,
+                name: undefined
+            },
+            city_select: undefined,
             btnDisabled: true,
+            countries: [],
+            cities: [],
             address:{
                 country: undefined,
                 city: undefined,
@@ -119,30 +127,55 @@ export default {
         }
     },
     methods:{
-     
-     async   getContry(){
+        
+        getContry(){
         let self=this;
-           await  axios.get(`${SERVER_URI}/api/countries/?token=${this.user_data.token}`,
+             axios.get(`${SERVER_URI}/api/countries/?token=${this.user_data.token}`,
             )
              .then(function (req) {
-          
-          
-            let select = req.data.countries.map(function(country){
-                return {
-                    value: country.code,
-                    title: country.name,
-                }
-            });
-           
+                   
+                self.countries = req.data.countries;
+               
              })
             .catch(function (err) {
             //handle error
             console.log("erro ", err);
         });
     },
+  
     handlSelectCountry(ev){
-        console.log("desde adrress",ev)
+        let code =ev.target.value;
+       this.city_select=undefined;
+        this.getCities(code);
+        let country=this.countries.filter(function(country){
+            return  country.code ==code;
+        })
+
+       this.address.country = country[0];
     },
+    handlSelectSities(ev){
+         let id =ev.target.value;
+       this.city_select=undefined;
+       
+        let city=this.cities.filter(function(country){
+            return  country._id ==id;
+        })
+        console.log("country ",this.address)
+    },
+    getCities(code=''){
+        let self=this;
+             axios.get(`${SERVER_URI}/api/city/${code}?token=${this.user_data.token}`)
+             .then(function (req) {
+            //handle success
+            self.cities =req.data.cities
+          
+             })
+            .catch(function (err) {
+            //handle error
+            console.log("error ====>", err);
+        });
+    },
+    
   getSelect(ev){
       console.log(ev) 
     
@@ -184,50 +217,10 @@ export default {
      updateMusicUpload(){
   
     },
-      checkInfoMusic(){
-        this.error.error=false;
-        this.success.success=false;
-          if(this.music.file_name== undefined || this.music.file_name== ''){
-            this.error.error=true;
-            this.error.message=`Debe subir un archivo con una de las siguientes extencion MP3 , OGG y WAV `;
-           return false;
-        }
-
-        if(this.music.genre == undefined || this.music.genre== ''){
-            this.error.error=true;
-            this.error.message=`Debe selecionar un  genero musical.`;
-           return false;
-        }
-
-        if(this.music.title== undefined || this.music.title== ''){
-            this.error.error=true;
-            this.error.message=`El campo titulo es requerido`;
-           return false;
-        }
-
-       
-
-
-        if(this.music.description== undefined || this.music.description== ''){
-            this.error.error=true;
-            this.error.message=`El campo descripcion es requerido`;
-         return false;
-        }
-
-        if(this.music.tags== undefined || this.music.tags== ''){
-            this.error.error=true;
-            this.error.message=`El campo etiqueta es requerido`;
-           return false;
-        }
-        return true;
-    },
-   
+  
  
 
-     uploadFilesForm(){
-       
-        
-    },
+   
       address_complete(){
            if((this.address.city!=undefined && this.address.city!='') &&
                (this.address.country!=undefined && this.address.country!='') &&
@@ -291,6 +284,11 @@ export default {
              .then(function (req) {
                  if(req.data.address!=undefined){
                      self.address =req.data.address;
+                     self.city_select =  self.address.city.name;
+                     self.country_select.name=  self.address.country.name;
+                     self.country_select.code=  self.address.country.code;
+                     self.getCities(self.address.country.code);
+                     console.log("cadress", self.city_select)
                  }
         
              })
@@ -301,28 +299,14 @@ export default {
 
         }
     },
-    beforeMount(){
+    mounted(){
         this.redirectUserLogin();
          let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
+         this.getAddressByUserId();  
           this.getContry();
-         this.getAddressByUserId();     
+            
     },
-    computed:{
-        countries: async function(){
-            let self=this;
-           let countries =   await  axios.get(`${SERVER_URI}/api/countries/?token=${this.user_data.token}`,
-            )
-           
-            let select = countries.data.countries.map(function(country){
-                return {
-                    value: country.code,
-                    title: country.name,
-                }
-            });
-        return select;
-        },
-    
-    },
+
     watch:{
         'music.title':function(){
         this.error.error=false;
@@ -353,5 +337,8 @@ export default {
 </script>
 <style>
 @import url("./styles.css");
-
+    .form-card-address{
+        display: flex;
+        justify-content: space-around;
+    }
 </style>
