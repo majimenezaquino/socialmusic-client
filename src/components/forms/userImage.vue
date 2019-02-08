@@ -4,10 +4,18 @@
                     <a href="" class="btn btn-danger btn-fab btn-fab-sm"
                     v-on:click.prevent="handlClosePrevies"
                     >
+                            
                         <i class="fa fa-times" aria-hidden="true"></i></a>
                     <img :src="urlImg || propImageUrl" alt="" class="thumb-prevent">
-                    <button class="btn btn-primary save-image" v-if="btn_save">
+                    <button class="btn btn-primary save-image" v-if="btn_save" v-on:click.prevent="uploadFilesForm">
                         <i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
+                        
+                         <div class="alert alert-success message-surccess" role="alert" v-if="surccess.surccess">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled" v-on:click.prevent="handlCloseMessage">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <strong></strong> {{surccess.message}}
+                        </div>
+
                 </div>
                 <div class="form-contro ">
                      <label for="btn-upload" class="btn-upload">
@@ -50,6 +58,12 @@ export default {
                 file_name: undefined,
                 size: 0,
             },
+
+            surccess:{
+            surccess:false,
+            message: ''
+             },
+             
             urlImg: undefined,
             filename: undefined,
             user_found: false,
@@ -59,6 +73,7 @@ export default {
             btn_save:false
 
         }
+       
     },
     methods:{
         file_allower(file,extension_array){
@@ -76,7 +91,7 @@ export default {
      handlClosePrevies(){
         this.upload_image='';
         this.urlImg= undefined,
-        this.propImageUrl= undefined,
+        this.propImageUrl= '',
         this.upload.file=undefined;
         this.upload.file_name=undefined;
         this.upload_image='';
@@ -100,7 +115,7 @@ if(_this.file_allower(file.name,_this.extension)){
     let reader = new FileReader();
         reader.onload = function(e) {        
        _this.urlImg =e.target.result;   
-       console.log( _this.urlImg) 
+      
         }
     reader.readAsDataURL(file);
            
@@ -120,6 +135,7 @@ if(_this.file_allower(file.name,_this.extension)){
 
 }
    }
+
    ,
 uploadFiles(input){
            let self=this;
@@ -139,6 +155,35 @@ uploadFiles(input){
         reader.readAsDataURL(input.files[0]);
     }
         },
+        uploadFilesForm(){
+       let _this =this;
+        let self=this;
+        let formData = new FormData();
+        formData.append('image',_this.upload.file);
+    
+            axios.post(`${SERVER_URI}/api/upload/image?token=${this.user_data.token}`,formData)
+             .then(function (req) {
+                 if(!req.data.error){
+                     self.btn_save =false;
+                     self.surccess.surccess=true;
+                     self.surccess.message='Imagen Guardada';
+                      setTimeout(function(){
+                    self.surccess.surccess=false;
+                     },1500)
+
+
+                 }
+             })
+            .catch(function (err) {
+            //handle error
+            
+            if(err.response.data.error){
+                self.error.error=true;
+                self.error.message = err.response.data.message;
+            }
+        });
+        
+    },
 
 redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
@@ -155,4 +200,7 @@ redirectUserLogin(){
 </script>
 <style>
  @import url('./styles.css');
+ .message-surccess {
+     position: absolute;
+ }
 </style>

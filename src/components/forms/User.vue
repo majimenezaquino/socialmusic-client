@@ -61,16 +61,19 @@
                          >
                       </div>
                     </div>
-                    <div class="form-group oardio">
+                    <div class="group-genre">
                      
                         <label class="radio-inline"> Sexo: </label>
                         
-                          <label class="radio-inline">
-                            <input type="radio" name="gender" id="male" value="male" :checked="gender.male">
+                          <label class="radio-select">
+                            <input type="radio"
+                             name="gender" id="male" value="male" :checked="gender.male"
+                             class="inputcheck" />
                             Masculino 
                           </label>
-                          <label class="radio-inline">
-                            <input type="radio" name="gender" id="female" value="female" :checked="gender.female">
+                          <label class="radio-select">
+                            <input type="radio" name="gender" id="female" value="female" :checked="gender.female"
+                            class="inputcheck" />
                             Femenino 
                           </label>
                       </div>
@@ -154,9 +157,10 @@ export default {
                 if(_user.length>0){
                     self.user =_user[0];
                     self.user_profile =`${SERVER_URI}/api/files/image/${_user[0].profile_picture}`; //image 
-                  //  self.user.birth_date = self.changeDate(self.user.birth_date);
+                    console.log(self.user )
                     if(String(self.user.gender).toLowerCase()==='male'){
                         self.gender.male=true;
+                       
                     }
                      if(String(self.user.gender).toLowerCase()==='female'){
                         self.gender.female=true;
@@ -175,53 +179,27 @@ export default {
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
-     updateMusicUpload(){
-  
-    },
-      checkInfoMusic(){
-        this.error.error=false;
-        this.success.success=false;
-          if(this.music.file_name== undefined || this.music.file_name== ''){
-            this.error.error=true;
-            this.error.message=`Debe subir un archivo con una de las siguientes extencion MP3 , OGG y WAV `;
-           return false;
-        }
-
-        if(this.music.genre == undefined || this.music.genre== ''){
-            this.error.error=true;
-            this.error.message=`Debe selecionar un  genero musical.`;
-           return false;
-        }
-
-        if(this.music.title== undefined || this.music.title== ''){
-            this.error.error=true;
-            this.error.message=`El campo titulo es requerido`;
-           return false;
-        }
-
-       
-
-
-        if(this.music.description== undefined || this.music.description== ''){
-            this.error.error=true;
-            this.error.message=`El campo descripcion es requerido`;
-         return false;
-        }
-
-        if(this.music.tags== undefined || this.music.tags== ''){
-            this.error.error=true;
-            this.error.message=`El campo etiqueta es requerido`;
-           return false;
-        }
-        return true;
-    },
+     saveUpdate(){
+          let self=this;
+    
+            axios.put(`${SERVER_URI}/api/user?token=${this.user_data.token}`,this.user)
+             .then(function (response) {
+           
+            console.log(response);
+             })
+            .catch(function (err) {
+            //handle error
+            
+            if(err.response.data.error){
+                self.error.error=true;
+                self.error.message = err.response.data.message;
+            }
+        });
+     },
+   
    
  
 
-     uploadFilesForm(){
-       
-        
-    }
     },
     mounted(){
         this.redirectUserLogin();
@@ -259,5 +237,27 @@ export default {
 </script>
 <style>
 @import url("./styles.css");
-
+.group-genre {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .radio-select {
+        display: flex;
+        flex-direction: column;
+        margin:  20px;
+        align-items: center;
+    }
+    .inputcheck{
+        width: 20px;
+        height: 20px;
+        color: #f55;
+    }
+ .inputcheck:after {
+  content: "";
+  position: absolute;
+  display: none;
+  background: #f55;
+}
 </style>

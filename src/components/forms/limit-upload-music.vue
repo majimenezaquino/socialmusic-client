@@ -1,6 +1,14 @@
 <template>
     <div class="container-limit-upload" v-if="limit_upload">
-        
+ <div class="content">
+			 <h1>
+				límite  de subidas de músicas!
+			 </h1>
+			 
+			<p>
+				ya excedió el limite mensual de subidas de musicas, para subir mas musica cambie su cuenta  o espere hasta {{date_account}}.
+			</p>
+        </div>
     </div>
 </template>
 <script>
@@ -18,6 +26,7 @@ export default {
         return{
             user_data: undefined,
             limit_upload: false,
+            date_account: undefined
         }
     },
     methods:{
@@ -31,7 +40,13 @@ export default {
              .then(function (req) {
              let upload =req.data;
              self.limit_upload =upload.upload_info.limits.complete;
-                console.log("upload",)
+             let moth_account =upload.upload_info.limits.upload_month;
+            let tmp_date= new Date(upload.upload_info.date_account);
+            console.log("fecha update",tmp_date)
+             tmp_date.setMonth(tmp_date.getMonth() + parseInt(moth_account));
+            self.date_account =`${tmp_date.getDay()}/${tmp_date.getMonth()}/${tmp_date.getFullYear()}`;
+           
+       
              })
             .catch(function (response) {
             //handle error
@@ -45,3 +60,27 @@ export default {
     }
 }
 </script>
+<style>
+.container-limit-upload{
+     width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+}
+    .conetent{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+    
+    }
+     .conetent h1{
+         color: #fff;
+         font-size: 30px;
+         max-width: 80%;
+     }
+</style>

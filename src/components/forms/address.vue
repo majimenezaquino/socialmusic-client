@@ -102,6 +102,14 @@ export default {
                 code: undefined,
                 name: undefined
             },
+             address_up:{
+                 _id: undefined,
+                 city: undefined,
+                 country: undefined,
+                 street: undefined,
+                 house_number: undefined,
+                 house_number: undefined,
+             },
             city_select: undefined,
             btnDisabled: true,
             countries: [],
@@ -151,16 +159,16 @@ export default {
             return  country.code ==code;
         })
 
-       this.address.country = country[0];
+       this.address_up.country = country[0]._id;       
     },
     handlSelectSities(ev){
          let id =ev.target.value;
        this.city_select=undefined;
-       
         let city=this.cities.filter(function(country){
             return  country._id ==id;
         })
-        console.log("country ",this.address)
+        this.address_up.city=city[0]._id;
+       
     },
     getCities(code=''){
         let self=this;
@@ -176,47 +184,19 @@ export default {
         });
     },
     
-  getSelect(ev){
-      console.log(ev) 
-    
-    },
+
    handlSelectGenrens(country_select){
          this.genres_label=false; 
          this.music.genre =ev.target.value;
    },
     
-       async   getUserPublicById(userId){
-            let self = this
-           await axios.get(`${SERVER_URI}/api/public/user/${userId}`).
-            then(function(req){
-                let _user =req.data.user;
-                if(_user.length>0){
-                    self.user =_user[0];
-                    self.user_profile =`${SERVER_URI}/api/files/image/${_user[0].profile_picture}`; //image 
-                  //  self.user.birth_date = self.changeDate(self.user.birth_date);
-                    if(String(self.user.gender).toLowerCase()==='male'){
-                        self.gender.male=true;
-                    }
-                     if(String(self.user.gender).toLowerCase()==='female'){
-                        self.gender.female=true;
-                    }
-                }
-                
-             
-            }).catch(function(err){
-                console.log(`error--->${err}`)
-            })
-            
-           // console.log(this.musics)
-        },
+    
     
     redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
-     updateMusicUpload(){
   
-    },
   
  
 
@@ -251,9 +231,10 @@ export default {
         },
         updateAddress(){
             let self=this;
-             axios.put(`${SERVER_URI}/api/address?token=${this.user_data.token}`,this.address
-            )
+             axios.put(`${SERVER_URI}/api/address?token=${this.user_data.token}`,this.address_up)
+        
              .then(function (req) {
+                 console.log(req.data)
             let address =req.data.address;
                 self.success.success=true;
                 self.success.message=`Su dirección fue guardada`;
@@ -288,7 +269,13 @@ export default {
                      self.country_select.name=  self.address.country.name;
                      self.country_select.code=  self.address.country.code;
                      self.getCities(self.address.country.code);
-                     console.log("cadress", self.city_select)
+                     //set address to send
+                     self.address_up._id= self.address._id;
+                     self.address_up.country= self.address.country._id;
+                     self.address_up.city= self.address.city._id;
+                     self.address_up.postcode= self.address.postcode;
+                     self.address_up.street= self.address.street;
+                     self.address_up.house_number= self.address.house_number;
                  }
         
              })
