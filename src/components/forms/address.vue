@@ -51,7 +51,7 @@
                           <input type="text" class="form-control"  placeholder="cual es su calle?" v-model="address.street">
                         </div>
                       </div>
-                    <div class="form-card-address col-md-12">
+                    <div class="form-card-address">
                         <div class="form-group">
                         <label for="inputPassword" class="col-md-2 control-label">numero de casa <span class="required">*</span></label>
                         <div class="col-md-5">
@@ -234,7 +234,7 @@ export default {
              axios.put(`${SERVER_URI}/api/address?token=${this.user_data.token}`,this.address_up)
         
              .then(function (req) {
-                 console.log(req.data)
+                 console.log("error",req.data)
             let address =req.data.address;
                 self.success.success=true;
                 self.success.message=`Su dirección fue guardada`;
@@ -295,30 +295,16 @@ export default {
     },
 
     watch:{
-        'music.title':function(){
-        this.error.error=false;
-        this.success.success=false;
+        'address.street':function(newValue){
+            this.address_up.street =newValue;
         },
-         'music.tags':function(){
-        this.error.error=false;
-        this.success.success=false;
+         'address.postcode':function(newValue){
+            this.address_up.postcode =newValue;
         },
-         'music.genre':function(){
-        this.error.error=false;
-        this.success.success=false;
+         'address.house_number':function(newValue){
+            this.address_up.house_number =newValue;
         },
-         'music.file':function(){
-        this.error.error=false;
-        this.success.success=false;
-        },
-        'music.description':function(){
-        this.error.error=false;
-        this.success.success=false;
-        },
-        'music.file_name':function(){
-        this.error.error=false;
-        this.success.success=false;
-        }
+         
     }
 }
 </script>

@@ -68,12 +68,12 @@
                           <label class="radio-select">
                             <input type="radio"
                              name="gender" id="male" value="male" :checked="gender.male"
-                             class="inputcheck" />
+                             class="inputcheck" v-on:click="toggleCheck" />
                             Masculino 
                           </label>
                           <label class="radio-select">
                             <input type="radio" name="gender" id="female" value="female" :checked="gender.female"
-                            class="inputcheck" />
+                            class="inputcheck" v-on:click="toggleCheck" />
                             Femenino 
                           </label>
                       </div>
@@ -98,7 +98,7 @@
     const {EventBus} =require('@/eventbus');
     import LimitUpladMusic from './limit-upload-music.vue';
     import UserAvatar from './userImage.vue';
-    import { setInterval, setImmediate } from 'timers';
+    import { setInterval, setImmediate, setTimeout } from 'timers';
 export default {
     name: 'avatar',
     components:{
@@ -121,13 +121,8 @@ export default {
                 male: false,
                 female: false,
             },
-            message_upload:'selecciones una imagen para esta música.',
-            extension:["png","jpg","jpeg"],
             genres_label: true,
             genres: [],
-               user: {
-                
-            },
             error:{
                 error:false,
                 message: undefined
@@ -144,9 +139,22 @@ export default {
         //LOADF MUSIC
         //============================================================
 
-   handlSelectGenrens(ev){
-         this.genres_label=false; 
-         this.music.genre =ev.target.value;
+
+   toggleCheck(ev){
+       this.user.gender = ev.target.value;
+   },
+   checkUser(){
+       if(
+           this.user.name=='' || this.user.name==undefined ||
+           this.user.last_name=='' || this.user.last_name==undefined ||
+           this.user.last_name=='' || this.user.last_name==undefined ||
+           this.user.email=='' || this.user.email==undefined ||
+           this.user.phone=='' || this.user.phone==undefined ||
+           this.user.birth_date=='' || this.user.birth_date==undefined
+        ){
+            return false;
+        }
+        return true;
    },
     
        async   getUserPublicById(userId){
@@ -157,7 +165,7 @@ export default {
                 if(_user.length>0){
                     self.user =_user[0];
                     self.user_profile =`${SERVER_URI}/api/files/image/${_user[0].profile_picture}`; //image 
-                    console.log(self.user )
+                 
                     if(String(self.user.gender).toLowerCase()==='male'){
                         self.gender.male=true;
                        
@@ -181,11 +189,17 @@ export default {
     },
      saveUpdate(){
           let self=this;
-    
             axios.put(`${SERVER_URI}/api/user?token=${this.user_data.token}`,this.user)
-             .then(function (response) {
-           
-            console.log(response);
+             .then(function (req) {
+                 console.log(req.data)
+           if(!req.data.error){
+               self.success.success=true;
+               self.success.message=`Datos guardado.`;
+               setTimeout(function(){
+                   self.success.success=false;
+               },1500)
+           }
+          
              })
             .catch(function (err) {
             //handle error
@@ -212,26 +226,7 @@ export default {
         this.error.error=false;
         this.success.success=false;
         },
-         'music.tags':function(){
-        this.error.error=false;
-        this.success.success=false;
-        },
-         'music.genre':function(){
-        this.error.error=false;
-        this.success.success=false;
-        },
-         'music.file':function(){
-        this.error.error=false;
-        this.success.success=false;
-        },
-        'music.description':function(){
-        this.error.error=false;
-        this.success.success=false;
-        },
-        'music.file_name':function(){
-        this.error.error=false;
-        this.success.success=false;
-        }
+       
     }
 }
 </script>

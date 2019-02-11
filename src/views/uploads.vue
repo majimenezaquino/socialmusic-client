@@ -143,9 +143,6 @@
         //==========================================================================
         //METHOD TO SET WIZAN
         //==========================================================================
-        handlClick(ev){
-          console.log("ffff",ev)
-        },
          getMusicUploadIncompleteBYUser(){
            let _this =this;
         axios.get(`${SERVER_URI}/api/musicspending?token=${this.user_data.token}`)
@@ -200,11 +197,6 @@
           //  this.changeTab();
           
           
-        },
-        beforeMount(){
-          this.redirectUserLogin();
-          // this.checkUserUploadMusics();
-           this.getMusicUploadIncompleteBYUser();
         }
     
 	}
