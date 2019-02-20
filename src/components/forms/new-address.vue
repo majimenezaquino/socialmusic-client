@@ -7,7 +7,7 @@
             <div class="form-upload">
                 <div class="card">
                   <header class="card-heading ">
-                    <h2 class="card-title">Informacion de la cancion</h2>
+                    <h2 class="card-title">Registre su dirección de domicilio. </h2>
                         <div class="container-error">
                          <div class="alert alert-danger" role="alert" v-if="error.error">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
@@ -21,7 +21,7 @@
                         </div>
                         </div>
                   </header>
-                  <div class="card-body">
+                  <div class="card-body dontent-address">
                     <form class="form-horizontal">
                       <div class="form-group is-empty">
                         <label for="name" class="col-md-2 control-label">país <span class="required">*</span></label>
@@ -67,7 +67,7 @@
                         
                     </div>
                         <div class="card-footer text-right">
-                    <button class="btn btn-primary btn-sm" v-on:click.prevent="updateAddress">Guardar </button>
+                    <button class="btn btn-primary btn-sm" v-on:click.prevent="sendAdrress">Guardar </button>
                   </div>
                     </form>
                   </div>
@@ -87,7 +87,7 @@
     const {EventBus} =require('@/eventbus');
     import LimitUpladMusic from './limit-upload-music.vue';
 
-    import { setInterval, setImmediate } from 'timers';
+    import { setInterval, setImmediate, setTimeout } from 'timers';
 export default {
     name: 'avatar',
     components:{
@@ -102,14 +102,7 @@ export default {
                 code: undefined,
                 name: undefined
             },
-             address_up:{
-                 _id: undefined,
-                 city: undefined,
-                 country: undefined,
-                 street: undefined,
-                 house_number: undefined,
-                 house_number: undefined,
-             },
+        
             city_select: undefined,
             btnDisabled: true,
             countries: [],
@@ -121,7 +114,7 @@ export default {
                 house_number: undefined,
                 postcode: undefined,
             },
-            user_profile : undefined,
+            
             success: {
                 success: false,
                 message: undefined,
@@ -136,7 +129,28 @@ export default {
     },
     methods:{
         
-        getContry(){
+   
+  
+    handlSelectCountry(ev){
+        let code =ev.target.value;
+       this.city_select=undefined;
+        let country=this.countries.filter(function(country){
+            return  country.code ==code;
+        });    
+        this.getCities(code);
+        this.address.country=country[0]._id;
+    },
+    handlSelectSities(ev){
+         let id =ev.target.value;
+       this.city_select=undefined;
+        let city=this.cities.filter(function(country){
+            return  country._id ==id;
+        })
+        this.address.city=city[0]._id;
+        console.log( this.address)
+       
+    },
+         getContry(){
         let self=this;
              axios.get(`${SERVER_URI}/api/countries/?token=${this.user_data.token}`,
             )
@@ -150,33 +164,13 @@ export default {
             console.log("erro ", err);
         });
     },
-  
-    handlSelectCountry(ev){
-        let code =ev.target.value;
-       this.city_select=undefined;
-        this.getCities(code);
-        let country=this.countries.filter(function(country){
-            return  country.code ==code;
-        })
-
-       this.address_up.country = country[0]._id;       
-    },
-    handlSelectSities(ev){
-         let id =ev.target.value;
-       this.city_select=undefined;
-        let city=this.cities.filter(function(country){
-            return  country._id ==id;
-        })
-        this.address_up.city=city[0]._id;
-       
-    },
     getCities(code=''){
         let self=this;
              axios.get(`${SERVER_URI}/api/city/${code}?token=${this.user_data.token}`)
              .then(function (req) {
             //handle success
-            self.cities =req.data.cities
-          
+               self.cities =req.data.cities
+               self.address.city= self.cities[0]._id;
              })
             .catch(function (err) {
             //handle error
@@ -202,14 +196,29 @@ export default {
 
    
       address_complete(){
-           if((this.address.city!=undefined && this.address.city!='') &&
-               (this.address.country!=undefined && this.address.country!='') &&
-               (this.address.street!=undefined && this.address.street!='' && this.address.street.length>4 ) &&
-               (this.address.house_number!=undefined && this.address.house_number!='') 
-           ){
-               return true;
-           }
-        return false;
+          if(this.address.country==undefined){
+              this.error.error=true;
+              this.error.message=`Error, debe seleccionar el país  donde vive.`;
+              return false;
+          }
+          if(this.address.city==undefined){
+              this.error.error=true;
+              this.error.message=`Error, debe seleccionar la ciudad  donde vive. `;
+              return false;
+          }
+
+          if(this.address.street==undefined || !this.address.street.length>0){
+              this.error.error=true;
+              this.error.message=`Error, debe ingresar la calle  donde vive.`;
+              return false;
+          }
+           if(this.address.house_number==undefined || !this.address.house_number.length>0){
+              this.error.error=true;
+              this.error.message=`Error, debe ingresar el número de  casa  donde vive.`;
+              return false;
+          }
+
+        return true;
         },
 
         activeBtnbtnDisabled(){
@@ -221,36 +230,26 @@ export default {
                 
             
         },
-        sendData(){
-            if(this.address._id!=undefined){
-                this.updateAddress();
-            }else{
-                this.sendAdrress();
-            }
-            
-        },
-        updateAddress(){
-            let self=this;
-             axios.put(`${SERVER_URI}/api/address?token=${this.user_data.token}`,this.address_up)
-        
-             .then(function (req) {
-                 console.log("error",req.data)
-            let address =req.data.address;
-                self.success.success=true;
-                self.success.message=`Su dirección fue guardada`;
-             })
-            .catch(function (err) {
-            //handle error
-            console.log("erro ", err);
-        });
-        },
+       
+    
         sendAdrress(){
+            if(!this.address_complete()){
+                console.log("Error data no completada")
+                return ;
+            }
          let self=this;
              axios.post(`${SERVER_URI}/api/address?token=${this.user_data.token}`,this.address
             )
              .then(function (req) {
             let address =req.data.address;
-            
+                if(!address.error){
+                    self.success.success=true;
+                    self.success.message=`La dirección fue guardada.`;
+                    setTimeout(function(){
+                       self.$router.go();
+                    },1000);
+                    self.setDisabledAll("dontent-address");
+                }
               
              })
             .catch(function (err) {
@@ -258,25 +257,23 @@ export default {
             console.log("erro ", err);
         });
         },
-
+            setDisabledAll(_class_content){
+                let inputs=document.querySelectorAll(`.${_class_content } input`);
+                for(let i in inputs){
+                    inputs[i].disabled=true;
+                }
+            },
           getAddressByUserId(){
             let self=this;
              axios.get(`${SERVER_URI}/api/address?token=${this.user_data.token}`)
              .then(function (req) {
-                 if(req.data.address!=undefined){
-                     self.address =req.data.address;
-                     self.city_select =  self.address.city.name;
-                     self.country_select.name=  self.address.country.name;
-                     self.country_select.code=  self.address.country.code;
-                     self.getCities(self.address.country.code);
-                     //set address to send
-                     self.address_up._id= self.address._id;
-                     self.address_up.country= self.address.country._id;
-                     self.address_up.city= self.address.city._id;
-                     self.address_up.postcode= self.address.postcode;
-                     self.address_up.street= self.address.street;
-                     self.address_up.house_number= self.address.house_number;
-                 }
+                let address =req.data.address;
+                if(address.length>0){
+                    //update address
+                }else{
+                    //new address
+                }
+                
         
              })
             .catch(function (err) {
@@ -289,20 +286,27 @@ export default {
     mounted(){
         this.redirectUserLogin();
          let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
+         this.getContry();
          this.getAddressByUserId();  
-          this.getContry();
+        
             
     },
 
     watch:{
+        'address.country':function(newValue){
+            this.error.error=false;
+        },
+        'address.city':function(newValue){
+            this.error.error=false;
+        },
         'address.street':function(newValue){
-            this.address_up.street =newValue;
+            this.error.error=false;
         },
          'address.postcode':function(newValue){
-            this.address_up.postcode =newValue;
+           this.error.error=false;
         },
          'address.house_number':function(newValue){
-            this.address_up.house_number =newValue;
+           this.error.error=false;
         },
          
     }

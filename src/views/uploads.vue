@@ -110,7 +110,7 @@
             btn_upload:  {
                 active: true,
                 title: 'Subir',
-                disabled: this.allower_info,
+                disabled: this.allower_info, 
                 icon_class: 'fa fa-cloud-upload',
                 action: this.toggleUpload
               },
@@ -186,14 +186,39 @@
       togglePending(ev){
         this.clearVies()
         this.show_vies.pending=true;
+      },
+      getUploadStatus(){
+            let _this =this;
+        axios.get(`${SERVER_URI}/api/checkuseruploadmusics?token=${this.user_data.token}`)
+        
+             .then(function (req) {
+             let uploadInfo =req.data.upload_info;
+
+                if(!uploadInfo.user_complete){
+                _this.show_vies.user_info=true;
+                return;
+                }
+
+                if(!uploadInfo.address){
+                _this.show_vies.address=true;
+               // return;
+                }
+
+                console.log("status music",uploadInfo)
+            
+             })
+            .catch(function (response) {
+            //handle error
+            console.log(response);
+        });
       }
         },
  
         mounted(){
-          
           this.redirectUserLogin();
           // this.checkUserUploadMusics();
            this.getMusicUploadIncompleteBYUser();
+           this.getUploadStatus();
           //  this.changeTab();
           
           
