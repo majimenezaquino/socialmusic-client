@@ -1,57 +1,82 @@
 <template>
 <div class="container__music">
-          <div id="content" class="container-fluid">
-            <div class="content-body">
-              <div class="row">
-                <div class="col-xs-12">
-                  <div class="card card-data-tables">
-                    <header class="card-heading m-0">
-                      
-                      <h2 class="card-title">Zero configuration</h2>
-                     
-                    </header>
-                    <div class="card-body p-0">
-                      <div class="table-responsive">
-                        <table id="productsTable" class="mdl-data-table m-t-2" cellspacing="0" width="100%">
-                          <thead>
-                            <tr>
-                              <th data-orderable="false" class="col-xs-1">
-                                <span class="checkbox">
-                                  <label>
-                                    <input type="checkbox" value="" id="checkAll">
-                                    <span class="checkbox-material"></span>
-                                  </label>
-                                </span>
-                              </th>
-                              <th data-orderable="false" class="col-xs-2">País</th>
-                              <th class="col-xs-2">Ciudad</th>
-                              <th class="col-xs-2">Calle</th>
-                              <th class="col-xs-2">Numero de casa</th>
-
-                              <th class="col-xs-1">Código postal </th>
-                              <th data-orderable="false" class="col-xs-2">
-                                <button class="btn btn-primary btn-fab  animate-fab"><i class="zmdi zmdi-plus"></i></button>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr v-for="(_address ,index)  in address" :key="index">
-                              <td>{{_address.country.name}}</td>
-                              <td>#394822</td>
-                              <td>#394822</td>
-                              <td>1,200</td>
-                              <td><a href="javascript:void(0)" class="edit-product icon"><i class="zmdi zmdi-edit"></i></a></td>
-                            </tr>
-                          </tbody>
-                        </table>
+    <div class="col-music">
+        <!-- <UserAvatar :propImageUrl="user_profile" /> -->
+    </div>
+     <div class="col-music">
+            <div class="form-upload">
+                <div class="card">
+                  <header class="card-heading ">
+                    <h2 class="card-title">Actualizar dirección de domicilio.</h2>
+                        <div class="container-error">
+                         <div class="alert alert-danger" role="alert" v-if="error.error">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <strong>Oh snap! </strong> {{error.message}}
+                        </div>
+                         <div class="alert alert-success" role="alert" v-if="success.success">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <strong></strong> {{success.message}}
+                        </div>
+                        </div>
+                  </header>
+                  <div class="card-body dontent-address">
+                    <form class="form-horizontal">
+                      <div class="form-group is-empty">
+                        <label for="name" class="col-md-2 control-label">país <span class="required">*</span></label>
+                        <div class="col-md-10">
+                            <select class="form-control" v-on:change="handlSelectCountry">
+                                    <option :value="country_select.code">{{ country_select.name || 'Selecciones su país'}}</option>
+                                    <option v-for="country in countries"  :key="country._id" :value="country.code">
+                                        {{country.name}}
+                                    </option>
+                            </select>
+                        </div>
                       </div>
+                      <div class="form-group is-empty">
+                        <label for="inputEmail" class="col-md-2 control-label">ciudad <span class="required">*</span></label>
+                        <div class="col-md-10">
+                         <select class="form-control" v-on:change="handlSelectSities">
+                             <option v-if="city_select">{{ city_select}}</option>
+                                    <option v-for="city in cities"  :key="city._id" :value="city._id">
+                                        {{city.name}}
+                                    </option>
+                            </select>
+                        </div>
+                      </div>
+                      <div class="form-group is-empty">
+                        <label for="inputPassword" class="col-md-2 control-label">Calle <span class="required">*</span></label>
+                        <div class="col-md-10">
+                          <input type="text" class="form-control"  placeholder="cual es su calle?" v-model="address.street">
+                        </div>
+                      </div>
+                    <div class="form-card-address">
+                        <div class="form-group">
+                        <label for="inputPassword" class="col-md-2 control-label">numero de casa <span class="required">*</span></label>
+                        <div class="col-md-5">
+                          <input type="text" class="form-control"  placeholder="#102" v-model="address.house_number">
+                        </div>
+                      </div>
+                      <div class="form-group ">
+                        <label for="inputPassword" class="col-md-2 control-label">codigo postal</label>
+                        <div class="col-md-5">
+                          <input type="text" class="form-control"  placeholder="0000" v-model="address.postcode">
+                        </div>
+                      </div>
+                        
                     </div>
+                        <div class="card-footer text-right">
+                    <button class="btn btn-primary btn-sm" v-on:click.prevent="updateAddress">Guardar </button>
                   </div>
-                </div>
+                    </form>
+                  </div>
+                  
+         
               </div>
             </div>
-            
-      </div>
+    </div>
+    <!-- <LimitUpladMusic> </LimitUpladMusic> -->
 </div>
 </template>
 <script>
@@ -60,19 +85,46 @@
   const dbLocal= new DBLocal(DB_USER_NAME);
   const axios = require('axios');
     const {EventBus} =require('@/eventbus');
-    
+    import LimitUpladMusic from './limit-upload-music.vue';
 
-    import { setInterval, setImmediate } from 'timers';
+    import { setInterval, setImmediate, setTimeout } from 'timers';
 export default {
     name: 'avatar',
     components:{
-     
+        LimitUpladMusic,
         
     },
     data(){
         return{
+           
             user_data: undefined,
-            address:[],
+            country_select: {
+                code: undefined,
+                name: undefined
+            },
+        
+            city_select: undefined,
+            btnDisabled: true,
+            countries: [],
+            cities: [],
+            address:{
+                country: undefined,
+                city: undefined,
+                street: undefined,
+                house_number: undefined,
+                postcode: undefined,
+            },
+            
+            success: {
+                success: false,
+                message: undefined,
+            },
+            btn_upload:true,
+            error: {
+                error: false,
+                message: ''
+            },
+            user: {},
         }
     },
     methods:{
@@ -82,12 +134,11 @@ export default {
     handlSelectCountry(ev){
         let code =ev.target.value;
        this.city_select=undefined;
-        this.getCities(code);
         let country=this.countries.filter(function(country){
             return  country.code ==code;
-        })
-
-       this.address_up.country = country[0]._id;       
+        });    
+        this.getCities(code);
+        this.address.country=country[0]._id;
     },
     handlSelectSities(ev){
          let id =ev.target.value;
@@ -95,7 +146,8 @@ export default {
         let city=this.cities.filter(function(country){
             return  country._id ==id;
         })
-        this.address_up.city=city[0]._id;
+        this.address.city=city[0]._id;
+        console.log( this.address)
        
     },
          getContry(){
@@ -117,8 +169,8 @@ export default {
              axios.get(`${SERVER_URI}/api/city/${code}?token=${this.user_data.token}`)
              .then(function (req) {
             //handle success
-            self.cities =req.data.cities
-          
+               self.cities =req.data.cities
+               self.address.city= self.cities[0]._id;
              })
             .catch(function (err) {
             //handle error
@@ -144,40 +196,73 @@ export default {
 
    
       address_complete(){
-           if((this.address.city!=undefined && this.address.city!='') &&
-               (this.address.country!=undefined && this.address.country!='') &&
-               (this.address.street!=undefined && this.address.street!='' && this.address.street.length>4 ) &&
-               (this.address.house_number!=undefined && this.address.house_number!='') 
-           ){
-               return true;
-           }
-        return false;
+          if(this.address.country==undefined){
+              this.error.error=true;
+              this.error.message=`Error, debe seleccionar el país  donde vive.`;
+              return false;
+          }
+          if(this.address.city==undefined){
+              this.error.error=true;
+              this.error.message=`Error, debe seleccionar la ciudad  donde vive. `;
+              return false;
+          }
+
+          if(this.address.street==undefined || !this.address.street.length>0){
+              this.error.error=true;
+              this.error.message=`Error, debe ingresar la calle  donde vive.`;
+              return false;
+          }
+           if(this.address.house_number==undefined || !this.address.house_number.length>0){
+              this.error.error=true;
+              this.error.message=`Error, debe ingresar el número de  casa  donde vive.`;
+              return false;
+          }
+
+        return true;
         },
 
-        sendData(){
-            if(this.address._id!=undefined){
-                this.updateAddress();
-            }else{
-                this.sendAdrress();
+        activeBtnbtnDisabled(){
+            
+            this.btnDisabled=true;
+            if(this.address_complete()){
+                this.btnDisabled=false;
             }
+                
             
         },
+       
+    
         updateAddress(){
-            let self=this;
-             axios.put(`${SERVER_URI}/api/address?token=${this.user_data.token}`,this.address_up)
-        
+            if(!this.address_complete()){
+                console.log("Error data no completada")
+                return ;
+            }
+         let self=this;
+             axios.put(`${SERVER_URI}/api/address?token=${this.user_data.token}`,this.address
+            )
              .then(function (req) {
-                 console.log("error",req.data)
             let address =req.data.address;
-                self.success.success=true;
-                self.success.message=`Su dirección fue guardada`;
+                if(!address.error){
+                    self.success.success=true;
+                    self.success.message=`La dirección fue guardada.`;
+                    setTimeout(function(){
+                       self.$router.go();
+                    },1000);
+                    self.setDisabledAll("dontent-address");
+                }
+              
              })
             .catch(function (err) {
             //handle error
             console.log("erro ", err);
         });
         },
-        
+            setDisabledAll(_class_content){
+                let inputs=document.querySelectorAll(`.${_class_content } input`);
+                for(let i in inputs){
+                    inputs[i].disabled=true;
+                }
+            },
           getAddressByUserId(){
             let self=this;
              axios.get(`${SERVER_URI}/api/address?token=${this.user_data.token}`)
@@ -185,7 +270,6 @@ export default {
                 let address =req.data.address;
                 if(address.length>0){
                     //update address
-                    self.address =address;
                 }else{
                     //new address
                 }
@@ -202,20 +286,27 @@ export default {
     mounted(){
         this.redirectUserLogin();
          let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
+         this.getContry();
          this.getAddressByUserId();  
         
             
     },
 
     watch:{
+        'address.country':function(newValue){
+            this.error.error=false;
+        },
+        'address.city':function(newValue){
+            this.error.error=false;
+        },
         'address.street':function(newValue){
-            this.address_up.street =newValue;
+            this.error.error=false;
         },
          'address.postcode':function(newValue){
-            this.address_up.postcode =newValue;
+           this.error.error=false;
         },
          'address.house_number':function(newValue){
-            this.address_up.house_number =newValue;
+           this.error.error=false;
         },
          
     }
