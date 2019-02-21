@@ -113,6 +113,7 @@ export default {
             isDraging:false,
             upload_image: '',
             user_data: {},
+            privacies: undefined,
             message_upload:'selecciones una imagen para esta música.',
             extension:["png","jpg","jpeg"],
             genres_label: true,
@@ -233,9 +234,12 @@ if(_this.file_allower(file.name,_this.extension)){
             //handle success
             if(!response.data.error){
                 self.success.success=true;
-                self.success.message=`Musica subida`;
+                self.success.message=`Música Publicidad`;
                 self.btn_disable=true;
-                EventBus.$emit("music_upload",true);
+                setTimeout(function(){
+                       self.$router.go();
+                    },2000);
+                
             }
              })
             .catch(function (response) {
@@ -355,18 +359,17 @@ if(_this.file_allower(file.name,_this.extension)){
         let _this=this;
         if(zoneDrop.length>0){
             for(let i in zoneDrop){
-
-                zoneDrop[i].ondragover=function(ev){
+                zoneDrop[0].ondragover=function(ev){
                     ev.target.classList.add("active_drop")
                     return false;
                 };
-                zoneDrop[i].ondragleave=function(ev){
+                zoneDrop[0].ondragleave=function(ev){
                     ev.target.classList.remove("active_drop");
                      ev.target.classList.remove("active_error");
                     return false;
                 };
 
-                zoneDrop[i].ondrop=function(ev){
+                zoneDrop[0].ondrop=function(ev){
                     ev.preventDefault();
                     let file =ev.dataTransfer.files[0];
                     ev.target.classList.remove("active_drop");

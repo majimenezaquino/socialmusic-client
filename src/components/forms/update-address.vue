@@ -27,9 +27,8 @@
                         <label for="name" class="col-md-2 control-label">país <span class="required">*</span></label>
                         <div class="col-md-10">
                             <select class="form-control" v-on:change="handlSelectCountry">
-                                    <option :value="country_select.code">{{ country_select.name || 'Selecciones su país'}}</option>
-                                    <option v-for="country in countries"  :key="country._id" :value="country.code">
-                                        {{country.name}}
+                                    <option v-for="_country in countries"  :key="_country._id" :value="_country.code" :selected="_country._id==country_select">
+                                        {{_country.name}}
                                     </option>
                             </select>
                         </div>
@@ -38,8 +37,7 @@
                         <label for="inputEmail" class="col-md-2 control-label">ciudad <span class="required">*</span></label>
                         <div class="col-md-10">
                          <select class="form-control" v-on:change="handlSelectSities">
-                             <option v-if="city_select">{{ city_select}}</option>
-                                    <option v-for="city in cities"  :key="city._id" :value="city._id">
+                                    <option v-for="city in cities"  :key="city._id" :value="city._id" :selected="city._id==city_select">
                                         {{city.name}}
                                     </option>
                             </select>
@@ -98,11 +96,14 @@ export default {
         return{
            
             user_data: undefined,
-            country_select: {
-                code: undefined,
-                name: undefined
+            address_selected: {
+                country: undefined,
+                city: undefined,
+                street: undefined,
+                house_number: undefined,
+                postcode: undefined,
             },
-        
+            country_select: undefined,
             city_select: undefined,
             btnDisabled: true,
             countries: [],
@@ -133,21 +134,23 @@ export default {
   
     handlSelectCountry(ev){
         let code =ev.target.value;
-       this.city_select=undefined;
+ 
         let country=this.countries.filter(function(country){
             return  country.code ==code;
-        });    
-        this.getCities(code);
-        this.address.country=country[0]._id;
+        });   
+        
+        this.address.country =country[0]._id;
+        this.country_select =this.address.country; 
+       
     },
     handlSelectSities(ev){
          let id =ev.target.value;
-       this.city_select=undefined;
+     
         let city=this.cities.filter(function(country){
             return  country._id ==id;
         })
         this.address.city=city[0]._id;
-        console.log( this.address)
+       
        
     },
          getContry(){
@@ -157,6 +160,7 @@ export default {
              .then(function (req) {
                    
                 self.countries = req.data.countries;
+                
                
              })
             .catch(function (err) {
@@ -169,8 +173,7 @@ export default {
              axios.get(`${SERVER_URI}/api/city/${code}?token=${this.user_data.token}`)
              .then(function (req) {
             //handle success
-               self.cities =req.data.cities
-               self.address.city= self.cities[0]._id;
+               self.cities =req.data.cities;
              })
             .catch(function (err) {
             //handle error
@@ -247,8 +250,8 @@ export default {
                     self.success.message=`La dirección fue guardada.`;
                     setTimeout(function(){
                        self.$router.go();
-                    },1000);
-                    self.setDisabledAll("dontent-address");
+                    },2000);
+                 //   self.setDisabledAll("dontent-address");
                 }
               
              })
@@ -270,8 +273,16 @@ export default {
                 let address =req.data.address;
                 if(address.length>0){
                     //update address
-                }else{
-                    //new address
+                    self.address._id =address[0]._id;
+                    self.country_select =address[0].country._id;
+                    self.address.country=address[0].country._id;
+                    self.getCities(address[0].country.code);
+                    self.city_select=address[0].city._id;
+                    self.address.postcode =address[0].postcode;
+                    self.address.street =address[0].street;
+                    self.address.house_number =address[0].house_number;
+                    self.address.city=address[0].city._id;
+                    console.log(  self.address.city)
                 }
                 
         
@@ -286,12 +297,13 @@ export default {
     mounted(){
         this.redirectUserLogin();
          let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
-         this.getContry();
          this.getAddressByUserId();  
+         this.getContry();
+         
         
             
     },
-
+        
     watch:{
         'address.country':function(newValue){
             this.error.error=false;

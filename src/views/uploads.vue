@@ -80,6 +80,7 @@
         data(){
           return{
             user_data: undefined,
+            music_penging: false,
             show_vies:{
                user_info: false,
                upload: false,
@@ -149,13 +150,19 @@
         
              .then(function (req) {
              let music_penging =req.data.musics;
-                console.log(music_penging)
+              
                  if(music_penging.length>0){
                     _this.allower_upload =false;
-                 }else{
-                   _this.allower_publishe =false;
+                    _this.show_vies.pending=true;
+                      _this.show_vies.upload=false;
+                      _this.music_penging=true;
                  }
-            
+                 else{
+                   _this.allower_publishe =false;
+                 
+                   _this.show_vies.pending=true;
+                 }
+
              })
             .catch(function (response) {
             //handle error
@@ -201,24 +208,32 @@
 
                 if(!uploadInfo.address){
                 _this.show_vies.address=true;
-               // return;
+                return;
                 }
 
-                console.log("status music",uploadInfo)
+              if(!uploadInfo.address){
+                _this.show_vies.address=true;
+                return;
+                }
+                if(!_this.music_penging){
+                  _this.show_vies.pending=false;
+                  _this.show_vies.upload=true;
+                return;
+                }
+                
             
              })
             .catch(function (response) {
             //handle error
-            console.log(response);
+
         });
       }
         },
  
         mounted(){
           this.redirectUserLogin();
-          // this.checkUserUploadMusics();
-           this.getMusicUploadIncompleteBYUser();
            this.getUploadStatus();
+            this.getMusicUploadIncompleteBYUser();
           //  this.changeTab();
           
           

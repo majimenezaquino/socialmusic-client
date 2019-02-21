@@ -241,9 +241,12 @@ if(_this.file_allower(file.name,_this.extension)){
                 self.success.success=true;
                 self.success.message=`Musica subida`;
                 self.btn_disable=true;
-                EventBus.$emit("music_upload",true);
             }
-            console.log(response);
+             
+                    setTimeout(function(){
+                       self.$router.go();
+                    },2000);
+
              })
             .catch(function (err) {
             //handle error
@@ -262,22 +265,21 @@ if(_this.file_allower(file.name,_this.extension)){
          //===================================================================
         //set drag en drop
         //====================================================================
-        let zoneDrop =document.querySelectorAll(".zone_drop") || [];
+        let zoneDrop =document.querySelectorAll(".zone_drop");;
         let _this=this;
         if(zoneDrop.length>0){
             for(let i in zoneDrop){
-
-                zoneDrop[i].ondragover=function(ev){
+                zoneDrop[0].ondragover=function(ev){
                     ev.target.classList.add("active_drop")
                     return false;
                 };
-                zoneDrop[i].ondragleave=function(ev){
+                zoneDrop[0].ondragleave=function(ev){
                     ev.target.classList.remove("active_drop");
                      ev.target.classList.remove("active_error");
                     return false;
                 };
 
-                zoneDrop[i].ondrop=function(ev){
+                zoneDrop[0].ondrop=function(ev){
                     ev.preventDefault();
                     let file =ev.dataTransfer.files[0];
                     ev.target.classList.remove("active_drop");
