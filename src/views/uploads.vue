@@ -160,7 +160,7 @@
                  else{
                    _this.allower_publishe =false;
                  
-                   _this.show_vies.pending=true;
+                   _this.show_vies.pending=false;
                  }
 
              })

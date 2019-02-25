@@ -299,9 +299,7 @@ if(_this.file_allower(file.name,_this.extension)){
                  if(music_penging.length>0){
                    self.music =music_penging[0];
                    self.music.size_tmp=0;
-                   console.log("================={}=========================", self.music)
-                 }else{
-                   EventBus.$emit("music_upload",true);
+                 
                  }
             
              })
@@ -311,42 +309,6 @@ if(_this.file_allower(file.name,_this.extension)){
         });
     }, 
 
-     uploadFilesForm(){
-        if(this.checkInfoMusic()){
-        
-        let self=this;
-        let formData = new FormData();
-        formData.append('music',self.music.file);
-        formData.append('title',self.music.title);
-        formData.append('description',self.music.description);
-        formData.append('tags',self.music.tags);
-        formData.append('genre',self.music.genre);
-            axios.post(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
-             {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-              })
-             .then(function (response) {
-            //handle success
-            if(!response.data.error){
-                self.success.success=true;
-                self.success.message=`Musica subida`;
-                self.btn_disable=true;
-                EventBus.$emit("music_upload",true);
-            }
-            console.log(response);
-             })
-            .catch(function (err) {
-            //handle error
-            
-            if(err.response.data.error){
-                self.error.error=true;
-                self.error.message = err.response.data.message;
-            }
-        });
-        }
-    }
     },
     mounted(){
         this.redirectUserLogin();
