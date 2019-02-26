@@ -68,6 +68,9 @@
                         <label class="control-label">Etiquetas</label>
                         <input type="text" class="form-control"  v-model="music.tags" required>
                       </div>
+                      <div class="card-body">
+                          <span class="label label-primary m-2" v-for="(t ,i) in tags" :key="i">{{t}}</span>
+                      </div>
                     </div>
                   </div>
                   <div class="card-footer text-right">
@@ -102,6 +105,7 @@ export default {
             message_upload:'Suba su cancion',
             extension:["mp3","wpw","ogg"],
             genres_label: true,
+            tags: undefined,
             genres: [],
                music: {
                 title: undefined,
@@ -245,7 +249,7 @@ if(_this.file_allower(file.name,_this.extension)){
              
                     setTimeout(function(){
                        self.$router.go();
-                    },2000);
+                    },1000);
 
              })
             .catch(function (err) {
@@ -311,7 +315,8 @@ if(_this.file_allower(file.name,_this.extension)){
         this.error.error=false;
         this.success.success=false;
         },
-         'music.tags':function(){
+         'music.tags':function(tags){
+             this.tags=tags.split(",")
         this.error.error=false;
         this.success.success=false;
         },

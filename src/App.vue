@@ -6,13 +6,33 @@
 </template>
 <script>
 import Player from "@/components/player/player2.vue";
+import io from 'socket.io-client';
+  const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
+	const {DBLocal} =require('@/services/data_local')
+	const dbLocal= new DBLocal(DB_USER_NAME);
+const socket = io(SERVER_URI);
 export default {
   name: 'app',
   components:{
     Player
   },
+
+  
   mounted(){
-    
+    if(!dbLocal.checkDataLocalStorageOBject())
+    {
+      return;
+    }
+     let on_sockt_user  =dbLocal.getDataLocalStorageOBject().user.id;
+
+  
+    socket.on('connect', function(data){
+      console.log("connectado")
+    });
+
+    socket.on(on_sockt_user, function(data){
+    alert(data)
+    });
   }
  
   }

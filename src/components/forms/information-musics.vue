@@ -20,7 +20,7 @@
                     <h3>{{message_upload}}</h3>
                 </div>
                 <div class="upload-info">
-                    <p>{{music.file_name}}</p>
+                    <p>{{(music.file_name || '').substr(0,50)}}</p>
                     <small v-if="music.size_tmp>0">{{(music.size_tmp/1024/1024).toFixed(1)}} MB</small>
                 </div>
          </div>
@@ -123,6 +123,7 @@ export default {
                 description: undefined,
                 tags: undefined,
                 genre: undefined,
+                privacy: null,
                 file: undefined,
                 size_tmp: 0,
                 description:undefined,
@@ -204,7 +205,9 @@ if(_this.file_allower(file.name,_this.extension)){
           let self=this;
         axios.get(`${SERVER_URI}/api/privacies?token=${this.user_data.token}`)
              .then(function (req) {
-             self.privacies =req.data.privacies;        
+             self.privacies =req.data.privacies;  
+             self.music.privacy=  self.privacies[0]._id;    
+             console.log(self.music)
              })
             .catch(function (response) {
             //handle error
@@ -215,8 +218,9 @@ if(_this.file_allower(file.name,_this.extension)){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     },
+   
      updateMusicUpload(){
-  
+  console.log("loadd...",this.music)
         let self=this;
         let formData = new FormData();
         formData.append('image',self.music.file);
@@ -247,43 +251,7 @@ if(_this.file_allower(file.name,_this.extension)){
             console.log("error",response);
         });
     },
-      checkInfoMusic(){
-        this.error.error=false;
-        this.success.success=false;
-          if(this.music.file_name== undefined || this.music.file_name== ''){
-            this.error.error=true;
-            this.error.message=`Debe subir un archivo con una de las siguientes extencion MP3 , OGG y WAV `;
-           return false;
-        }
-
-        if(this.music.genre == undefined || this.music.genre== ''){
-            this.error.error=true;
-            this.error.message=`Debe selecionar un  genero musical.`;
-           return false;
-        }
-
-        if(this.music.title== undefined || this.music.title== ''){
-            this.error.error=true;
-            this.error.message=`El campo titulo es requerido`;
-           return false;
-        }
-
-       
-
-
-        if(this.music.description== undefined || this.music.description== ''){
-            this.error.error=true;
-            this.error.message=`El campo descripcion es requerido`;
-         return false;
-        }
-
-        if(this.music.tags== undefined || this.music.tags== ''){
-            this.error.error=true;
-            this.error.message=`El campo etiqueta es requerido`;
-           return false;
-        }
-        return true;
-    },
+   
     changePrivacy(event){
             this.music.privacy =event.target.value;
         },
