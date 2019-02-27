@@ -91,7 +91,7 @@
               </div>
             </div>
     </div>
-    <!-- <LimitUpladMusic> </LimitUpladMusic> -->
+ 
 </div>
 </template>
 <script>
@@ -102,6 +102,8 @@
     const {EventBus} =require('@/eventbus');
     import LimitUpladMusic from './limit-upload-music.vue';
   import { setInterval, setImmediate } from 'timers';
+  import io from 'socket.io-client';
+  const socket = io(SERVER_URI);
 
 export default {
     name: 'avatar',
@@ -117,6 +119,8 @@ export default {
             message_upload:'selecciones una imagen para esta música.',
             extension:["png","jpg","jpeg"],
             genres_label: true,
+            privacy: undefined,
+            download_allowed:false,
             genres: [],
                music: {
                 title: undefined,
@@ -200,14 +204,14 @@ if(_this.file_allower(file.name,_this.extension)){
         this.upload_image='';
         this.music.size_tmp=0;
         this.music.size =0;
+       
    },
       getPrivacies(){
           let self=this;
         axios.get(`${SERVER_URI}/api/privacies?token=${this.user_data.token}`)
              .then(function (req) {
              self.privacies =req.data.privacies;  
-             self.music.privacy=  self.privacies[0]._id;    
-             console.log(self.music)
+              self.privacy=  self.privacies[0]._id;    
              })
             .catch(function (response) {
             //handle error
@@ -220,43 +224,58 @@ if(_this.file_allower(file.name,_this.extension)){
     },
    
      updateMusicUpload(){
-  console.log("loadd...",this.music)
+
         let self=this;
         let formData = new FormData();
-        formData.append('image',self.music.file);
-        formData.append('id',self.music._id);
-        formData.append('title',self.music.title);
-        formData.append('privacy',self.music.privacy);
-        formData.append('download_allowed',self.music.download_allowed);
+        formData.append('image',this.music.file);
+        formData.append('id',this.music._id);
+        formData.append('title',this.music.title);
+        formData.append('privacy', this.privacy);
+        formData.append('download_allowed',this.download_allowed);
+   
             axios.put(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
              {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
               })
-             .then(function (response) {
+             .then(function (req) {
             //handle success
-            if(!response.data.error){
-                self.success.success=true;
-                self.success.message=`Música Publicidad`;
-                self.btn_disable=true;
+            //socket
+                 
+        
+            
+            if(!req.data.error){
+               
+                let  notification={
+                user_id: self.user_data.user.id,
+                notification_key: req.data.notification_key
+                }
+                                console.log("envinado",req)
+                socket.emit('notification_key',notification);
+                     
                 setTimeout(function(){
                        self.$router.go();
-                    },2000);
+                    },1000);
+                    
+
+                    self.success.success=true;
+                self.success.message=`Música Publicidad`;
+                self.btn_disable=true;
                 
             }
              })
-            .catch(function (response) {
+            .catch(function (err) {
             //handle error
-            console.log("error",response);
+            console.log("error",err);
         });
     },
    
     changePrivacy(event){
-            this.music.privacy =event.target.value;
+            this.privacy =event.target.value;
         },
          changeAllowerChange(event){
-            this.music.download_allowed =event.target.value;
+            this.changeAllowerChange =event.target.value;
         },
      getMusicUploadIncompleteBYUser(){
       let self=this;
