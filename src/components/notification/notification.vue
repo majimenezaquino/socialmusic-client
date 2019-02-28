@@ -92,7 +92,7 @@ export default {
       console.log("connectado")
     });
 
-    socket.on(this.on_sockt_user, function(data){
+    socket.on(this.user_data.user.id, function(data){
     alert(data)
     });
 

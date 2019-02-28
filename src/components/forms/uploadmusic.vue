@@ -24,21 +24,15 @@
                   <header class="card-heading ">
                     <h2 class="card-title">Informacion de la cancion</h2>
                         <div class="container-error">
-                         <div class="alert alert-danger" role="alert" v-if="error.error">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
-                                    <span aria-hidden="true">&times;</span></button>
-                                <strong>Oh snap! </strong> {{error.message}}
-                        </div>
-                         <div class="alert alert-success" role="alert" v-if="success.success">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
-                                    <span aria-hidden="true">&times;</span></button>
-                                <strong></strong> {{success.message}}
-                        </div>
+                            <AlertError v-if="error.error">
+                                <p slot="alert-title" class="description">{{error.message}}</p>
+                            </AlertError>
+                            <AlertSuccess v-if="success.success">
+                                <p slot="alert-title" class="description">{{success.message}}</p>
+                            </AlertSuccess>
                         </div>
                   </header>
-                  <div class="card-body">
-
-                     
+                  <div class="card-body"> 
                       <div class="form-group is-empty">
                       <div class="input-group">
                           <span class="input-group-addon"> </span>
@@ -68,7 +62,7 @@
                         <label class="control-label">Etiquetas</label>
                         <input type="text" class="form-control"  v-model="music.tags" required>
                       </div>
-                      <div class="card-body">
+                      <div class="body-tags">
                           <span class="label label-primary m-2" v-for="(t ,i) in tags" :key="i">{{t}}</span>
                       </div>
                     </div>
@@ -91,12 +85,16 @@
   const axios = require('axios');
     const {EventBus} =require('@/eventbus');
     import LimitUpladMusic from './limit-upload-music.vue';
+    import AlertError from './AlertError.vue';
+    import AlertSuccess from './AlertSuccess.vue';
   import { setInterval, setImmediate } from 'timers';
 
 export default {
     name: 'avatar',
     components:{
-        LimitUpladMusic
+        LimitUpladMusic,
+        AlertError,
+        AlertSuccess
     },
     data(){
         return{
@@ -250,6 +248,7 @@ if(_this.file_allower(file.name,_this.extension)){
                     setTimeout(function(){
                        self.$router.go();
                     },1000);
+                
 
              })
             .catch(function (err) {
@@ -266,6 +265,7 @@ if(_this.file_allower(file.name,_this.extension)){
     mounted(){
         this.redirectUserLogin();
          this.getGenres();
+         this.title("titleffff")
          //===================================================================
         //set drag en drop
         //====================================================================
@@ -341,5 +341,12 @@ if(_this.file_allower(file.name,_this.extension)){
 </script>
 <style>
 @import url("./styles.css");
+.body-tags{
+min-height: 40px;
+width: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+}
 
 </style>

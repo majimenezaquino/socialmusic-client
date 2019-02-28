@@ -30,18 +30,14 @@
                 <div class="card">
                   <header class="card-heading ">
                     <h2 class="card-title">Informacion de la cancion</h2>
-                        <div class="container-error">
-                         <div class="alert alert-danger" role="alert" v-if="error.error">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
-                                    <span aria-hidden="true">&times;</span></button>
-                                <strong>Oh snap! </strong> {{error.message}}
-                        </div>
-                         <div class="alert alert-success" role="alert" v-if="success.success">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" disabled="disabled">
-                                    <span aria-hidden="true">&times;</span></button>
-                                <strong></strong> {{success.message}}
-                        </div>
-                        </div>
+                     <div class="container-error">
+                            <AlertError v-if="error.error">
+                                <p slot="alert-title" class="description">{{error.message}}</p>
+                            </AlertError>
+                            <AlertSuccess v-if="success.success">
+                                <p slot="alert-title" class="description">{{success.message}}</p>
+                            </AlertSuccess>
+                    </div>
                   </header>
                   <div class="card-body">
                        <div class="form-group is-empty">
@@ -102,13 +98,17 @@
     const {EventBus} =require('@/eventbus');
     import LimitUpladMusic from './limit-upload-music.vue';
   import { setInterval, setImmediate } from 'timers';
+          import AlertError from './AlertError.vue';
+        import AlertSuccess from './AlertSuccess.vue';
   import io from 'socket.io-client';
   const socket = io(SERVER_URI);
 
 export default {
     name: 'avatar',
     components:{
-        LimitUpladMusic
+        LimitUpladMusic,
+        AlertError,
+        AlertSuccess
     },
     data(){
         return{
