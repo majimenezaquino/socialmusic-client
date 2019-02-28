@@ -195,9 +195,9 @@ export default {
            if(!req.data.error){
                self.success.success=true;
                self.success.message=`Datos guardado.`;
-               setTimeout(function(){
-                   self.success.success=false;
-               },1500)
+                setTimeout(function(){
+                       self.$router.go();
+                    },1000);
            }
           
              })
