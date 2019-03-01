@@ -10,7 +10,15 @@
                 <div class="col-xs-12">
                   <div class="card card-data-tables product-table-wrapper">
                     <header class="card-heading">
-                              <h1>Musicas</h1>
+                              <div class="music-header-search">
+                                <h1>Musicas</h1>
+                                 <div class="uplod">
+                                    <a href="/uploads" class="button">
+                                       <i class="fa fa-cloud-upload"></i> 
+                                    </a>
+                                    <span class="hover-uplad">sube tu música aquí</span>
+                                 </div>
+                              </div>
                       <div class="card-search">
                         <div id="productsTable_wrapper" class="form-group label-floating is-empty">
                           <i class="zmdi zmdi-search search-icon-left"></i>

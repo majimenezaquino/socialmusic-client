@@ -162,13 +162,9 @@
 								<option option="IT">Italiano</option>
 							</select>
 						</li>
-						<li class="dropdown hidden-xs hidden-sm">
-							<a href="javascript:void(0)" data-toggle="dropdown" aria-expanded="false">
-								<span class="badge mini status danger"></span>
-								<i class="zmdi zmdi-notifications"></i>
-							</a>
+						
 							<Notification />
-						</li>
+						
 						<li class="dropdown hidden-xs hidden-sm">
 							<a href="javascript:void(0)" data-toggle="dropdown" aria-expanded="false">
 								<i class="fa fa-cog" aria-hidden="true"></i>
@@ -199,15 +195,34 @@
 <script>
  import Loguot from'@/components/config/logout.vue';
  import Notification from'@/components/notification/notification.vue';
- 
+ import io from 'socket.io-client';
+  const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
+	const {DBLocal} =require('@/services/data_local')
+	const dbLocal= new DBLocal(DB_USER_NAME);
+const socket = io(SERVER_URI);
 	
     export default {
 		name: "partheader",
+		data(){
+			return {
+				
+			}
+		},
 		components:{
 			Loguot,
 			Notification
 		},
+		methods:{
+			
+		},
+		mounted(){
+	
+		}
 
 	
     }
 </script>
+<style>
+
+
+</style>

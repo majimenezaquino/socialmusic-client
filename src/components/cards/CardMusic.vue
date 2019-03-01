@@ -57,7 +57,7 @@ export default {
 
 .card-music{
     width: 250px;
-    height: 320px;
+    height: 300px;
     margin-bottom: 5px;
     background: #eee;
 }
@@ -79,18 +79,17 @@ height: 100%;
  border-radius: 5px;
  padding-bottom: 2px;
 }
-.card-music .content h1{
-    font-size: 16px;
-}
+
   .card-music .content p{
-    font-size: 13px;
-    line-height: 17px;
-     padding:0px;
+    font-size: 12px;
+    line-height: 14px;
+     margin:0px 3px;
    
 }
 .card-music .content h1{
-  font-size: 16px;
+  font-size: 13px;
   font-weight: bold;
+   margin:0px 3px;
    margin-top: 3px;
    margin-bottom: 1px;
 }
