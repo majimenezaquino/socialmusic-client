@@ -30,9 +30,7 @@ export default {
       console.log("connectado")
     });
 
-    socket.on(on_sockt_user, function(data){
-    alert(data)
-    });
+   
   }
  
   }

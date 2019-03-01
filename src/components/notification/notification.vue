@@ -19,9 +19,9 @@
 								</li>
 								<li v-for="(notif ,index) in notification" :key="index">
 									<div class="card">
-										<a href="javascript:void(0)" class="pull-right dismiss" data-dismiss="close">
-											<i class="zmdi zmdi-close"></i>
-										</a>
+										<button class="pull-right dismiss btn"  data-dismiss="close" v-on:click.prevent="removeNotification(notif._id)">
+											<i class="zmdi zmdi-close"  ></i>
+										</button>
 										<div class="card-body">
 											<ul class="list-group ">
 												<li class="list-group-item ">
@@ -73,27 +73,42 @@ export default {
             then(function(req){
              _this.notification=req.data.notificacion;
                 
-             console.log("notification====>",req)
             }).catch(function(err){
                 console.log(`error--->${err}`)
             })
             
            // console.log(this.musics)
         },
+
+        removeNotification(notificacion_id){
+           
+             let _this = this;
+         axios.put(`${SERVER_URI}/api/notificacion/${notificacion_id}?token=${this.user_data.token}`).
+            then(function(req){
+
+           _this.getNotificationByKey();
+            }).catch(function(err){
+                console.log(`error--->${err}`)
+            })
+            
+        },
         getImage(name){
             return `${SERVER_URI}/api/files/image/${name}`; 
         }
     },
     mounted(){
+        
         this.redirectUserLogin();
-        this. getNotificationByKey();
-
+            this.getNotificationByKey();
+    let _this =this;
          socket.on('connect', function(data){
-      console.log("connectado")
+     
     });
 
+  
+//
     socket.on(this.user_data.user.id, function(data){
-    alert(data)
+        _this.getNotificationByKey();
     });
 
     }
