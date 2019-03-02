@@ -9,7 +9,7 @@
               <div class="row">
                 <div class="col-xs-12">
                   <div class="card card-data-tables product-table-wrapper">
-                    <header class="card-heading">
+                    <header class="card-heading search-option-header">
                               <div class="music-header-search">
                                 <h1>Musicas</h1>
                                  <div class="uplod">
@@ -54,15 +54,20 @@
                     </header>
                     <div class="card-body">
                        <div id="container-music-item">
-                      <CardMusic 
+                      
+                     <div class="row">
+                          
+                          <CardMusic 
                       v-for="(_music,index) in musics"
                       :id="_music._id"
                       :title="_music.title"
+                      :date_create="_music.date_create"
+                      :description="_music.description"
                       :img="_music.img"
                       :user_name="_music.user_published.name"
                       :key="index"
                       />
-                     
+                          </div>
                      
                        </div>
                     </div>
@@ -136,14 +141,6 @@
 </script>
 <style>
   @import url("uploads.css");
-  #container-music-item{
-    display: flex;
-    overflow: hidden;
-    height: auto;
-    justify-content: space-around;
-    align-items: flex-start;
-    flex-wrap: wrap;
-  }
 
 
 

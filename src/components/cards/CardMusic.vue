@@ -1,4 +1,5 @@
 <template>
+<div class="col-md-3">
     <section class="card-music">
             <div class="content">
                 <div class="thumbnil">
@@ -6,30 +7,45 @@
                         <img :src="image" alt="">
                     </a>
                  <div class="controller">
-                    <button><i class="fa fa-heart" aria-hidden="true"></i></button>
+                    <div class="op-music">
+                        <Emotion 
+                    :music_id="id"
+                    :reactiones="0"
+                    />
                     <button><i class="fa fa-heart" aria-hidden="true"></i></button>
                     <button><i class="fa fa-heart" aria-hidden="true"></i></button>
                     <button><i class="zmdi zmdi-more-vert"></i></button>
+                    </div>
                 </div>
                 </div>
     
                 <div class="info">
-                    <h1>{{title}}</h1>
-                    <p>{{user_name}} </p>
+                    <h1>{{user_name}} - {{title}}</h1>
+                    <p>{{description}} Publicado  hace {{ getTime(date_create)}} </p>
                 </div>
             </div>
 
     </section>
+    </div>
 </template>
 <script>
 import { setTimeout } from 'timers';
+import Emotion from '../reactions/emotion.vue'
+ import QualificationStars from "../qualifications/qualifications.vue";
+ const moment = require('moment');
  const {SERVER_URI}=require('@/config/index')
+moment.locale('es')
+
 export default {
     name: 'card-music',
+    components:{
+        Emotion
+    },
     data(){
         return{
             active: '',
-            image: undefined
+            image: undefined,
+            
         }
     },
     props: {
@@ -37,11 +53,19 @@ export default {
         title: String,
         img: String,
         user_name: String,
+        description: String,
+        date_create: String,
+    
         
     },
     methods:{
         getImageMusic(image_name){
             return `${SERVER_URI}/api/files/image/${image_name}`;
+        }
+        ,
+        getTime(date_create){
+            
+            return moment(date_create,"YYYYMMDD").fromNow();
         }
     },
     mounted(){
@@ -56,28 +80,26 @@ export default {
 <style>
 
 .card-music{
-    width: 250px;
-    height: 300px;
+    width: 100%;
     margin-bottom: 5px;
-    background: #eee;
 }
 .card-music .content {
     position: relative;
 }
 .card-music .content .thumbnil{
-    width: 250px;
-    height: 250px;
+    width: 100%;
     display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
-    border-bottom: #ccc solid 1px;
+    border-radius: 5px;
 
 }
+.card-music .content .thumbnil a{
+   
+}
 .card-music .content .thumbnil img{
-height: 100%;
  min-width: 100%;
- max-width: 100%;
- border-radius: 5px;
- padding-bottom: 2px;
 }
 
   .card-music .content p{
@@ -95,6 +117,7 @@ height: 100%;
 }
 .card-music .content .thumbnil .controller{
 position: absolute;
+top:0px;
 bottom: 0px;
 width: 100%;
 display: flex;
@@ -109,21 +132,15 @@ transition: all ease 2s;
 .card-music .content .thumbnil:hover .controller{
     transition: all ease 2s;
     display: flex;
+    border-radius: 5px;
+    background: rgba(0, 174, 239, 0.7);
 }
-.card-music .content .thumbnil .controller  button{
+
+.op-music{
+    position: absolute;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    width: 32px;
-    height: 32px;
-    background: rgba(0, 0, 0, 0.8);
-    border-radius: 50%;
-    margin: 0px 5px;
-}
-.card-music .content .thumbnil .controller  button i{
-    display: inline-block;
-    color: #fff;
+    justify-content: space-between;
+    bottom: 0px;
 }
 </style>
 

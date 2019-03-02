@@ -1,9 +1,11 @@
 <template>
-<button  v-on:click.prevent="sendReactions">
+<div class="btn_compoment">
+    <button  v-on:click.prevent="sendReactions" class="component-btn">
     <i :class="userReatedChangeClass(user_active)"></i> 
     <span>{{parseInt(reactiones + addreaction)}}</span>
 </button>
 
+</div>
 </template>
 <script>
     const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
@@ -117,4 +119,6 @@ disabledReactionsbyUser(id){
     }
 }
 </script>
+<style>
 
+</style>

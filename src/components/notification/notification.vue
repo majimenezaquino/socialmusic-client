@@ -23,24 +23,56 @@
 										</li>
 									</ul>
 								</li>
-								<li v-for="(notif ,index) in notification" :key="index">
+								<!-- <li >
 									<div class="card">
-										<button class="pull-right dismiss btn"  data-dismiss="close" v-on:click.prevent="removeNotification(notif._id)">
+										<button class="pull-right dismiss btn"  data-dismiss="close" >
 											<i class="zmdi zmdi-close"  ></i>
 										</button>
 										<div class="card-body">
 											<ul class="list-group ">
-												<li class="list-group-item ">
-													<span :class="'pull-left boder-img '+ viewed(notif.status)"><img :src="getImage(notif.user_published.profile_picture)" alt="" class="img-circle max-w-40 m-r-10 "></span>
-													<div class="list-group-item-body">
-														<div class="list-group-item-heading">{{notif.title}}</div>
+												<li class="list-group-item card-notification">
+													    <span :class="'pull-left boder-img '+ >
+                                                        <a ><img  alt="" class="img-circle max-w-40 m-r-10 "></a>
+                                                        </span>
+													<div class="list-group-item-body content-item-notification">
+														<div class="list-group-item-heading">
+                                                           <a :href="'/profile/'+notif.user_published._id"> {{notif.user_published.name}} </a>
+                                                            </div>
 														<div class="list-group-item-text">{{notif.description}}</div>
 													</div>
 												</li>
 											</ul>
 										</div>
 									</div>
-								</li>
+								</li> -->
+                             
+
+                                  <li :class="'card-notification '+viewed(notif.status)" v-for="(notif ,index) in notification" :key="index">
+                                    <button class="close-notication" v-on:click.prevent="removeNotification(notif._id)">
+                                        <i class="zmdi zmdi-close"></i></button>
+                                   <div class="notification-body">
+                                         <div :class="'thumbnail '">
+                                        <a :href="'/profile/'+notif.user_published._id" class="profile">
+                                            <img :src="getImage(notif.user_published.profile_picture)" alt=""/>
+                                        </a>
+                                     </div>
+                                        
+                                    
+                                    <div class="content-info">
+                                       <p> <span class="name"><a :href="'/profile/'+notif.user_published._id" class="profile">{{notif.user_published.name}}</a></span>
+                                        {{notif.title}}
+                                        <a :href="'/profile/'+notif.user_published._id" class="profile">
+                                        {{notif.description}}
+                                        </a>
+                                        </p>
+                                        <div class="info-fotter">
+                                            <span class="icon"><i class="fa fa-music"></i></span>
+                                            <span>Hace {{ changeTimeTodate(notif.date_create)}}</span>
+                                        </div>  
+                                   </div>
+                                    </div> 
+                                    
+                                </li>
 
 							
 								<li class="dropdown-menu-footer">
@@ -54,6 +86,8 @@
 <script>
 const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
 const {DBLocal} =require('@/services/data_local')
+ const moment = require('moment');
+ moment.locale('es')
 const dbLocal= new DBLocal(DB_USER_NAME);
 const axios = require('axios');
 import io from 'socket.io-client';
@@ -103,7 +137,11 @@ export default {
             
            // console.log(this.musics)
         },
+        changeTimeTodate(time){
+         
+          return   moment(time,"YYYYMMDD").fromNow();
 
+        },
         removeNotification(notificacion_id){
            
              let _this = this;
@@ -140,8 +178,18 @@ export default {
          axios.put(`${SERVER_URI}/api/notificacionview?token=${this.user_data.token}`,{notification:tmp_notification}).
             then(function(req){
                 let notificacion =req.data.notification;
+                let tmp_notification;
                 if( notificacion.length>0){
-
+                    for(let i in notificacion){
+                    tmp_notification =   _this.notification.map(function(notifi){
+                        if(notifi._id==notificacion[i]._id){
+                             notifi.status=notificacion[i];
+                        }
+                        return notifi;
+                    });
+                }
+                _this.notification=tmp_notification;
+                console.log( _this.notification);
                 }
                 _this.active ='';
             }).catch(function(err){
@@ -180,6 +228,7 @@ export default {
 	align-items: center;
 	padding: 0px  10px !important;
 	position: relative;
+    
 	
 }
 .btn-notification>span{
@@ -205,10 +254,97 @@ font-size: 18px !important;
   0%   {transform: rotate(15deg);}
   50%  {transform: rotate(-15deg);} 
 }
-.boder-img img {
-    border: #fff solid 2px;
+.card-notification{
+    position: relative;
+    width: 100%;
+    padding: 0px 5px;
+     background: #fff;
+     border-bottom: #eee solid 1px;
 }
-.viewed img {
-    border: #ff1744 solid 2px;
+.card-notification .notification-body{
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+   
+  
+}
+.card-notification .profile{
+    display: inline !important;
+    padding: 0px !important;
+    font-size: 13px !important;
+    line-height: 14px !important;
+    font-weight: 900 !important;
+
+}
+.card-notification .thumbnail{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0px;
+    margin: 0px;
+    border: #eee solid 4px;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    background: #eee;
+}
+.card-notification .thumbnail img{
+width: 100% !important;
+height: 100%;
+}
+.close-notication{
+      position: absolute ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    top: 5px ;
+    right: 10px;
+    background: #fff;
+    border: none;
+    color: #607188;
+    background: transparent;
+    z-index: 1;
+    font-size: 12px;
+    font-weight: 100;
+ 
+}
+.content-info{
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    width: 100px;
+    flex-grow: 1;
+    padding: 0px 10px;
+}
+.content-info p{
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 14px;
+    margin: 0px;
+    padding-top: 10px;
+
+}
+.info-fotter{
+    width: 100%;
+    display: flex;
+    justify-content: start;
+}
+.info-fotter span{
+    display: flex;
+    justify-items: center;
+    font-size: 10px;
+    line-height: 11px;
+    margin-top: 5px;
+}
+.info-fotter span:last-child{
+margin: 5px;
+}
+.viewed .thumbnail{
+    border: #ff1744 solid 4px;
 }
 </style>

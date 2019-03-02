@@ -255,7 +255,7 @@ if(_this.file_allower(file.name,_this.extension)){
                 socket.emit('notification_key',notification);
                      
                 setTimeout(function(){
-                       self.$router.go();
+                       self.$router.push('/musics/'+req.data.music._id);
                     },1000);
                     
 
