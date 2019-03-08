@@ -38,13 +38,13 @@
                         <a :href="'musics/'+music._id"><h1> {{music.title}}</h1></a>
                     <p>{{music.description}} Publicado   <small>{{ getTime(music.date_update)}}</small> </p>
                     </div>
-                    <div class="user-music">
-                        <div class="thum-user">
-                            <a :href="'/profile/'+music.user_published._id"> <img :src=" getImageMusic(music.user_published.profile_picture)" alt=""> </a>
-                        </div>
-                        <a :href="'/profile/'+music.user_published._id"><h1>{{music.user_published.name}} {{music.user_published.last_name}}</h1></a>
-                    </div>
-                    
+                  
+                    <CardUser 
+                    :user_id="music.user_published._id"
+                    :user_name="music.user_published.name"
+                    :user_last_name="music.user_published.last_name"
+                    :user_img="getImageMusic(music.user_published.profile_picture)"
+                    />
                 </div>
             </div>
 
@@ -57,6 +57,7 @@ import Emotion from '../reactions/emotion.vue'
  import QualificationStars from "../qualifications/qualifications.vue";
  import SondDedocate from "../reactions/songdedicate.vue";
  import MoreOption from "../reactions/option-music.vue";
+ import CardUser from "./CardUser.vue";
  const moment = require('moment');
  const {SERVER_URI}=require('@/config/index')
 moment.locale('es')
@@ -66,7 +67,8 @@ export default {
     components:{
         Emotion,
         SondDedocate,
-        MoreOption
+        MoreOption,
+        CardUser
     },
     data(){
         return{
@@ -185,18 +187,7 @@ border-top-left-radius: 5px;
 border-bottom: #eee solid 1px;
 padding: 5px;
 }
-.card-music .content .info .user-music .thum-user{
-width: 36px;
-height: 36px;
-overflow: hidden;
-border-radius: 50%;
-display: flex;
-justify-content: center;
-align-items: center;
-overflow: hidden;
-border: #eee solid 2px;
-background: #fff;
-}
+
 .card-music .content .info .user-music .thum-user img{
     width: 100%;
 }

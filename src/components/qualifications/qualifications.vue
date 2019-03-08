@@ -25,11 +25,11 @@
                 <a><i class="fa fa-star-o"></i></a>
             </div>
             <div class="container-star save-qualification" v-if="toggle_save">
-                <button v-on:click.prevent="resetQualification">cancel</button>
+                <button v-on:click.prevent="resetQualification">Cancelar </button>
                 <button 
                 v-on:click.prevent="sendQualification"
-                >Save</button>
-                <small>Is sure to save changes this rating is not reversible</small>
+                >Guardar </button>
+                <small>¿Está seguro de guardar esta calificación?, una vez guardad ya no podrá modificarla nuevamente. </small>
             </div>
     </div>
  </div>
