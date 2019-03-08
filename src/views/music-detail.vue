@@ -1,33 +1,82 @@
 <template>
 
      <LayoutDashboard> 
-		 <div slot="content">
-        <section id="content_outer_wrapper">
-            	<div class="musics-body">
-                    <div class="content-musics">
-                         <div class="header">
-                                    <h1></h1>
-                                </div>
-                            <div class="content">
-                               <!-- show card-music if have`nt paramas -->
-                                
-                                    <CardMusicDetail
-                                     v-for="(music_item ,index) in music_obj"
-                                     :music="music_item"
-                                     :key="index"
-                                     />
-                              
-                                <div class="show-more">
-                                    <a href="" v-on:click.prevent="getmusicsByUser">show more</a>
-                                </div>
-                            </div>
+		 <div slot="content" id="content_outer_wrapper">
+        <section id="content_wrapper">
+        
+              <div id="content" class="container-fluid">
+            <div class="content-body">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="card card-data-tables product-table-wrapper">
+                    <header class="card-heading search-option-header">
+                              <div class="music-header-search">
+                                <h1>Musicas</h1>
+                                 <div class="uplod">
+                                    <a href="/uploads" class="button">
+                                       <i class="fa fa-cloud-upload"></i> 
+                                    </a>
+                                    <span class="hover-uplad">sube tu música aquí</span>
+                                 </div>
+                              </div>
+                      <div class="card-search">
+                        <div id="productsTable_wrapper" class="form-group label-floating is-empty">
+                          <i class="zmdi zmdi-search search-icon-left"></i>
+                          <input type="text" class="form-control filter-input" placeholder="Filter Products..." autocomplete="off">
+                          <a href="javascript:void(0)" class="close-search" data-card-search="close" data-toggle="tooltip" data-placement="top" title="Close"><i class="zmdi zmdi-close"></i></a>
+                        </div>
+                      </div>
+                      <ul class="card-actions icons right-top">
+                        <li id="deleteItems" style="display: none;">
+                          <span class="label label-info pull-left m-t-5 m-r-10 text-white"></span>
+                          <a href="javascript:void(0)" id="confirmDelete" data-toggle="tooltip" data-placement="top" data-original-title="Delete Product(s)">
+                            <i class="zmdi zmdi-delete"></i>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="javascript:void(0)" data-card-search="open" data-toggle="tooltip" data-placement="top" data-original-title="Filter Products">
+                            <i class="zmdi zmdi-search search-icon-left"></i>
+                          </a>
+                        </li>
+                        <li class="dropdown" data-toggle="tooltip" data-placement="top" data-original-title="Show Entries">
+                          <a href="javascript:void(0)" data-toggle="dropdown">
+                            <i class="zmdi zmdi-more-vert"></i>
+                          </a>
+                          <div id="dataTablesLength">
+                          </div>
+                        </li>
+                        <li>
+                          <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" data-original-title="Export All">
+                            <i class="zmdi zmdi-inbox"></i>
+                          </a>
+                        </li>
+                      </ul>
+                    </header>
+                    <div class="card-body">
+                       <div id="container-music-item">
+                      
+                     <div class="row">
+                          
+                          <CardMusic 
+                      v-for="(_music,index) in musics"
+                      :music="_music"
+                      :key="index"
+                      />
+                          </div>
+                     
+                       </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ModalDedicate />
+  </div>
+      </section>
+<!-- modal -->
 
-                   
-				</div>
-		
-    </section>
-		 </div>
+  </div>
+      	
      </LayoutDashboard>
 
 </template>
@@ -35,252 +84,65 @@
 <script>
   
 
-	const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
-	const {DBLocal} =require('@/services/data_local')
-	const dbLocal= new DBLocal(DB_USER_NAME);
-	const axios = require('axios')
+  const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
+  const {DBLocal} =require('@/services/data_local')
+  const dbLocal= new DBLocal(DB_USER_NAME);
+  const axios = require('axios');
+  const {EventBus} =require('@/eventbus');
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
-    import CardMusicDetail from "@/components/cards/cardMusicDetail.vue";
-   import { setTimeout } from 'timers';
+    import FormUser from "@/components/forms/User.vue";
+  
+    import CardMusic from "@/components/cards/cardMusicDetail.vue";
+    import ModalDedicate from "@/components/cards/ModalDedicate.vue";
+    import { setTimeout } from 'timers';
     export default {
-        name: "musics",
-        components:{
-            LayoutDashboard,
-            CardMusicDetail
-        },
+        name: "upload-music",
         data(){
-            return {
-                user_data: undefined,
-                music_obj: []
-            }
+          return{
+            user_data: undefined,
+            musics: [],
+  
+          }
         },
-        methods:{
-            getMusicById(id){
-            let self = this;
-            axios.get(`${SERVER_URI}/api/musics/${id}?token=${this.user_data.token}`).
+        components:{
+          LayoutDashboard,
+          CardMusic,
+          ModalDedicate
+      
+        },
+        methods: {
+          
+        redirectUserLogin(){
+          if(dbLocal.checkDataLocalStorageOBject())
+           this.user_data  =dbLocal.getDataLocalStorageOBject();
+         },
+         getMusics(){
+           let music_id =this.$route.params.id;
+            let _this = this;
+            axios.get(`${SERVER_URI}/api/musics/${music_id}?token=${this.user_data.token}`).
             then(function(req){
-                console.log(req)
-                    self.music_obj =req.data.music;           
+                _this.musics =req.data.music
+              console.log( "$route.params.id",_this.musics);
+                             
             }).catch(function(err){
                 console.log(`error--->${err}`)
             })
-
+         }
+       
         },
-         redirectUserLogin(){
-			 if(!dbLocal.checkDataLocalStorageOBject()){
-                this.$router.push( '../' )
-			 }else{ 
-                 this.user_data  =dbLocal.getDataLocalStorageOBject();
-                 }
-            }
-        },
+ 
         mounted(){
-            this.redirectUserLogin();
-            this.getMusicById(this.$route.params.id);
-            console.log(this.music_obj)
-
+          this.redirectUserLogin();    
+          this.getMusics();
         }
-    }
+    
+	}
+	
 
 </script>
 <style>
-.musics-body{
-padding-top: 70px;
-background: #fff;
-}
-.content-musics{
-    border-top: #ccc solid 1px;
-  
-    background: #eee;
-
-}
-.content-musics:last-child{
-      border-bottom: #ccc solid 1px;
-}
-.content-musics .header{
-
-    padding:10px;
-    box-sizing: border-box;
-
-}
-
-.content-musics .content{
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    width: 100%;
-    position: relative;
-    
-}
-.show-more{
-position: absolute;
-bottom: 0px;
-width: 100%;
-overflow: hidden;
-padding-top: 30px;
-text-align: center;
-}
-.show-more a{
-    text-decoration: underline;
-}
-.content-musics .content .musics{
-    width: 175px;
-    display: flex;
-    flex-wrap: wrap;
-    margin:0px 20px;
-    margin-bottom: 30px;
-    background: #fff !important;
-}
+  @import url("uploads.css");
 
 
-.content-musics .content .musics .thumb{
-    display: flex;
-    position: relative;
-    width: 175px;
-    height: 175px;
-    overflow: hidden;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-    /*  */
-}
 
-/*color for album when not haven`t picture*/
-.content-musics .content .musics:nth-of-type(2){
-background-color: #1976d2!important;
-}
-.content-musics .content .musics:nth-of-type(3){
-background-color: #64ffda!important;
-}
-
-.content-musics .content .musics:nth-of-type(4){
-background-color: #ff1744!important;
-}
-
-.content-musics .content .musics .thumb .card-back{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.content-musics .content .musics .thumb .card-back button{
-    display: block;
-    width: 56px;
-    height: 56px;
-    border:#fff solid 1px;
-    border-radius: 50%;
-    font-size: 40px;
-    background: transparent;
-    padding: 0px;
-    margin: 0px;
-    position: relative;
-    box-sizing: border-box;
-
-}
-.content-musics .content .musics .thumb .card-back button i{
-    display: inline-block;
-    position: absolute;
-    top:50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    margin-left: 3px;
-    color: #fff;
-}
-.content-musics .content .musics:hover > .thumb  .card-back{
-    z-index: 1;
-    transition: all ease 0.2s;
-    background: rgba(0, 0, 0, 0.7);
-}
-.content-musics .content .musics .card-option{
-    display: flex;
-    position: absolute;
-    bottom: 0px;
-    flex-wrap: wrap;
-    align-items: flex-start;
-     color: #fff;
-     padding: 0px 4px;
-
-}
-.content-musics .content .musics .card-option span{
-    font-size: 13px;
-    width: 100%;
-    margin: 0px;
-    padding: 0px;
-    line-height: 14px;
-}
-.content-musics .content .musics .card-option span a{
-    display: inline-block;
-    padding-bottom: 10px;
-    text-decoration: underline;
-}
-.content-musics .content .musics  .card-info{
-    text-align: center;
-    width: 100%;
-    height: 45px;
-    background:rgba(255,255,255,1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.content-musics .content .musics  .card-info .info{
-    flex-grow: 1;
-    z-index: 10;
-}
-.content-musics .content .musics  .card-info .option a{
-    display: block;
-    width: 20px;
-    position: relative;
-    z-index: 10;
-}
-.content-musics .content .musics  .card-info .option{
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    color: #363636;
-}
-.content-musics .content .musics  .card-info .option .box-option{
-    position: absolute;
-    bottom: 38px;
-    right: 0px;
-    width: 175px;
-    height:0px;
-    background: #fff;
-    z-index: 10;
-
-}
-.content-musics .content .musics  .card-info .option a:hover .box-option{
-height: 175px;
-}
-.content-musics .content .musics  .card-info span{
-    display: block;
-    font-size: 13px;
-    font-weight: bold;
-     color: #363636;
-     line-height: 17px;
-     margin: 0px;
-     padding: 0px;
-     
-     
-}
-
-.content-musics .content .musics  .card-info p{
-    width: 100%;
-    font-size: 11px;
-     color: #363636;
-     line-height: 12px;
-     margin: 0px;
-     padding: 0px;
- 
-}
-.btn_link{
-    text-decoration: underline;
-    z-index: 100;
-    font-size: 14px;
-}
 </style>

@@ -1,6 +1,9 @@
 <template>
  <div class="component-dedicate">
-     <button v-on:click.prevent="toggleShow" data-toggle="modal" data-target="#toolabr_modal"><i class="fa fa-share-square-o"></i></button>
+     <div class="content-hidden" v-if="show">
+
+     </div>
+     <button v-on:click.prevent="toggleShow"><i class="zmdi zmdi-more-vert"></i></button>
  </div>
 </template>
 <script>
@@ -31,6 +34,10 @@ export default {
          border: none;
          font-size: 22px;
          background: transparent;
+         margin: 0px 20px;
+    }
+    .component-dedicate button:hover i{
+        transform: scale(1.5);
     }
     .content-hidden{
         position:absolute;
@@ -53,10 +60,5 @@ export default {
             transform: translateX(-50%);
             bottom: -20px;
 
-    }
-
-    .show-follower {
-        width: 100%;
-  
     }
 </style>

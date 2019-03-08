@@ -59,12 +59,7 @@
                           
                           <CardMusic 
                       v-for="(_music,index) in musics"
-                      :id="_music._id"
-                      :title="_music.title"
-                      :date_create="_music.date_create"
-                      :description="_music.description"
-                      :img="_music.img"
-                      :user_name="_music.user_published.name"
+                      :music="_music"
                       :key="index"
                       />
                           </div>
@@ -75,10 +70,13 @@
                 </div>
               </div>
             </div>
-            
+            <ModalDedicate />
   </div>
       </section>
-		 </div>
+<!-- modal -->
+
+  </div>
+      	
      </LayoutDashboard>
 
 </template>
@@ -95,6 +93,7 @@
     import FormUser from "@/components/forms/User.vue";
   
     import CardMusic from "@/components/cards/CardMusic.vue";
+    import ModalDedicate from "@/components/cards/ModalDedicate.vue";
     import { setTimeout } from 'timers';
     export default {
         name: "upload-music",
@@ -107,7 +106,8 @@
         },
         components:{
           LayoutDashboard,
-          CardMusic
+          CardMusic,
+          ModalDedicate
       
         },
         methods: {

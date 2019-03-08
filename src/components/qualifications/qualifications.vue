@@ -24,7 +24,7 @@
                 <a><i class="fa fa-star-o"></i></a>
                 <a><i class="fa fa-star-o"></i></a>
             </div>
-            <div class="save-qualification" v-if="toggle_save">
+            <div class="container-star save-qualification" v-if="toggle_save">
                 <button v-on:click.prevent="resetQualification">cancel</button>
                 <button 
                 v-on:click.prevent="sendQualification"
@@ -191,19 +191,33 @@ export default {
 }
 </script>
 <style>
-
+    .container-qualifications{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        flex-direction: column;
+        margin: 0px auto;
+        padding-left:5px;
+        overflow: hidden;
+        
+     
+    }
      .container-star{
         width: 100%;
         display: flex;
         flex-wrap: wrap;
-        justify-content: center;
-        background: #fff;
-        padding: 5px;
+        justify-content: space-around;
         box-sizing: border-box;
+        pad: 0px;
     }
 
     .container-star .group-stars{
         width: 200px;
+        padding: 20px;
+        box-sizing: border-box;
+        padding-bottom: 10px;
         display: flex;
         justify-content: space-around;
     }
@@ -212,7 +226,6 @@ export default {
         font-size: 24px;
         color: #f4c150;
         padding: 5px 2.5px;
-        box-sizing: border-box;
     }
 .container-star .group-stars a:hover{
     transform: scale(1.5);
@@ -246,7 +259,7 @@ align-items: center;
 }
       
 .save-qualification{
-    widows: 100%;
+    width: 100%;
     flex-grow: 1;
     display: flex;
     justify-content: center;
@@ -279,8 +292,10 @@ align-items: center;
     padding: 5px;
 }
 .stars-editail{
-    border: #f4c150 solid 1px;
-    box-sizing: border-box;
-    padding: 5px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 </style>

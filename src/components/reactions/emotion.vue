@@ -1,6 +1,6 @@
 <template>
 <div class="btn_compoment">
-    <button  v-on:click.prevent="sendReactions" class="component-btn">
+    <button  v-on:click.prevent="sendReactions" :class="'component-btn '+status">
     <i :class="userReatedChangeClass(user_active)"></i> 
     <span>{{parseInt(reactiones + addreaction)}}</span>
 </button>
@@ -30,12 +30,15 @@ export default {
     data(){
         return{
             user_data:[],
+            class_active: undefined,
             addreaction:0,
             reaction_id: undefined,
             emotion_id: undefined,
             showcontent: false,
             user_reacted: false,
-            user_active: false
+            user_active: false,
+            status: ''
+
         }
     },
     mounted(){
@@ -68,6 +71,7 @@ sendReactions(){
              self.emotion_id =req.data.reactions[0]._id;
          if(req.data.reactions[0].status=='active'){
             self.user_active=true;
+            self.status='active'
             self.addreaction =0; 
              }
         }
@@ -83,6 +87,7 @@ addREactionByUser(){
         if(!data.data.error){
             console.log("usuario registrado con id =",data.data.reaction._id)
             self.user_active=true;
+            self.status='active'
             self.user_reacted=true;
             self.addreaction =1; 
             self.emotion_id =data.data.reaction._id;
@@ -102,8 +107,10 @@ disabledReactionsbyUser(id){
             if(data.data.reaction.status=='active'){
                 self.addreaction ++; 
                 self.user_active =true; 
+                self.status='active'
             }else{
                 self.user_active =false; 
+                self.status=''
                 self.addreaction --;  
             }   
         }    
@@ -116,9 +123,35 @@ disabledReactionsbyUser(id){
         this.user_data  =dbLocal.getDataLocalStorageOBject();
     } 
        
-    }
+    },
+    
 }
 </script>
 <style>
-
+.btn_compoment button{
+    border: none;
+    padding:0 10px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    margin: 0px 10px;
+    font-size: 22px;
+}
+.btn_compoment button span{
+    font-size: 10px;
+    color: #ccc;
+    display: inline-block;
+    padding: 5px;
+}
+.btn_compoment button:hover i{
+    transform: scale(1.5);
+}
+.btn_compoment button i{
+    color: #fff;
+}
+.btn_compoment .active i{
+color: #f00;
+}
 </style>
