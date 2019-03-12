@@ -13,13 +13,13 @@
                                 :user_last_name="music.user_published.last_name"
                                 :user_img="getUrlImage(music.user_published.profile_picture)"
                                 />
-                                    <small><span>Hace 5 hora</span></small>
+                                    <small><span>{{changeTimeTodate(music.date_create)}}</span></small>
                                 </div>
                                 <button><i class="fa fa-play"></i></button>
                                 <div class="info-footer">
-                                <span class="info-views">100  Escuchadas</span>
-                                <span class="info-views">100  Dedicadas</span>
-                                <span class="info-views">100  Descargadas</span>
+                                <span class="info-views">{{music.played_count}}  Escuchadas</span>
+                                <span class="info-views">{{music.dedicated}}  Dedicadas</span>
+                                <span class="info-views">{{music.downloaded}}  Descargadas</span>
                             </div>
                             </div>
                         </div>
@@ -48,18 +48,22 @@
                     />
                 </div>
                 <div class="content-body">
-                        <h1>Titulo de la cansion</h1>
-                        <p>Descripcion de esta cancion</p>
+                        <h1>{{music.title}}</h1>
+                        <p>{{music.description}}</p>
                         <QualificationStars 
                         :contend_id="music._id"
-                        :props_qualification="5"
+                        :props_qualification="music.qualification"
                         />
                 </div>
                 <div class="content-footer">
                     <div class="colaboradores">
                         colaboradores
                     </div>
-                    
+                    <div class="conta-comment-up">
+                        <div class="conet">
+                            <CommentMusic  :music_id="music._id" />
+                        </div>
+                    </div>
                 </div>
             </div>
                 </div>
@@ -73,6 +77,7 @@ import Emotion from '../reactions/emotion.vue'
  import SondDedocate from "../reactions/songdedicate.vue";
  import MoreOption from "../reactions/option-music.vue";
   import CardUser from "./CardUser.vue";
+  import CommentMusic from "../comment/CommentMusic.vue";
  const moment = require('moment');
  const {SERVER_URI}=require('@/config/index')
 moment.locale('es')
@@ -83,7 +88,8 @@ export default {
      Emotion,
         SondDedocate,
         MoreOption ,
-        CardUser 
+        CardUser ,
+        CommentMusic
     },
     props:{
         music: Object,
@@ -91,13 +97,23 @@ export default {
     methods:{
           getUrlImage(image_name){
             return `${SERVER_URI}/api/files/image/${image_name}`;
+        },
+         changeTimeTodate(time){
+         
+          return   moment(time,"YYYYMMDD").fromNow();
+
+        },
+        showmore(text='', leng=0){
+            if(text.length>leng){
+
+            }
         }
     }
 }
 </script>
 <style>
 .content-music-detail{
-     
+     position: relative;
 }
 .content-music-detail .content-music{
      width: 100%;
@@ -200,10 +216,21 @@ export default {
 }
 .content-footer{
 width: 100%;
-    min-height: 60px;
+position: relative;
+bottom: 0px;
+left: 0px;;
 }
 .container-comment{
-    
+
     background: #fff;
+    height: 200px;
 }
+.conta-comment-up{
+    position: relative;
+    width: 100%;
+    background: #fff;
+    height: 150px;
+    background: #000;
+}
+
 </style>

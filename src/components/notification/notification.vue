@@ -67,7 +67,7 @@
                                         </p>
                                         <div class="info-fotter">
                                             <span class="icon"><i class="fa fa-music"></i></span>
-                                            <span>Hace {{ changeTimeTodate(notif.date_create)}}</span>
+                                            <span> {{ changeTimeTodate(notif.date_create)}}</span>
                                         </div>  
                                    </div>
                                     </div> 

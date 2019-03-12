@@ -11,7 +11,7 @@
                   <div class="card card-data-tables product-table-wrapper">
                     <header class="card-heading search-option-header">
                               <div class="music-header-search">
-                                <h1>Musicas</h1>
+                                <h1>Músicas</h1>
                                  <div class="uplod">
                                     <a href="/uploads" class="button">
                                        <i class="fa fa-cloud-upload"></i> 
@@ -58,14 +58,23 @@
                      <div class="row">
                           
                         <div class="col-md-4">
-                            <CardMusic 
+                            <CardMusicDetail 
                       v-for="(_music,index) in musics"
                       :music="_music"
                       :key="index"
                       />
                         </div>
                         <div class="col-md-8">
-
+                              <header class="card-heading ">
+                                  <h1 class="card-title">Músicas relacionas </h1>
+                                </header>
+                             <div class="row">
+                                 <CardMusic 
+                                    v-for="(_music,index) in musicsRelation"
+                                    :music="_music"
+                                    :key="index"
+                                 />
+                             </div>
                         </div>
                           </div>
                      
@@ -97,7 +106,9 @@
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
   
-    import CardMusic from "@/components/cards/cardMusicDetail.vue";
+    import CardMusicDetail from "@/components/cards/cardMusicDetail.vue";
+    import CardMusic from "@/components/cards/CardMusicRelaction.vue";
+  
     import ModalDedicate from "@/components/cards/ModalDedicate.vue";
     import { setTimeout } from 'timers';
     export default {
@@ -106,11 +117,13 @@
           return{
             user_data: undefined,
             musics: [],
+            musicsRelation: [],
   
           }
         },
         components:{
           LayoutDashboard,
+          CardMusicDetail,
           CardMusic,
           ModalDedicate
       
@@ -132,6 +145,17 @@
             }).catch(function(err){
                 console.log(`error--->${err}`)
             })
+         },
+           getMusicsRelaction(){
+            let _this = this;
+            axios.get(`${SERVER_URI}/api/musics?token=${this.user_data.token}`).
+            then(function(req){
+                _this.musicsRelation =req.data.musics
+              console.log( _this.musics);
+                             
+            }).catch(function(err){
+                console.log(`error--->${err}`)
+            })
          }
        
         },
@@ -139,6 +163,7 @@
         mounted(){
           this.redirectUserLogin();    
           this.getMusics();
+          this.getMusicsRelaction();
         }
     
 	}

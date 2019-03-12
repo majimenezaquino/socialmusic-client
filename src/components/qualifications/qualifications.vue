@@ -210,7 +210,7 @@ export default {
         flex-wrap: wrap;
         justify-content: space-around;
         box-sizing: border-box;
-        pad: 0px;
+        padding: 10px;
     }
 
     .container-star .group-stars{
