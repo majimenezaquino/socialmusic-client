@@ -4,6 +4,7 @@ import Dashboard from "@/views/Dashboard";
 import Playlist from "@/views/Playlist.vue";
 import Muiscs from "@/views/musics";
 import MuiscDetail from "@/views/music-detail.vue";
+
 import PlaylistDetail from "@/views/playlistitem.vue";
 import Profiles from "@/views/profiles";
 import Page404 from "@/views/pages/Page404.vue";
@@ -38,12 +39,14 @@ export default new Router({
       name: "musician",
       component: Musician
     },
- 
+    
     {
       path: "/playlist",
       name: "playlist",
       component: Playlist
     },
+
+ 
     {
       path: "/musics",
       name: "muisc",
@@ -66,6 +69,7 @@ export default new Router({
       component: Config
     },
     
+
 
     {
       path: "/playlist/:id",

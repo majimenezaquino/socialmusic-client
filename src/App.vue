@@ -11,6 +11,7 @@ import io from 'socket.io-client';
 	const {DBLocal} =require('@/services/data_local')
 	const dbLocal= new DBLocal(DB_USER_NAME);
 const socket = io(SERVER_URI);
+
 export default {
   name: 'app',
   components:{

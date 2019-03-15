@@ -13,7 +13,7 @@
     
          <TextMore :text="comment.comment_message" :lengths="80" />
             <small> {{getTime(comment.date_create)}} </small>
-                <span class="container-show-btn">
+                <span class="container-show-btn" v-if="self_user_comment== comment.user_commented._id">
                     <a href="" v-on:click.prevent="commentEdite" :name="comment._id" :data-text_comment="comment.comment_message">Editar</a>
                     <a href="" v-on:click.prevent="deletComment" :name="comment._id">Eliminar</a>
                 </span>
@@ -30,7 +30,7 @@
         <p> <a :href="'/profile/'+comment.user_commented._id">{{comment.user_commented.name}} {{comment.user_commented.last_name}}</a>
          <TextMore :text="comment.comment_message" :lengths="80" />
             <small> {{getTime(comment.date_create)}} </small>
-            <span class="container-show-btn" >
+            <span class="container-show-btn" v-if="self_user_comment== comment.user_commented._id" >
                     <a href="" v-on:click.prevent="commentEdite" :name="comment._id" :data-text_comment="comment.comment_message">Editar</a>
                     <a href="" v-on:click.prevent="deletComment" :name="comment._id" >Eliminar</a>
                 </span>
@@ -75,7 +75,8 @@ export default {
             comments_bisable: [],
             show_comment: false,
             commentCount: 0,
-            comment_id: undefined
+            comment_id: undefined,
+            self_user_comment: undefined,
         }
     },
     components:{
@@ -87,6 +88,7 @@ export default {
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
         this.on_sockt_user = this.user_data.user.id;
+        this.self_user_comment =this.user_data.user.id;
     },
      getTime(date_create){
             

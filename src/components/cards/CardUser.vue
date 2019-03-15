@@ -25,7 +25,7 @@ export default {
 }
 .container-user-create h1{
     display: inline;
-    font-size: 13px;
+    font-size: 13px !important;
     line-height: 14px;
 
 }

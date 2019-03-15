@@ -41,7 +41,14 @@ export default {
     },
     mounted(){
         this.showmore();
-    }
+    },
+    watch: { 
+      	text: function(text) { // watch it
+          let n =this.text.length;
+            this.showmore(n);
+            console.log("prop chane" ,text)
+        }
+        }
 }
 </script>
 <style>

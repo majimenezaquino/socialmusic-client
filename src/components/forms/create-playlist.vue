@@ -29,7 +29,7 @@
             <div class="form-upload">
                 <div class="card">
                   <header class="card-heading ">
-                    <h2 class="card-title">Informacion de la cancion</h2>
+                    <h2 class="card-title">Crear lista de reproducción</h2>
                      <div class="container-error">
                             <AlertError v-if="error.error">
                                 <p slot="alert-title" class="description">{{error.message}}</p>
@@ -41,15 +41,15 @@
                   </header>
                   <div class="card-body">
                        <div class="form-group is-empty">
-                        <label for="name" class="col-md-4 control-label">Título de la canción </label>
+                        <label for="name" class="col-md-4 control-label">Nombre de la lista de reproducción </label>
                         <div class="col-md-8">
                        
-                          <input type="text" v-model="music.title" disabled="true" class="form-control disabled" />
+                          <input type="text" v-model="music.title"  class="form-control disabled" />
                         </div>
                       </div>
 
                       <div class="form-group is-empty">
-                        <label for="name" class="col-md-4 control-label">Quien puede ver esta canción? </label>
+                        <label for="name" class="col-md-4 control-label">Quien puede ver esta lista de reproducción? </label>
                         <div class="col-md-8">
                        
                           <select class="form-control" v-on:change="changePrivacy" id="value-content">
@@ -57,18 +57,7 @@
                           </select>
                         </div>
                       </div>
-                        
-                        <div class="form-group is-empty">
-                        <label for="name" class="col-md-4 control-label">Quiere que los usuarios puedan descargar esta canción.? </label>
-                        <div class="col-md-8">
-                       
-                          <select class="form-control" v-on:change="changeAllowerChange" id="value-content">
-                            <option :value="true">NO</option>
-                            <option :value="false">SI</option>
-                          </select>
-                        
-                        </div>
-                      </div>
+                      
 
                        <div class="form-group is-empty">
                         <label for="name" class="col-md-4 control-label">
@@ -116,7 +105,7 @@ export default {
             upload_image: '',
             user_data: {},
             privacies: undefined,
-            message_upload:'selecciones una imagen para esta música.',
+            message_upload:'Selecciones una imagen',
             extension:["png","jpg","jpeg"],
             genres_label: true,
             privacy: undefined,
@@ -211,7 +200,7 @@ if(_this.file_allower(file.name,_this.extension)){
         axios.get(`${SERVER_URI}/api/privacies?token=${this.user_data.token}`)
              .then(function (req) {
              self.privacies =req.data.privacies;  
-              self.privacy=  self.privacies[0]._id;     
+              self.privacy=  self.privacies[0]._id;    
              })
             .catch(function (response) {
             //handle error
@@ -233,7 +222,7 @@ if(_this.file_allower(file.name,_this.extension)){
         formData.append('privacy', this.privacy);
         formData.append('download_allowed',this.download_allowed);
    
-            axios.put(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
+            axios.post(`${SERVER_URI}/api/upload/playlist?token=${this.user_data.token}`,formData,
              {
                 headers: {
                     'Content-Type': 'multipart/form-data'

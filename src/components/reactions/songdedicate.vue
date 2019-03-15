@@ -1,6 +1,6 @@
 <template>
  <div class="component-dedicate">
-     <button v-on:click.prevent="toggleShow" data-toggle="modal" data-target="#toolabr_modal"><i class="fa fa-share-square-o"></i></button>
+     <button  data-toggle="modal" data-target="#toolabr_modal"><i class="fa fa-share-square-o"></i></button>
  </div>
 </template>
 <script>
