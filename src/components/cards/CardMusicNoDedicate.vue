@@ -1,5 +1,5 @@
 <template>
-<div class="col-md-3">
+<div class="col-md-6">
     <section class="card-music">
             <div class="content">
                 <div class="thumbnil">
@@ -30,8 +30,8 @@
                                      <a href="" 
                                       data-toggle="modal"
                                         class="btn-dedocate"
-                                        v-on:click="setMusicDedicate(music._id)"
-                                         data-target="#modal-music-dedicataction"
+                                        v-on:click.prevent="setMusicDedicate"
+                                        disabled
                                          :name="music._id"
                                          ><i class="fa fa-share-square-o"></i></a>
                                     </div>
@@ -99,8 +99,7 @@ export default {
             return moment(date_create,"YYYYMMDD").fromNow();
         },
         setMusicDedicate(ev){
-            let music_id =ev;
-            this.music_select_callback(music_id);
+           
         }
     },
     mounted(){

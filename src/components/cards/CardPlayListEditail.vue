@@ -157,7 +157,7 @@
           if(this.playlist.name===undefined){
             return;
           }
-          if(this.filename===undefined){
+          if(this.filename===undefined || this.filename.includes("http")){
               
           axios.put(`${SERVER_URI}/api/albumes/${self.playlist_id}?token=${this.user_data.token}`,this.playlist)
               .then(function (req) {

@@ -84,7 +84,10 @@ export default {
     props: {
        music: Object,
         active: Boolean,
-        prop_playlist_select: Function
+        prop_playlist_select: {
+            type: Function,
+            required: false
+        }
     },
     methods:{
         editailPlaylist(ev){

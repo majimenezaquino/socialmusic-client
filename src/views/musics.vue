@@ -58,9 +58,10 @@
                      <div class="row">
                           
                           <CardMusic 
-                      v-for="(_music,index) in musics"
-                      :music="_music"
-                      :key="index"
+                          v-for="(_music,index) in musics"
+                          :music="_music"
+                          :key="index"
+                          :music_select_callback="handlerMusicSElect"
                       />
                           </div>
                      
@@ -70,7 +71,9 @@
                 </div>
               </div>
             </div>
-            <ModalDedicate />
+            <CardMusicDedicate 
+            :music_dedicate="music_select_id"
+            />
   </div>
       </section>
 <!-- modal -->
@@ -91,15 +94,15 @@
   const {EventBus} =require('@/eventbus');
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
-  
     import CardMusic from "@/components/cards/CardMusic.vue";
-    import ModalDedicate from "@/components/cards/ModalDedicate.vue";
+    import CardMusicDedicate from "@/components/cards/CardMusicDedicate.vue";
     import { setTimeout } from 'timers';
     export default {
         name: "upload-music",
         data(){
           return{
             user_data: undefined,
+            music_select_id: undefined,
             musics: [],
   
           }
@@ -107,7 +110,7 @@
         components:{
           LayoutDashboard,
           CardMusic,
-          ModalDedicate
+          CardMusicDedicate
       
         },
         methods: {
@@ -126,6 +129,9 @@
             }).catch(function(err){
                 console.log(`error--->${err}`)
             })
+         },
+         handlerMusicSElect(music_id){
+          this.music_select_id=music_id;
          }
        
         },

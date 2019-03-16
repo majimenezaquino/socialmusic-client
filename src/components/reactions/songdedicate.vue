@@ -1,6 +1,6 @@
 <template>
  <div class="component-dedicate">
-     <button  data-toggle="modal" data-target="#toolabr_modal"><i class="fa fa-share-square-o"></i></button>
+     <a href=""  data-toggle="modal" data-target="#toolabr_modal"><i class="fa fa-share-square-o"></i></a>
  </div>
 </template>
 <script>
