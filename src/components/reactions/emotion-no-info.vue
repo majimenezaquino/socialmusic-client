@@ -1,8 +1,7 @@
 <template>
-<div class="component-dedicate btn_compoment">
-    <a  v-on:click.prevent="sendReactions" :class="'btn-dedocate component-btn '+status">
+<div class="like-content-music-inline">
+    <a  v-on:click.prevent="sendReactions" :class="'component-btn '+status">
     <i :class="userReatedChangeClass(user_active)"></i> 
-    <span>{{parseInt(reactiones + addreaction)}}</span>
 </a>
 
 </div>
@@ -128,14 +127,14 @@ disabledReactionsbyUser(id){
 }
 </script>
 <style>
-.btn_compoment >a{
-    color: #fff;
+.like-content-music-inline >a{
+    color: #444;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
 }
-.btn_compoment >a span{
+.like-content-music-inline >a span{
     font-size: 10px;
     color: #ccc;
     display: inline-block;
@@ -143,13 +142,13 @@ disabledReactionsbyUser(id){
     right: 5px;
     padding: 5px;
 }
-.btn_compoment >a:hover i{
+.like-content-music-inline >a:hover i{
     transform: scale(1.5);
 }
-.btn_compoment >a i{
-    color: #fff;
+.like-content-music-inline >a {
+    color: #444;
 }
-.btn_compoment .active i{
+.like-content-music-inline .active {
 color: #f00;
 }
 </style>

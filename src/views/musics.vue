@@ -74,6 +74,10 @@
             <CardMusicDedicate 
             :music_dedicate="music_select_id"
             />
+
+            <CardMusicAddToList 
+            :music_dedicate="music_select_id"
+            />
   </div>
       </section>
 <!-- modal -->
@@ -96,6 +100,7 @@
     import FormUser from "@/components/forms/User.vue";
     import CardMusic from "@/components/cards/CardMusic.vue";
     import CardMusicDedicate from "@/components/cards/CardMusicDedicate.vue";
+    import CardMusicAddToList from "@/components/cards/CardMusicAddToList.vue";
     import { setTimeout } from 'timers';
     export default {
         name: "upload-music",
@@ -110,7 +115,8 @@
         components:{
           LayoutDashboard,
           CardMusic,
-          CardMusicDedicate
+          CardMusicDedicate,
+          CardMusicAddToList
       
         },
         methods: {
@@ -130,6 +136,19 @@
                 console.log(`error--->${err}`)
             })
          },
+
+            getMusics(){
+            let _this = this;
+            axios.get(`${SERVER_URI}/api/musics?token=${this.user_data.token}`).
+            then(function(req){
+                _this.musics =req.data.musics
+              console.log( _this.musics);
+                             
+            }).catch(function(err){
+                console.log(`error--->${err}`)
+            })
+         },
+         
          handlerMusicSElect(music_id){
           this.music_select_id=music_id;
          }

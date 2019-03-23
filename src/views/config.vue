@@ -4,7 +4,7 @@
 		 <div slot="content">
         <section id="content_outer_wrapper">
             	<Language> </Language>
-		
+            <LoadFiles />
     </section>
 		 </div>
      </LayoutDashboard>
@@ -21,12 +21,14 @@
 	
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import Language from "@/components/config/language.vue";
+    import LoadFiles from "@/components/cards/LoadFile.vue";
 
     export default {
         name: "playlist_music",
         components:{
             LayoutDashboard,
-            Language
+            Language,
+            LoadFiles
 		}
     }
 

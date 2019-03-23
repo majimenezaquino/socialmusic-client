@@ -200,16 +200,20 @@
      * UPDATE PL
      */
       function updatePL(addList) {
+       
         if(!apActive) {
+        
           return 'Player is not yet initialized';
         }
         if(!Array.isArray(addList)) {
+         
           return;
+            
         }
         if(addList.length === 0) {
           return;
         }
-    
+      
         var count = playList.length;
         var html  = [];
         playList.push.apply(playList, addList);
@@ -421,6 +425,7 @@
       }
     
       function volumeToggle() {
+       
         if(audio.muted) {
           if(parseInt(volumeLength, 10) === 0) {
             volumeBar.style.height = settings.volume * 100 + '%';
@@ -563,7 +568,7 @@
     
       function setVolume(evt) {
         evt.preventDefault();
-        volumeLength = volumeBar.css('height');
+        volumeLength = volumeBar.height;
         if(seekingVol && rightClick === false || evt.type === wheel()) {
           var value = moveBar(evt, volumeBar.parentNode, 'vertical') / 100;
           if(value <= 0) {
@@ -754,7 +759,7 @@
     //   ]
     // });
     
-    // // TEST: update playlist
+    // TEST: update playlist
     // document.getElementById('addSongs').addEventListener('click', function(e) {
     //   e.preventDefault();
     //   AP.update([

@@ -20,7 +20,7 @@ pre {
 /*-----------------------
     Audio Player - AP
 ------------------------*/
-.ap {
+.app_player {
   position: fixed;
   left: 0;
   right: 0;
@@ -39,21 +39,21 @@ pre {
   z-index: 99999;
 }
 
-.ap__inner {
+.app_player__inner {
   display: flex;
   max-width: 1440px;
   margin: auto;
 }
 
-.ap__item {
+.app_player__item {
   display: flex;
   flex: 1;
   justify-content: center;
   align-items: center;
 }
 
-.ap__item--playback > .ap__controls,
-.ap__item--settings > .ap__controls {
+.app_player__item--playback > .app_player__controls,
+.app_player__item--settings > .app_player__controls {
   flex: 0 25%;
 }
 
@@ -82,7 +82,7 @@ pre {
             transform: scale(1);
   }
 }
-.ap__item--track {
+.app_player__item--track {
   flex: 1 40%;
   padding: 0 20px;
 }
@@ -163,8 +163,8 @@ pre {
   z-index: 0;
 }
 
-.ap__controls,
-.ap button {
+.app_player__controls,
+.app_player button {
   margin: 0;
   padding: 0;
   border: 0;
@@ -177,12 +177,12 @@ pre {
   cursor: pointer;
   transition: background .3s ease;
 }
-.ap__controls:active,
-.ap button:active {
+.app_player__controls:active,
+.app_player button:active {
   background: rgba(0, 0, 0, 0.1);
 }
-.ap__controls:hover,
-.ap button:hover {
+.app_player__controls:hover,
+.app_player button:hover {
   opacity: 1;
 }
 
@@ -271,39 +271,39 @@ pre {
   opacity: .7;
 }
 
-.ap__controls.is-active > svg {
+.app_player__controls.is-active > svg {
   fill: steelblue;
   -webkit-filter: drop-shadow(0 0 3px rgba(70, 130, 180, 0.4));
           filter: drop-shadow(0 0 3px rgba(70, 130, 180, 0.4));
 }
 
 @media (max-width: 1024px) {
-  .ap__item > .ap__controls {
+  .app_player__item > .app_player__controls {
     flex: 1;
   }
 }
 @media (max-width: 580px) {
-  .ap {
+  .app_player {
     min-width: 250px;
   }
 
-  .ap, .ap__inner {
+  .app_player, .app_player__inner {
     height: auto;
   }
 
-  .ap__inner {
+  .app_player__inner {
     flex-wrap: wrap;
   }
 
-  .ap__item--track {
+  .app_player__item--track {
     margin-bottom: 10px;
     padding: 0 20px;
     order: 1;
     flex: 1 1 100%;
   }
 
-  .ap__item--playback,
-  .ap__item--settings {
+  .app_player__item--playback,
+  .app_player__item--settings {
     flex: 1 1 50%;
     order: 2;
   }
@@ -490,13 +490,13 @@ pre {
 .h-show {
   display: block;
 }
-.ap__track_profile{
+.app_player__track_profile{
   width: 50px;
   display: flex;
 justify-content: center;
 align-items: center;  
 }
-.ap__track_profile .tuh {
+.app_player__track_profile .tuh {
   width: 32px;
   height: 32px;
   overflow: hidden;

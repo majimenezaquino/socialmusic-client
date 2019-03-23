@@ -1,6 +1,6 @@
 <template>
     <section>
-<div class="modal fade" id="modal-music-dedicataction" tabindex="-1" role="dialog" aria-labelledby="modal-music-dedicataction">
+<div class="modal fade" id="modal-music-add-playlist" tabindex="-1" role="dialog" aria-labelledby="modal-music-add-playlist">
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="card m-0">
@@ -188,7 +188,7 @@
                     }).then((value) => {
                         if(value) _this.$router.go();
                        })
-                    $("#modal-music-dedicataction").modal("hide");
+                    $("#modal-music-add-playlist").modal("hide");
                     
                   }
              

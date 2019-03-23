@@ -6,7 +6,7 @@ v-if="!hiddenUser"
     <a href="" class="user-conent" v-on:click.prevent="selectUserDedicate(follower._id)" >
     <div class="thumbnail">
     
-        <img v-if="follower.profile_picture!=undefined" 
+        <img v-if="getImagePlaylist(follower.profile_picture)!=undefined" 
         :src="getImagePlaylist(follower.profile_picture)"
          :alt="follower.name" >
     </div>
@@ -61,8 +61,8 @@ methods:{
     },
      getImagePlaylist(image_name){
       
-              if(image_name===undefined){
-                  return 'miaga'
+              if(image_name===undefined || image_name==='' || image_name===null){
+                  return undefined;
               }
             if(image_name.includes("https://") || image_name.includes("http://")){
                 return image_name;
@@ -126,8 +126,9 @@ this.user_id=this.follower._id; //get by props
       }
       .user-dedicate h1{
           display: inline-block;
-          font-size: 15px;
+          font-size: 11px;
           color: #444;
+          font-weight: 100;
           padding-bottom: 5px;
      
       }

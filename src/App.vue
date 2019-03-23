@@ -1,12 +1,16 @@
 <template>
   <div id="app">
     <router-view/>
-    <Player />
+    <Player 
+    :tracks="playlist"
+    :add_track="playlist2"
+    />
   </div>
 </template>
 <script>
 import Player from "@/components/player/player2.vue";
 import io from 'socket.io-client';
+import { setTimeout } from 'timers';
   const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
 	const {DBLocal} =require('@/services/data_local')
 	const dbLocal= new DBLocal(DB_USER_NAME);
@@ -18,8 +22,14 @@ export default {
     Player
   },
 
-  
+  data(){
+    return{
+      playlist: [],
+      playlist2: []
+    }
+  },
   mounted(){
+    let self =this;
     if(!dbLocal.checkDataLocalStorageOBject())
     {
       return;
@@ -30,8 +40,20 @@ export default {
     socket.on('connect', function(data){
       console.log("connectado")
     });
+    
+    self.playlist=[
+        {'icon': 'urlimage', 'title': 'Hitman', 'file': 'http://incompetech.com/music/royalty-free/mp3-royaltyfree/Hitman.mp3'}
+      ]
 
-   
+    setTimeout(function(){
+      self.playlist2=[
+        {'icon': 'urlimage', 'title': 'Hitman', 'file': 'http://incompetech.com/music/royalty-free/mp3-royaltyfree/Hitman.mp3'},
+        {'icon': 'urlimage', 'title': 'Dreamer', 'file': 'http://incompetech.com/music/royalty-free/mp3-royaltyfree/Dreamer.mp3'},
+        {'icon': 'urlimage', 'title': 'District Four', 'file': 'http://incompetech.com/music/royalty-free/mp3-royaltyfree/District%20Four.mp3'},
+        {'icon': 'urlimage', 'title': 'Christmas Rap', 'file': 'http://incompetech.com/music/royalty-free/mp3-royaltyfree/Christmas%20Rap.mp3'},
+        {'icon': 'urlimage', 'title': 'Rocket Power', 'file': 'http://incompetech.com/music/royalty-free/mp3-royaltyfree/Rocket%20Power.mp3'}
+      ]
+    },10000)
   }
  
   }

@@ -23,28 +23,7 @@
 										</li>
 									</ul>
 								</li>
-								<!-- <li >
-									<div class="card">
-										<button class="pull-right dismiss btn"  data-dismiss="close" >
-											<i class="zmdi zmdi-close"  ></i>
-										</button>
-										<div class="card-body">
-											<ul class="list-group ">
-												<li class="list-group-item card-notification">
-													    <span :class="'pull-left boder-img '+ >
-                                                        <a ><img  alt="" class="img-circle max-w-40 m-r-10 "></a>
-                                                        </span>
-													<div class="list-group-item-body content-item-notification">
-														<div class="list-group-item-heading">
-                                                           <a :href="'/profile/'+notif.user_published._id"> {{notif.user_published.name}} </a>
-                                                            </div>
-														<div class="list-group-item-text">{{notif.description}}</div>
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</li> -->
+							
                              
 
                                   <li :class="'card-notification '+viewed(notif.status)" v-for="(notif ,index) in notification" :key="index">
@@ -60,9 +39,9 @@
                                     
                                     <div class="content-info">
                                        <p> <span class="name"><a :href="'/profile/'+notif.user_published._id" class="profile">{{notif.user_published.name}}</a></span>
-                                        {{notif.title}}
-                                        <a :href="'/profile/'+notif.user_published._id" class="profile">
-                                        {{notif.description}}
+        
+                                        <a :href="'/music/'+notif.user_published._id" class="profile">
+                                          {{notif.title}} {{notif.description}}
                                         </a>
                                         </p>
                                         <div class="info-fotter">

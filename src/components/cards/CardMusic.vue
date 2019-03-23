@@ -1,8 +1,11 @@
 <template>
-<div class="col-md-3">
+<div class="col-md-3" v-if="!hidden">
     <section class="card-music">
             <div class="content">
                 <div class="thumbnil">
+                <a href="" class="close-music" v-on:click.prevent="hanlerHiddenCard">
+                    <i class="zmdi zmdi-close"></i>
+                </a>
                     <div class="container-user">
                         <CardUser 
                     :user_id="music.user_published._id"
@@ -19,13 +22,11 @@
                             <button><i class="fa fa-play" aria-hidden="true"></i></button>
                     </div>
                     
-                    <div class="op-music">
+                    <div class="op-music container-option-reaction">
                         <Emotion 
                     :music_id="music._id"
                     :reactiones="music.reactions"
                     />
-
-
                                     <div class="component-dedicate">
                                      <a href="" 
                                       data-toggle="modal"
@@ -35,13 +36,17 @@
                                          :name="music._id"
                                          ><i class="fa fa-share-square-o"></i></a>
                                     </div>
-                    
-                        <MoreOption 
-                    :music_id="music._id"
-                    :reactiones="music.reactions"
-                    />
-                    
-                    </div>
+
+                                     <div class="component-dedicate">
+                                     <a href="" 
+                                        class="btn-dedocate"
+                                        v-on:click.prevent="handlerToglesOption"
+                                         ><i class="zmdi zmdi-more-vert"></i></a>
+                                    </div>
+                                </div>
+                                <CardMusicOption 
+                                :music_id="music._id"
+                                v-if="showoption" />
                     </a>
                  
                 </div>
@@ -66,6 +71,7 @@ import Emotion from '../reactions/emotion.vue'
  import SondDedocate from "../reactions/songdedicate.vue";
  import MoreOption from "../reactions/option-music.vue";
  import CardUser from "./CardUser.vue";
+ import CardMusicOption from "./cardMusicOption.vue";
  const moment = require('moment');
  const {SERVER_URI}=require('@/config/index')
 moment.locale('es')
@@ -76,17 +82,21 @@ export default {
         Emotion,
         SondDedocate,
         MoreOption,
-        CardUser
+        CardUser,
+        CardMusicOption
     },
     data(){
         return{
             active: '',
             image: undefined,
+            hidden: false,
+            showoption: false
             
         }
     },
     props: {
        music: Object,
+       playlist: Array,
        music_select_callback: Function
     },
     methods:{
@@ -101,6 +111,15 @@ export default {
         setMusicDedicate(ev){
             let music_id =ev;
             this.music_select_callback(music_id);
+        },
+        hanlerHiddenCard(){
+            this.hidden=true;
+        }, 
+        hiddenOpction(){
+            this.showoption=false;
+        },
+        handlerToglesOption(){
+          this.showoption=!this.showoption;  
         }
     },
     mounted(){
@@ -184,6 +203,7 @@ background: rgba(0, 0, 0, 0.1);
     justify-content: space-between;
     bottom: 0px;
     z-index: 10;
+    height: 40px;
 }
 .card-music .content .info .user-music {
   display: flex;
@@ -226,14 +246,48 @@ padding: 5px;
     color: #ccc;
     font-weight: 100;
 }
-.btn-dedocate{
-    display: inline-block;
+.container-option-reaction .btn-dedocate{
+    display: flex !important;
     font-size: 22px;
-    color: #fff !important;
+    color:#fff !important;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    z-index: 10;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 20px;
+}
+
+.container-option-reaction .btn-dedocate:hover {
+    background: #EEE;
+    color:#444 !important;
+    transform: scale(1);
+}
+.close-music{
+    display: flex;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color:#444;
+    width: 25px;
+    height: 25px;
     justify-content: center;
     align-items: center;
-    margin:0px  20px; 
+    border-radius: 50%;
     z-index: 10;
+    font-size: 16px;
+    font-weight: 100;
+    margin: 0px;
+    padding: 2px;
 }
+.close-music:hover{
+border:#eee solid 1px;
+background: #fff;
+color: #444;
+
+}
+
 </style>
 

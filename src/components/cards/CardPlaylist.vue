@@ -18,7 +18,7 @@
                         </div>
                   </div>
 
-                    <a :href="'musics/'+music._id" class="controller">
+                    <a :href="'playlist/'+music._id" class="controller">
                     <div class="btn-player">
                             <button><i class="fa fa-play" aria-hidden="true"></i></button>
                     </div>
@@ -77,13 +77,14 @@ export default {
             image: undefined,
             self_user_comment: undefined,
             user_data : undefined,
-            show_card: true
+            show_card: true,
+         
             
         }
     },
     props: {
        music: Object,
-        active: Boolean,
+        active: Boolean, 
         prop_playlist_select: {
             type: Function,
             required: false
@@ -95,19 +96,20 @@ export default {
             this.prop_playlist_select(playlist_id)
         },
 deletePlayList(ev){
+let playlist_id =ev.target.name;
+
 swal({
-  text: "¿Está seguro de querer eliminar esta lista de reproducción?",
+  text: `Esta lista de reproducción contienes ${this.music.musics_cout || 0}   cancion/es ¿Está seguro de querer eliminarla? `,
    buttons: ["No eliminar", "Eliminar"],
 })
 .then((willDelete) => {
   if (willDelete) {
       // ELIMINAR PLAYLIST
        let self = this;
-       let playlist_id =ev.target.name;
+       
             axios.delete(`${SERVER_URI}/api/albumes/${playlist_id}?token=${this.user_data.token}`).
             then(function(req){
               
-                  console.log("playlist delete",req.data)   
                   
                   if(req.data.albumes._id!=undefined){
                       self.show_card=false;
