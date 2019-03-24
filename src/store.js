@@ -7,20 +7,20 @@ Vue.use(Vuex)
 
  export default  new Vuex.Store({
          state:{
-            playlist_store:{
-                tracks: [],
-                is_playlist: false,
-                index: undefined
-            },
+         tracks:{
+                index_play: 0,
+                play: true,
+                tracks: []
+            }
             
      },
      mutations:{
 
      //push music in player
-     pushMusicPlayer (state,obj){
-        state.playlist_store.tracks= obj.tracks;
-        state.playlist_store.index=obj.index
-        state.playlist_store.is_playlist=obj.is_playlist
+     sendMusic (state,obj){
+        state.tracks.tracks=[obj];
+       
+        
  }
 
      },
@@ -29,9 +29,21 @@ Vue.use(Vuex)
     //  },
      actions:{
 
-        ADD_PLAYLIST_PLAYER: (conrext,obj)=>{
-            console.log(obj)
-            conrext.commit('pushMusicPlayer',obj)
+        SEND_MUSIC_PLAYER: (conrext,obj)=>{
+            console.log(typeof obj)
+            if(typeof obj =='object'){
+                conrext.commit('sendMusic',obj)
+            }
+           
+            
+        },
+        SEND_PLAYLIST_PLAYER: (conrext,obj)=>{
+            console.log(typeof obj)
+            // if(typeof obj =='object'){
+            //     conrext.commit('sendMusic',obj)
+            // }
+           
+            
         }
      }
 

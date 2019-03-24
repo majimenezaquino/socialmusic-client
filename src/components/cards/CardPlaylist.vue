@@ -20,7 +20,7 @@
 
                     <a :href="'playlist/'+music._id" class="controller">
                     <div class="btn-player">
-                            <button><i class="fa fa-play" aria-hidden="true"></i></button>
+                            <button v-on:click.prevent="sendMusicToPlayer"><i class="fa fa-play" aria-hidden="true"></i></button>
                     </div>
                     
                     <div class="card-footer-playlist">
@@ -145,7 +145,11 @@ swal({
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
         this.self_user_comment =this.user_data.user.id;
-    }
+    },
+     sendMusicToPlayer(){
+             this.$store.dispatch("SEND_PLAYLIST_PLAYER", this.music);
+            // this.toggleActiveCard();
+         }
     },
     mounted(){
         this.redirectUserLogin();

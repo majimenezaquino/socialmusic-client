@@ -19,7 +19,7 @@
 					</div>
 
 						<!-- component playlist -->
-					<!-- <Player> </Player> -->
+					<Player />
 					<!-- footer -->
 					<!-- <PartFooter> 
 						
@@ -36,7 +36,7 @@
 
 <script>
 //import Player from "@/components/player/Player.vue";
-import Player from "@/components/player/player2.vue";
+import Player from "@/components/player/Player.vue";
 import PartHeader from "@/parties/partHeader.vue";
 import PartFooter from "@/parties/partFooter.vue";
 import PartSideBarRight from "@/parties/part-sidebar-right.vue";

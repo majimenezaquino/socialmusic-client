@@ -58,9 +58,9 @@
                      <div class="row">
                           
                           <CardMusic 
-                          v-for="(_music,index) in musics"
+                          v-for="_music in musics"
                           :music="_music"
-                          :key="index"
+                          :key="_music._id"
                           :music_select_callback="handlerMusicSElect"
                       />
                           </div>

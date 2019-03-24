@@ -1,6 +1,7 @@
 <template>
 <div class="col-md-3" v-if="!hidden">
-    <section class="card-music">
+    <section :class="{'card-music': true ,
+    'music_active_player':active}">
             <div class="content">
                 <div class="thumbnil">
                 <a href="" class="close-music" v-on:click.prevent="hanlerHiddenCard">
@@ -19,7 +20,7 @@
                     </a>
                     <a :href="'musics/'+music._id" class="container-controller">
                     <div class="btn-player">
-                            <button><i class="fa fa-play" aria-hidden="true"></i></button>
+                            <button v-on:click.prevent="sendMusicToPlayer"><i class="fa fa-play" aria-hidden="true"></i></button>
                     </div>
                     
                     <div class="op-music container-option-reaction">
@@ -87,7 +88,7 @@ export default {
     },
     data(){
         return{
-            active: '',
+            active: false,
             image: undefined,
             hidden: false,
             showoption: false
@@ -110,7 +111,9 @@ export default {
         },
         setMusicDedicate(ev){
             let music_id =ev;
+            
             this.music_select_callback(music_id);
+            
         },
         hanlerHiddenCard(){
             this.hidden=true;
@@ -120,7 +123,25 @@ export default {
         },
         handlerToglesOption(){
           this.showoption=!this.showoption;  
-        }
+        },
+         sendMusicToPlayer(){
+             this.$store.dispatch("SEND_MUSIC_PLAYER", this.music);
+             this.toggleActiveCard();
+         },
+         toggleActiveCard(){
+             let cardSelect= document.querySelectorAll(".card-music");
+             if(cardSelect.length>0){
+                 for(let i in cardSelect){                  
+                         try{
+                             cardSelect[i].classList.remove("music_active_player");
+                         }catch(ex){
+       
+                         }
+
+                     }
+             }
+             this.active= true;
+         }
     },
     mounted(){
        
@@ -211,6 +232,7 @@ background: rgba(0, 0, 0, 0.1);
 }
 .card-music .content .info  .music-info{
 border-bottom: #eee solid 1px;
+background: #fff;
 padding: 5px;
 }
 
@@ -287,6 +309,14 @@ border:#eee solid 1px;
 background: #fff;
 color: #444;
 
+}
+.music_active_player .thumbnil .container-controller{
+background: rgba(0, 0, 0, 0.6) !important;
+
+}
+.music_active_player .thumbnil .container-controller .btn-player button{
+    transition: all ease 0.3s;
+    display: flex !important;
 }
 
 </style>

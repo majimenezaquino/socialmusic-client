@@ -38,6 +38,16 @@ pre {
   box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.1);
   z-index: 99999;
 }
+.playlist-hidden{
+  position: absolute;
+  width: 100%;
+  max-width: 600px;
+  min-height: 30px;
+  background: #eee;
+  bottom: 50px;
+  right: 0px;
+
+}
 
 .app_player__inner {
   display: flex;
@@ -102,6 +112,8 @@ pre {
   text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-size: 13px;
+  margin-bottom: 5px;
 }
 
 .track__time {
@@ -171,11 +183,20 @@ pre {
   outline: 0;
   background: transparent;
   position: relative;
-  display: block;
+  display: flex;
   height: 50px;
-  text-align: center;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   transition: background .3s ease;
+  font-size: 24px;
+  color:#444;
+}
+.app_player button:hover{
+  background: #ccc;
+}
+.app_player button:disabled{
+ background: #ddd;
 }
 .app_player__controls:active,
 .app_player button:active {
@@ -497,8 +518,83 @@ justify-content: center;
 align-items: center;  
 }
 .app_player__track_profile .tuh {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   overflow: hidden;
   border-radius: 50%;
+  border: #eee solid 3px;
+  background: #fff;
 }
+
+.item-music-in-player{
+  list-style:none;
+}
+  .item-music-in-player >a{
+      width: 100%;
+      margin: 0px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 10px;
+  }
+  .item-music-in-player >a:hover{
+      background: #ccc;
+  }
+ .item-music-in-player    .tumbnil-music{
+       width: 36px;
+       height: 36px;
+       background: #fff;
+       display: flex;
+       justify-content: center;
+      align-items: center;
+       padding: 0px;
+       background-size: cover;
+
+   }
+   .item-music-in-player    .tumbnil-music button{
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       background: rgba(0, 0, 0,0.6);
+       color: #fff;
+       width: 30px;
+       height: 30px;
+       border-radius: 50%;
+       z-index: -1;
+   }
+   .item-music-in-player    .tumbnil-music:hover button{
+       z-index: 1;
+   }
+   .item-music-in-player .content-musi{
+        flex-grow: 1;
+        padding:0px 10px;
+    }
+    .item-music-in-player  .content-musi h1,  .item-music-in-player  .content-musi p{
+        font-size: 12px;
+        line-height: 13px;
+        margin: 0px;
+        color: #444;
+    }
+   .item-music-in-player    .content-musi h1{
+         font-weight: bold;
+     }
+   .item-music-in-player  .info{
+       display: flex;
+       justify-content: space-between;
+       color: #444;
+     }
+     .item-music-in-player  .info span{
+         font-size: 10px;
+         display: flex;
+         padding-left: 10px;
+
+     }
+
+    .item-music-in-player .like-content-music-inline{
+        font-size: 22px;
+        padding:0px 10px;
+     }
+     .music_active_player{
+         background: #ccc;
+     }
