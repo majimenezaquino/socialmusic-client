@@ -544,9 +544,27 @@ align-items: center;
   border-bottom: #ccc solid 1px;
   align-items: center;
 }
-.item-music-in-player .item-header a{
+.item-music-in-player .item-header button{
   display: flex;
-  padding: 10px 20px;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  margin: 5px;
+  color: #444;
+}
+
+.item-music-in-player .item-header span{
+  display: flex;
+  font-size: 15px;
+  color: #444;
+}
+
+
+#app_player button.active{
+  color: #42a5f5 !important;
 }
   .item-music-in-player >a{
       width: 100%;

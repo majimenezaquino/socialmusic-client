@@ -6,10 +6,12 @@
                           <ul id="playlist-item">
                               <li class="item-music-in-player">
                                 <div class="item-header">
-                                  <a href=""><i class="zmdi zmdi-shuffle"></i></a>
+                                  <button v-on:click.prevent="toggleRandom" :class="{'active':active_random}">
+                                    <i class="zmdi zmdi-shuffle"></i>
+                                    </button>
                                 <span  v-if="!playlist.length>0">No hay música para reproducir</span>
                                  <span  v-else>Músicas en cola </span>
-                                  <a href=""><i class="zmdi zmdi-chevron-down"></i></a>
+                                  <button v-on:click.prevent="togglePlaylist"><i class="zmdi zmdi-chevron-down"></i></button>
                                 </div>
                                 </li>
                               
@@ -127,17 +129,15 @@
             </div>
           </div>
         </div>
-        <button class="app_player__controls app_player__controls--repeat">
-          <svg version="1.1"  fill="#333" width="24" height="24" viewBox="0 0 24 24">
-            <path d="M17.016 17.016v-4.031h1.969v6h-12v3l-3.984-3.984 3.984-3.984v3h10.031zM6.984 6.984v4.031h-1.969v-6h12v-3l3.984 3.984-3.984 3.984v-3h-10.031z"></path>
-          </svg>
+        <button :class="{'app_player__controls app_player__controls--repeat': true, 'active':isRepeactActive}"
+        v-on:click.prevent="toggleRepeatcAudio"
+        >
+          <i class="zmdi zmdi-repeat"></i>
         </button>
-        <button class="app_player__controls app_player__controls--playlist"
+        <button :class="{'app_player__controls app_player__controls--playlist': true, 'active': isPlaylistActive}"
           v-on:click.prevent="togglePlaylist"
         >
-          <svg version="1.1"  fill="#333" width="24" height="24" viewBox="0 0 24 24">
-            <path d="M17.016 12.984l4.969 3-4.969 3v-6zM2.016 15v-2.016h12.984v2.016h-12.984zM18.984 5.016v1.969h-16.969v-1.969h16.969zM18.984 9v2.016h-16.969v-2.016h16.969z"></path>
-          </svg>
+          <i class="zmdi zmdi-playlist-audio"></i>
         </button>
       </div>
   </div>
@@ -167,6 +167,7 @@ export default {
       music_run: undefined,
        audio: "",
        isPlaying: false,
+    active_random: false,
 		imgLoaded: false,
 		currentlyPlaying: false,
 		currentlyStopped: false,
@@ -176,6 +177,7 @@ export default {
 		currentProgressBar: 0,
 		currentBofferProgressBar: 0,
 		isPlaylistActive: false,
+		isRepeactActive: false,
 		currentSong: 0,
     debug: false,
     volumeBar: 0,
@@ -307,8 +309,11 @@ methods: {
         this.clearCardActive();
          this.activeCardMusic(content_id);
          this.music_run = content_id;
-
-			this.audioFile = this.musicPlaylist[this.currentSong].url;
+          //check is random
+        
+            this.audioFile = this.musicPlaylist[this.currentSong].url;
+          
+			
 			this.audio = new Audio(this.audioFile);
 			var localThis = this;
 			this.audio.addEventListener("loadedmetadata", function() {
@@ -320,7 +325,25 @@ methods: {
 			if (wasPlaying) {
 				this.playAudio();
 			}
-		},
+    },
+   shuffle(arra1) {
+    let ctr = arra1.length;
+    let temp;
+    let index;
+
+    // While there are elements in the array
+    while (ctr > 0) {
+// Pick a random index
+        index = Math.floor(Math.random() * ctr);
+// Decrease ctr by 1
+        ctr--;
+// And swap the last element with it
+        temp = arra1[ctr];
+        arra1[ctr] = arra1[index];
+        arra1[index] = temp;
+    }
+    return arra1;
+},
 		isCurrentSong: function(index) {
 			if (this.currentSong == index) {
 				return true;
@@ -359,7 +382,8 @@ methods: {
 			this.audio.pause();
 			this.currentlyPlaying = false;
 			this.pausedMusic();
-		},
+    },
+    
 		handleEnded: function() {
 			if (this.currentSong + 1 == this.musicPlaylist.length) {
 				this.stopAudio();
@@ -519,6 +543,20 @@ clearCardActive(){
             }
           }
           //
+        },
+        toggleRandom(){
+          this.active_random=!this.active_random;
+          let index =undefined;
+              if(this.active_random){
+                this.musicPlaylist = this.shuffle( this.musicPlaylist);
+              index=Math.floor(Math.random() * this.musicPlaylist.length);
+              this.changeSong(index)
+             }
+     
+          
+        },
+        toggleRepeatcAudio(){
+          this.isRepeactActive=! this.isRepeactActive
         }
 },
   filters: {
