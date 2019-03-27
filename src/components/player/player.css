@@ -528,6 +528,25 @@ align-items: center;
 
 .item-music-in-player{
   list-style:none;
+ 
+}
+.playlist-hidden{
+  border: #ccc solid 1px;
+  border-bottom: none;
+  padding: 0px;
+}
+.item-music-in-player .item-header{
+  display: flex;
+  background: #eee;
+  padding: 10px;
+  padding-bottom: 0px;
+  font-size: 20px;
+  border-bottom: #ccc solid 1px;
+  align-items: center;
+}
+.item-music-in-player .item-header a{
+  display: flex;
+  padding: 10px 20px;
 }
   .item-music-in-player >a{
       width: 100%;
@@ -595,6 +614,9 @@ align-items: center;
         font-size: 22px;
         padding:0px 10px;
      }
-     .music_active_player{
+     .active_card_music{
          background: #ccc;
      }
+     .active_card_music  .tumbnil-music button{
+      z-index: 1 !important;
+  }

@@ -5,15 +5,19 @@
                <div class="col-md-12 p-0 m-0">
                           <ul id="playlist-item">
                               <li class="item-music-in-player">
+                                <div class="item-header">
+                                  <a href=""><i class="zmdi zmdi-shuffle"></i></a>
                                 <span  v-if="!playlist.length>0">No hay música para reproducir</span>
+                                 <span  v-else>Músicas en cola </span>
                                   <a href=""><i class="zmdi zmdi-chevron-down"></i></a>
+                                </div>
                                 </li>
                               
                             
-                        <li   v-for="_playlist in playlist"  :key="_playlist._id"
-                        :class="{
-                            'item-music-in-player':true  }">
-                            <a href="" v-on:click.prevent="toggleActive">
+                        <li   v-for="(_playlist,index) in playlist"  :key="index"
+                        v-on:click.prevent="changeMusic(index)"
+                        :class="'item-music-in-player card-music'+  ' music'+_playlist._id ">
+                            <a href="">
                                   <Emotion 
                                         :music_id="_playlist._id"
                                         :reactiones="_playlist.reactions"
@@ -21,7 +25,7 @@
                                 <div class="tumbnil-music"
                                 v-bind:style="{ 'background-image': 'url('+ getFileUrlmg(_playlist.img)+' )' }"
                                 >
-                                <button><i class="zmdi zmdi-play"></i></button>
+                                <button class="btn_player"><i class="zmdi zmdi-play"></i></button>
                             </div>
                             <div class="content-musi">
                                 <h1>{{_playlist.title}}</h1>
@@ -157,8 +161,10 @@ export default {
  data() {
       return {
       playlist: undefined,
+      playlist_rando: false,
       playlist_item: [],
       openPlaylistStore: false,
+      music_run: undefined,
        audio: "",
        isPlaying: false,
 		imgLoaded: false,
@@ -289,12 +295,19 @@ methods: {
 			if (this.currentSong > 0) this.changeSong(this.currentSong - 1);
 		},
 		changeSong: function(index) {
+
+     
 			var wasPlaying = this.currentlyPlaying;
 			this.imageLoaded = false;
 			if (index !== undefined) {
 				this.stopAudio();
 				this.currentSong = index;
-			}
+      }
+        let content_id =this.musicPlaylist[this.currentSong].id ;
+        this.clearCardActive();
+         this.activeCardMusic(content_id);
+         this.music_run = content_id;
+
 			this.audioFile = this.musicPlaylist[this.currentSong].url;
 			this.audio = new Audio(this.audioFile);
 			var localThis = this;
@@ -456,20 +469,56 @@ getFileUrlmg(image_name){
             return `${SERVER_URI}/api/files/music/${image_name}`;
         },
         /** change music */
-        activeCardMusic(card_active_id){
-         let allCards=  document.querySelectorAll(".music_active_player");
-         if(allCards.length>0){
-           for(let i in allCards){
-             allCards[i].classList.remove("music_active_player")
-           }
-         }
+clearCardActive(){
+   let card_class=document.querySelectorAll(".card-music");
+          for(let i in card_class){
+            try{
+              card_class[i].classList.remove("active_card_music")
+            }catch(e){
 
-        let card_active= document.querySelectorAll("."+card_active_id);
-        if(card_active.length>0){
-          for( let i in card_active){
-            card_active[i].classList.add("music_active_player")
+            }
           }
-        }
+},
+        activeCardMusic(name_class){
+         
+         
+
+       let   card_class_active=document.querySelectorAll(`.music${name_class}`);
+           
+          for(let i in card_class_active){
+            try{
+              card_class_active[i].classList.add("active_card_music")
+               setTimeout(function(){
+                
+               },100)
+            }catch(e){
+
+            }
+          }
+          card_class_active=document.querySelectorAll(`.music${name_class} .btn_player`); 
+          for( let i in card_class_active){
+            try {
+              card_class_active[i].innerHTML='<i class="zmdi zmdi-pause"></i>';
+            } catch (error) {
+              
+            }
+          }
+        
+        },
+        changeMusic(index){
+          console.log(index)
+          let music_select =this.musicPlaylist[index].id || undefined
+          if(this.music_run ==music_select){
+            this.playAudio();
+          }else{
+            this.changeSong(index);
+            try {
+              this.audio.play()
+            } catch (error) {
+              
+            }
+          }
+          //
         }
 },
   filters: {

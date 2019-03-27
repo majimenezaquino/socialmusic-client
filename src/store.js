@@ -19,9 +19,34 @@ Vue.use(Vuex)
      //push music in player
      sendMusic (state,obj){
         state.tracks.tracks=[obj];
-       
-        
- }
+     }
+,
+     sendPlaylist (state,obj){
+        console.log( obj)
+         let music =obj.map(function(playlist){
+                    return  {
+                _id: playlist.music._id,
+                date_create: playlist.music.date_create,
+                date_update: playlist.music.date_update,
+                dedicated: playlist.music.dedicated,
+                description: playlist.music.description,
+                download_allowed: playlist.music.download_allowed,
+                downloaded: playlist.music.downloaded,
+                duration: playlist.music.duration,
+                genre: playlist.music.genre,
+                img: playlist.music.img,
+                url: playlist.music.url,
+                played_count: playlist.music.played_count,
+                privacy: playlist.music.privacy,
+                qualification: playlist.music.qualification,
+                reactions: playlist.music.reactions,
+                title: playlist.music.title,
+                user_published: playlist.user_published
+            }
+         });
+
+        state.tracks.tracks=music;
+     }
 
      },
     //  getters:{
@@ -30,7 +55,6 @@ Vue.use(Vuex)
      actions:{
 
         SEND_MUSIC_PLAYER: (conrext,obj)=>{
-            console.log(typeof obj)
             if(typeof obj =='object'){
                 conrext.commit('sendMusic',obj)
             }
@@ -38,12 +62,7 @@ Vue.use(Vuex)
             
         },
         SEND_PLAYLIST_PLAYER: (conrext,obj)=>{
-            console.log(typeof obj)
-            // if(typeof obj =='object'){
-            //     conrext.commit('sendMusic',obj)
-            // }
-           
-            
+                conrext.commit('sendPlaylist',obj)    
         }
      }
 

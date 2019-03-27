@@ -146,10 +146,20 @@ swal({
         this.user_data  =dbLocal.getDataLocalStorageOBject();
         this.self_user_comment =this.user_data.user.id;
     },
-     sendMusicToPlayer(){
-             this.$store.dispatch("SEND_PLAYLIST_PLAYER", this.music);
-            // this.toggleActiveCard();
+    async sendMusicToPlayer(){
+            let data= await this.getPlaylistItemByPlayList(this.music._id);
+             this.$store.dispatch("SEND_PLAYLIST_PLAYER",data);
+            
          }
+         ,
+       async    getPlaylistItemByPlayList(_id){
+            let self = this;
+           let playlist =await  axios.get(`${SERVER_URI}/api/playlist/${_id}?token=${this.user_data.token}`);
+           return playlist.data.playLists;
+
+            
+           // console.log(this.playlist)
+        }
     },
     mounted(){
         this.redirectUserLogin();
