@@ -11,7 +11,9 @@
                                     </button>
                                 <span  v-if="!playlist.length>0">No hay música para reproducir</span>
                                  <span  v-else>Músicas en cola </span>
-                                  <button v-on:click.prevent="togglePlaylist"><i class="zmdi zmdi-chevron-down"></i></button>
+                                  <button v-on:click.prevent="togglePlaylist">
+                                    <i class="zmdi zmdi-chevron-down">
+                                      </i></button>
                                 </div>
                                 </li>
                               
@@ -27,7 +29,11 @@
                                 <div class="tumbnil-music"
                                 v-bind:style="{ 'background-image': 'url('+ getFileUrlmg(_playlist.img)+' )' }"
                                 >
-                                <button class="btn_player"><i class="zmdi zmdi-play"></i></button>
+                                <button class="btn_player">
+                                  <i :class="{
+                                    'zmdi zmdi-play': !isPlaying, 
+                                    'spinner spinner-bounce-bottom': isPlaying
+                                    }"></i></button>
                             </div>
                             <div class="content-musi">
                                 <h1>{{_playlist.title}}</h1>
@@ -505,7 +511,7 @@ clearCardActive(){
 },
         activeCardMusic(name_class){
          
-         
+         let _this=this;
 
        let   card_class_active=document.querySelectorAll(`.music${name_class}`);
            
@@ -522,7 +528,7 @@ clearCardActive(){
           card_class_active=document.querySelectorAll(`.music${name_class} .btn_player`); 
           for( let i in card_class_active){
             try {
-              card_class_active[i].innerHTML='<i class="zmdi zmdi-pause"></i>';
+   
             } catch (error) {
               
             }

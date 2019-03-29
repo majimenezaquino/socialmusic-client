@@ -18,19 +18,19 @@
 							<i class="fa fa-home" aria-hidden="true"></i>Home
 						</router-link></li>
 						<li>
-							<router-link to="/musics"><i class="fa fa-music"></i>Music</router-link>
+							<router-link to="/musics"><i class="fa fa-music"></i>Músicas</router-link>
 							
 							</li>
 						<li><router-link to="/playlist">
-							<i class="zmdi zmdi-playlist-audio"></i>Playlist</router-link>
+							<i class="zmdi zmdi-playlist-audio"></i>Listas de reproducciones </router-link>
 						</li>
 
 						<li><router-link to="/musician">
-							<i class="zmdi zmdi-gradient"></i>Musician</router-link>
+							<i class="zmdi zmdi-accounts-list"></i>Creadores</router-link>
 						</li>
 
 						<li><router-link to="/nightclub">
-							<i class="zmdi zmdi-store"></i> Nigthclub</router-link>
+							<i class="zmdi zmdi-store"></i> Centros de diversiones</router-link>
 						</li>
 						
 	
