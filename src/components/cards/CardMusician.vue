@@ -2,32 +2,54 @@
  <div class="col-md-3">
     <div class="card-creactor">
       <a class="thumbnil"
-      v-bind:style="{ 'background-image': 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXNa3l4lXTNLDvXNQV8uVLLownxElJSu71UItofQAb7vkLh7zj)' }" >
+      v-bind:style="{ 'background-image': 'url('+getImageUrl(musician.user_published.profile_picture)+')' }" >
           <div class="content">
-        <a href=""> <h1>Miguel Jimenez</h1> </a>
+        <a href=""> <h1>{{musician.user_published.name}} {{musician.user_published.last_name}}</h1> </a>
       </div>
         <div class="info-hidden">
           <div class="musician">
-              <div class="itme-musician">
-                  <span>profection</span>
-                   <i class="zmdi zmdi-run"></i>
+              <div class="itme-musician"
+              v-for="(ms, index) in musician.musicians"
+              :key="index" 
+              >
+                  <span>{{ms.musician.name}}</span>
+                   <i :class="ms.musician.icon"></i>
               </div>
-              <div class="itme-musician">
-                  <span>profection</span>
-                   <i class="zmdi zmdi-run"></i>
-              </div>
-              <div class="itme-musician">
-                  <span>profection</span>
-                   <i class="zmdi zmdi-run"></i>
-              </div>
+              
           </div>
-          <p>Lorem, ipsum dolor sit amet  quasi voluptatum nesciunt cupiditate, animi magni voluptatem!</p>
+          <p>{{musician.description}}</p>
         </div>
       </a>
       
   </div>
  </div>
 </template>
+<script>
+const {SERVER_URI,DB_USER_NAME}=require('@/config/index');
+export default {
+  name: "card-musician",
+  props:{
+    musician: {
+      type: Object,
+      required: false
+    }
+  },
+
+  methods: {
+    getImageUrl(image_name){
+              console.log("imagent" ,image_name)
+              if(image_name===undefined){
+                  return 'miaga'
+              }
+            if(image_name.includes("https://") || image_name.includes("http://")){
+                return image_name;
+            }
+            return `${SERVER_URI}/api/files/image/${image_name}`;
+        }
+  }
+}
+</script>
+
 <style>
   .card-creactor{
     margin: 0px;

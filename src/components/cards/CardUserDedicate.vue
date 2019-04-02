@@ -15,7 +15,9 @@ v-if="!hiddenUser"
         <h1>{{follower.name}} {{follower.last_name}}</h1>
     </div>
     </a>
-    <a href="" class="close-user" v-on:click.prevent="handlerHiddenUser"><i class="fa fa-times" aria-hidden="true"></i></a>
+    <a href="" class="close-user" v-on:click.prevent="handlerHiddenUser">
+        <i class="fa fa-times" aria-hidden="true"></i>
+        </a>
     </article>
 </template>
 <script>

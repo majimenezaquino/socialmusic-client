@@ -89,7 +89,9 @@ export default {
         return {
              user_data: undefined,
              musician: [],
+             userMusicians: [],
              musicianIds: [],
+             musician_select_limt: [],
              user_musician: [],
              musician_select: undefined,
              btn_active: false,
@@ -110,6 +112,19 @@ export default {
                 axios.get(`${SERVER_URI}/api/musician?token=${this.user_data.token}`).
                 then(function(req){
                     _this.musician =req.data.musicians;
+            
+                                
+                }).catch(function(err){
+                    console.log(`error--->${err}`)
+                })
+            },
+
+             getUserMusicians(){
+                let _this = this;
+                axios.get(`${SERVER_URI}/api/usermusician?token=${this.user_data.token}`).
+                then(function(req){
+                   //musicians;
+                   console.log(req.data.musicians)
             
                                 
                 }).catch(function(err){
@@ -141,11 +156,15 @@ export default {
                    
                     _this.user_musician=req.data.musicians;
          
-                    _this.musicianIds =req.data.musicians[0].musicians.map(function(musician){
+                  let item_select  =req.data.musicians[0].musicians.map(function(musician){
                         return musician.musician._id;
                     });
+                     _this.musicianIds =item_select;
+                   ;
+                   for(let i in item_select){
+                       _this.musician_select_limt.push(item_select[i])
+                   }
 
-               console.log( req.data.musicians[0].musicians)
         
                                 
                 }).catch(function(err){
@@ -184,7 +203,24 @@ export default {
             },
 
             toggleSelectMusician(ev){
-                if(this.musicianIds.length>=this.limit){
+                 let button =ev.target;              
+                
+                     button.classList.toggle("active");
+                     
+                
+
+                    
+               
+                 if(!button.className.includes('active')){ 
+                     
+                     
+                     let  music_delete =button.value;
+                     let newArray =this.musicina_send.musicians.filter(item=>item.musician!=music_delete);
+                     this.musicina_send.musicians = newArray;
+                     this.musician_select_limt = newArray;
+                    return false;
+                 }else{
+                     if( this.musician_select_limt.length>=this.limit){
                     swal({
                       text: "Ya alcánzate el límite de profesiones, para agregar más profesiones cambia e tipo de cuenta.",
                       icon: "error",
@@ -192,22 +228,14 @@ export default {
                     });
 
                     return false;
-
                 }
-                let button =ev.target;
-                
-              
-                 button.classList.toggle("active");
-                 if(!button.className.includes('active')){
-                     
-                    let  music_delete =button.value;
-                     let newArray =this.musicina_send.musicians.filter(item=>item.musician!=music_delete);
-                     this.musicina_send.musicians = newArray;
-                    return false;
 
                  }
-                console.log("desativado", this.musicina_send.musicians)
+            
                 this.musician_select =  button.value;
+                 this.musician_select_limt.push( button.value);
+
+               console.log( this.musician_select_limt.length)
             }
 
     }
@@ -215,6 +243,7 @@ export default {
     mounted(){
         this.redirectUserLogin();
         this.getMusicians();
+        this. getUserMusicians()
         this.getMusiciansByUserId();
     },
     watch:{

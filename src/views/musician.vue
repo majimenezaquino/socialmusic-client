@@ -58,11 +58,11 @@
                       
                      <div class="row">
                           
-                          <CardMusic 
-                          v-for="_music in musics"
-                          :music="_music"
-                          :key="_music._id"
-                          :music_select_callback="handlerMusicSElect"
+                          <CardMusician 
+                          v-for="_musician in userMusicians"
+                          :musician="_musician"
+                          :key="_musician._id"
+                       
                       />
                           </div>
                      
@@ -93,7 +93,7 @@
   const {EventBus} =require('@/eventbus');
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
-    import CardMusic from "@/components/cards/CardMusician.vue";
+    import CardMusician from "@/components/cards/CardMusician.vue";
     import CrearMusiciasModal from "@/components/cards/CrearMusiciasModal.vue";
 
     import { setTimeout } from 'timers';
@@ -104,12 +104,13 @@
             user_data: undefined,
             music_select_id: undefined,
             musics: [],
+            userMusicians: [],
   
           }
         },
         components:{
           LayoutDashboard,
-          CardMusic,
+          CardMusician,
           CrearMusiciasModal
      
       
@@ -131,6 +132,19 @@
                 console.log(`error--->${err}`)
             })
          },
+              getUserMusicians(){
+                let _this = this;
+                axios.get(`${SERVER_URI}/api/usermusician?token=${this.user_data.token}`).
+                then(function(req){
+                   //musicians;
+                   _this.userMusicians=req.data.musicians;
+                    console.log("user musician", _this.userMusicians)
+                                
+                }).catch(function(err){
+                    console.log(`error--->${err}`)
+                })
+            },
+
 
             getMusics(){
             let _this = this;
@@ -153,6 +167,7 @@
         mounted(){
           this.redirectUserLogin();    
           this.getMusics();
+          this. getUserMusicians();
         }
     
 	}
