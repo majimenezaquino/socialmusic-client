@@ -9,7 +9,9 @@
                 <div class="card-search">
                     <div class="form-group is-empty">
                         <a href="javascript:void(0)" class="close-search" data-card-search="close" data-toggle="tooltip" data-placement="top" title="" data-original-title="Back"> <i class="zmdi zmdi-arrow-left"></i></a>
-                        <input type="text" placeholder="Search and press enter..." class="form-control" autocomplete="off">
+                        <input type="text" placeholder="Search and press enter..." class="form-control" autocomplete="off"
+                        v-on:keyup="searMusiciaanByKeyWord"
+                        >
                         <a href="javascript:void(0)" class="clear-search" data-card-search="clear" data-toggle="tooltip" data-placement="top" title="" data-original-title="Clear search"><i class="zmdi zmdi-close-circle"></i></a>
                     </div>
                 </div>
@@ -38,20 +40,33 @@
                         <button class="musician"
                         :value="musc._id"
                         v-on:click.prevent="toggleSelectMusician"
+                        :disabled="musicianIds.includes(musc._id)"
                         >
                            <span>{{musc.name}}</span>
                             <i :class="musc.icon"></i>
                          </button>
                     </div>
                    
-      
 
                
+               
+            </div>
+             <div class="form-group">
+                <label for="exampleFormControlTextarea1">Detalla tu profesión </label>
+                <textarea class="form-control" 
+                id="exampleFormControlTextarea1" rows="2" 
+                placeholder="Ejemplo: Soy guitarrita profesional. Gane el premio al guitarrista el año.  "
+                v-model="musicina_send.description"
+                >
+                </textarea>
             </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Ok</button>
+                <button type="button" class="btn btn-primary"
+                 :disabled="!btn_active"
+                 v-on:click.prevent="sendMusicians"
+                 >Ok</button>
             </div>
         </div>
         <!-- modal-content -->
@@ -74,7 +89,15 @@ export default {
         return {
              user_data: undefined,
              musician: [],
-             musician_select: []
+             musicianIds: [],
+             user_musician: [],
+             musician_select: undefined,
+             btn_active: false,
+             limit: 10,
+             musicina_send: {
+                 musicians: [],
+                 description: undefined,
+             }
         }
     },
     methods:{
@@ -87,39 +110,104 @@ export default {
                 axios.get(`${SERVER_URI}/api/musician?token=${this.user_data.token}`).
                 then(function(req){
                     _this.musician =req.data.musicians;
-                console.log("musician", req);
+            
                                 
                 }).catch(function(err){
                     console.log(`error--->${err}`)
                 })
             },
 
-            toggleSelectMusician(ev){
-                let button =ev.target;
-                try {
+
+             searMusiciaanByKeyWord(ev){
+                 let keyword =ev.target.value;
+                 keyword.charAt(0).toUpperCase();
+                 if(!keyword!=''){
+                     return false;
+                 }
+                let _this = this;
+                axios.get(`${SERVER_URI}/api/searmusician/${keyword}?token=${this.user_data.token}`).
+                then(function(req){
+                    _this.musician =req.data.musicians;
+                    console.log(req);
+                                
+                }).catch(function(err){
+                    console.log(`error--->${err}`)
+                })
+            },
+             getMusiciansByUserId(){
+                let _this = this;
+                axios.get(`${SERVER_URI}/api/usermusician/${this.user_data.user.id}?token=${this.user_data.token}`).
+                then(function(req){
                    
-                        button.classList.toggle("active");
-                        let isactice=button.className.split(" ")
-                        
-                        if(isactice.includes('active')){
-                            if(this.musician_select.length<=3){
-                                this.musician_select.push(button.name);
-                            }else{
+                    _this.user_musician=req.data.musicians;
+         
+                    _this.musicianIds =req.data.musicians[0].musicians.map(function(musician){
+                        return musician.musician._id;
+                    });
+
+               console.log( req.data.musicians[0].musicians)
+        
+                                
+                }).catch(function(err){
+                    console.log(`error`,err.response)
+                })
+            },
+
+            sendMusicians(){
+                let _this = this;
+                axios.post(`${SERVER_URI}/api/usermusician?token=${this.user_data.token}`,
+                this.musicina_send).
+                then(function(req){
+                     if(!req.data.error){
                     swal({
-                      text: `Por el momento solo puede agregar un máximo de 3 profesiones  `,
+                      text: "Su profesión fue guardada con existo.",
                       icon: "success",
                       button: "ok",
                     }).then((value) => {
-                      //self.openPlaylist=false;
-                    })
-                            }
-                           
-                        }
+                        if(value) _this.$router.go();
+                       })
+                    $("#create_musician").modal("hide");
                     
-                } catch (error) {
-                    
+                  }else{
+                      swal({
+                      text: req.data.message,
+                      icon: "error",
+                      button: "ok",
+                    });
+
+                  }
+                console.log("musician", req);
+                                
+                }).catch(function(err){
+                    console.log(err.response)
+                })
+            },
+
+            toggleSelectMusician(ev){
+                if(this.musicianIds.length>=this.limit){
+                    swal({
+                      text: "Ya alcánzate el límite de profesiones, para agregar más profesiones cambia e tipo de cuenta.",
+                      icon: "error",
+                      button: "ok",
+                    });
+
+                    return false;
+
                 }
+                let button =ev.target;
                 
+              
+                 button.classList.toggle("active");
+                 if(!button.className.includes('active')){
+                     
+                    let  music_delete =button.value;
+                     let newArray =this.musicina_send.musicians.filter(item=>item.musician!=music_delete);
+                     this.musicina_send.musicians = newArray;
+                    return false;
+
+                 }
+                console.log("desativado", this.musicina_send.musicians)
+                this.musician_select =  button.value;
             }
 
     }
@@ -127,6 +215,31 @@ export default {
     mounted(){
         this.redirectUserLogin();
         this.getMusicians();
+        this.getMusiciansByUserId();
+    },
+    watch:{
+        'musician_select':function(val){
+     
+            this.musicina_send.musicians.push({musician: val});
+            console.log( this.musicina_send.musicians);
+            if(this.musicina_send.musicians.length>0 && this.musicina_send.description !=undefined && this.musicina_send.description !=''){
+                this.btn_active=true;
+            }else{
+                 this.btn_active=false;
+            }
+        },
+        'musicina_send.description':function(val){
+            //  musicina_send: {
+            //      musician: undefined,
+            //      user_published: undefined,
+            //      description: undefined,
+            //  }
+            if(this.musicina_send.musicians.length>0 && this.musicina_send.description !=undefined && this.musicina_send.description !=''){
+                this.btn_active=true;
+            }else{
+                 this.btn_active=false;
+            }
+        }
     }
 }
 </script>
@@ -139,6 +252,8 @@ export default {
         align-items: center;
         flex-wrap: wrap;
         margin: 10px;
+        overflow-y: scroll;
+        max-height: 400px;
     }
     .item-musician{
         width: 130px;
@@ -175,6 +290,10 @@ export default {
      }
      .container-item-musician button.active{
          background: rgb(33, 150, 243);
+         color: #fff;
+     }
+      .container-item-musician button:disabled{
+         background: #ef5350!important;
          color: #fff;
      }
 </style>

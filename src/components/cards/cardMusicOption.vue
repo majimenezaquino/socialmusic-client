@@ -60,7 +60,7 @@ export default {
               self.playlists =req.data.playlist
                   console.log("playlist by user",req.data.playlist)        
             }).catch(function(err){
-                console.log(`error--->${err}`)
+                console.log("error send playlist", err.response)
             })
             
            // console.log(this.playlist)
@@ -98,7 +98,7 @@ export default {
                     })  
                   }       
             }).catch(function(err){
-                console.log(`error--->${err}`)
+                console.log("error send playlist", err.response)
             })
             
            // console.log(this.playlist)
