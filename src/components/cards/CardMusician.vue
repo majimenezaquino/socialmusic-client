@@ -1,7 +1,9 @@
 <template>
  <div class="col-md-3">
+
     <div class="card-creactor">
       <a class="thumbnil"
+      :href="'/profile/'+musician.user_published._id"
       v-bind:style="{ 'background-image': 'url('+getImageUrl(musician.user_published.profile_picture)+')' }" >
           <div class="content">
         <a href=""> <h1>{{musician.user_published.name}} {{musician.user_published.last_name}}</h1> </a>
@@ -9,13 +11,22 @@
         <div class="info-hidden">
           <div class="musician">
               <div class="itme-musician"
-              v-for="(ms, index) in musician.musicians"
+              v-for="(ms, index) in musician_limit"
               :key="index" 
               >
                   <span>{{ms.musician.name}}</span>
                    <i :class="ms.musician.icon"></i>
               </div>
-              
+
+              <a class="itme-musician"
+              v-if=" musician.musicians.length>3"
+                :href="'/profile/'+musician.user_published._id"
+              >
+                  <span>{{musician.musicians.length -musician_limit.length}} más </span>
+                  <i class="zmdi zmdi-collection-plus"></i>
+                   
+              </a>
+
           </div>
           <p>{{musician.description}}</p>
         </div>
@@ -34,10 +45,15 @@ export default {
       required: false
     }
   },
+  data(){
+    return {
+      musician_limit: []
+    }
+  },
 
   methods: {
     getImageUrl(image_name){
-              console.log("imagent" ,image_name)
+           
               if(image_name===undefined){
                   return 'miaga'
               }
@@ -46,6 +62,13 @@ export default {
             }
             return `${SERVER_URI}/api/files/image/${image_name}`;
         }
+  },
+  mounted(){
+    this.musician_limit=this.musician.musicians.filter((ms,index)=>{
+      if(index<=2)
+      return ms
+    })
+    console.log(this.musician.musicians)
   }
 }
 </script>
@@ -66,6 +89,7 @@ export default {
     min-height: 300px;
     border-radius: 4px;
     position: relative;
+    z-index: 10;
   }
   .card-creactor .thumbnil .info-hidden{
     position: absolute;
@@ -106,6 +130,8 @@ export default {
      margin: 0px 1px;
      background: #eee;
      height: 60px;
+     z-index: 10;
+     color: #444;
    }
    .itme-musician span{
      font-size: 12px;

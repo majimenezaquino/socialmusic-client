@@ -12,13 +12,13 @@
                     <header class="card-heading search-option-header">
                               <div class="music-header-search">
                                 
-                                 <div class="uplod">
+                                 <div class="uplod titlepopo">
                                     <a href="#" class="button" data-toggle="modal" data-target="#create_musician">
-                                       <i class="fa fa-cloud-upload"></i> 
+                                       <i class="zmdi zmdi-folder-person"></i>
                                     </a>
-                                    <span class="hover-uplad">sube tu música aquí</span>
+                                    <span class="hover-uplad">Creadores de contenidos musicales</span>
                                  </div>
-                                 <h1>Creadores de contenidos musicales </h1>
+                                 <h1> </h1>
                               </div>
                       <div class="card-search">
                         <div id="productsTable_wrapper" class="form-group label-floating is-empty">
