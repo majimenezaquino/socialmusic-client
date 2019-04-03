@@ -138,7 +138,6 @@
                 then(function(req){
                    //musicians;
                    _this.userMusicians=req.data.musicians;
-                    console.log("user musician", _this.userMusicians)
                                 
                 }).catch(function(err){
                     console.log(`error--->${err}`)

@@ -9,15 +9,15 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right btn-primary">
                             <li>
-                                <a href="javascript:void(0)">Edit Profile</a>
+                                <a href="javascript:void(0)">Editar perfil</a>
                             </li>
                         </ul>
                     </li>
                 </ul>
         </header>
             <div class="card-body">
-                <h3 class="name">{{userPublic.name}} {{userPublic.last_name}}</h3>
-                <button type="button" class="btn btn-primary btn-round">Connect</button>
+                <h5 class="name"><span>{{userPublic.name}}</span> <span>{{userPublic.last_name}}</span></h5>
+                <button type="button" class="btn btn-round">Contactar</button>
             </div>
             <footer class="card-footer border-top">
                     <div class="row row p-t-10 p-b-10">
@@ -51,8 +51,8 @@ export default {
     mounted(){
    
         this.redirectUserLogin();
-         let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
-         this.getUserPublicById(user_id);
+       //  let user_id  =dbLocal.getDataLocalStorageOBject().user.id;
+         this.getUserPublicById(this.user_id);
     },
     methods:{
      redirectUserLogin(){

@@ -1,10 +1,12 @@
 <template>
    <div class="conttainet-user-profiles">
-        <CardMusic 
+      <div class="row">
+            <CardMusic 
         v-for="(mus ,index) in musics" :music="mus" 
         :key="index" 
         :id="'card_music'+index"
     />
+      </div>
    </div>
 </template>
 <script>
@@ -12,7 +14,7 @@
 	const {DBLocal} =require('@/services/data_local')
 	const dbLocal= new DBLocal(DB_USER_NAME);
 	const axios = require('axios')
-import CardMusic from "../cards/CardMusic.vue";
+import CardMusic from "../cards/CardMusicProfile.vue";
 
 export default {
     name: "music-profiles",
@@ -38,15 +40,16 @@ export default {
             },
         getmusicsByUser(){
             let self = this
-            axios.get(`${SERVER_URI}/api/musicsbyuser/${this.user_id}`).
+            axios.get(`${SERVER_URI}/api/musicsbyuser/${this.user_id}?token=${this.user_data.token}`).
             then(function(req){
 
                 if(req.data.musics.length>0){
                     self.musics= req.data.musics;
                 }
+                console.log("req",req)
              
             }).catch(function(err){
-                console.log(`error--->${err}`)
+                console.log(`error`,err.response)
             })
             
            // console.log(this.musics)
@@ -67,6 +70,7 @@ export default {
         justify-content: space-around;
         flex-wrap: wrap;
         overflow-y: scroll;
+        overflow-x: hidden;
         max-height: 70vh;
     }
 </style>

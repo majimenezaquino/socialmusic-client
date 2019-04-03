@@ -12,7 +12,7 @@
 					<ul class="card-actions fab-action right">
 						<li>
 							<button class="btn btn-primary btn-fab" data-toggle="modal" data-target="#toolabr_modal">
-								<i class="zmdi zmdi-plus"></i>
+								<i class="fa fa-camera" aria-hidden="true"></i>
 							</button>
 						</li>
 					</ul>
@@ -40,11 +40,11 @@
 															<ul class="nav nav-tabs nav-justified">
 																
 																<li role="presentation">
-																	<a href="#profile-about" data-toggle="tab" aria-expanded="true">About</a>
+																	<a href="#profile-about" data-toggle="tab" aria-expanded="true">Biografía
+</a>
 																</li>
-																<li  class="active "  role="presentation">
+																<li    role="presentation">
 																	<a href="#profile-musics" data-toggle="tab" aria-expanded="true">
-																		<i class="fa fa-music" aria-hidden="true"></i>
 																		Musics
 																		</a>
 																</li>
@@ -64,7 +64,7 @@
 											</div>
 
 											<div class="tab-pane fadeIn" id="profile-musics">
-											<MusicsByUSer />
+											<MusicByUser />
 											</div>
 											
 
@@ -113,6 +113,7 @@
 	import MusicsByUSer from "@/components/profiles/MusicsByUSer.vue";
 	import UserProfile from "@/components/profiles/profile.vue";
 	import About from "@/components/profiles/about.vue";
+	import MusicByUser from "@/components/profiles/MusicsByUSer.vue";
 	const axios =require('axios')
 	import ContentNotFound from "@/components/cards/ContentNotFound.vue";
     export default {
@@ -125,7 +126,7 @@
 			},
         components:{
 			LayoutDashboard,
-			MusicsByUSer,
+			MusicByUser,
 			UserProfile,
 			About,
 			ContentNotFound
@@ -149,15 +150,12 @@
 					self.user_found=true;
                     self.userPublic =_user[0];
                     
-                }
-                
+                }   
              
             }).catch(function(err){
 			//	console.log(`error--->${err}`)
 				
             })
-            
-           // console.log(this.musics)
         }
 		},
 		mounted(){

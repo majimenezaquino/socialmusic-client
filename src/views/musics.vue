@@ -137,7 +137,7 @@
             })
          },
 
-            getMusics(){
+        getMusics(){
             let _this = this;
             axios.get(`${SERVER_URI}/api/musics?token=${this.user_data.token}`).
             then(function(req){
