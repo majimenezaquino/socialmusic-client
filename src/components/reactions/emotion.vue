@@ -1,5 +1,5 @@
 <template>
-<div class="component-dedicate btn_compoment">
+<div class="component-dedicate btn-emotion">
     <a  v-on:click.prevent="sendReactions" :class="'btn-dedocate component-btn '+status">
     <i :class="userReatedChangeClass(user_active)"></i> 
     <span>{{parseInt(reactiones + addreaction)}}</span>
@@ -128,14 +128,28 @@ disabledReactionsbyUser(id){
 }
 </script>
 <style>
-.btn_compoment >a{
+.btn-emotion{
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 36px;
+    height: 36px;
+    margin: 0px;
+    
+}
+
+
+.btn-emotion >a{
     color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
 }
-.btn_compoment >a span{
+
+.btn-emotion >a span{
     font-size: 10px;
     color: #ccc;
     display: inline-block;
@@ -143,13 +157,11 @@ disabledReactionsbyUser(id){
     right: 5px;
     padding: 5px;
 }
-.btn_compoment >a:hover i{
-    transform: scale(1.5);
-}
-.btn_compoment >a i{
+
+.btn-emotion >a i{
     color: #fff;
 }
-.btn_compoment .active i{
+.btn-emotion .active i{
 color: #f00;
 }
 </style>

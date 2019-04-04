@@ -4,7 +4,7 @@
             <div class="content">
                 <div class="thumbnil">
                     <div class="container-user">
-                        <CardUser 
+                        <CardUser  
                     :user_id="music.user_published._id"
                     :user_name="music.user_published.name"
                     :user_last_name="music.user_published.last_name"
@@ -112,127 +112,6 @@ export default {
 }
 </script>
 <style>
-
-.card-music{
-    width: 100%;
-    margin-bottom: 10px;
-    border: #eee solid 1px;
-    border-radius: 5px;
-}
-.card-music .content {
-    position: relative;
-}
-.card-music .content .thumbnil{
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-
-}
-
-.card-music .content .thumbnil img{
- min-width: 100%;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
-  .card-music .content p{
-    font-size: 12px;
-    line-height: 14px;
-     margin:0px 3px;
-     color: #ccc;
-   
-}
-.card-music .content p small{
-    font-size: 8px;
-    display: inline;
-}
-.card-music .content h1{
-  font-size: 11px;
-  font-weight: bold;
-   margin:0px 3px;
-   margin-top: 3px;
-   margin-bottom: 1px;
-}
-.card-music .content .thumbnil .container-controller{
-position: absolute;
-top:0px;
-bottom: 0px;
-left: 0px;
-right: 0px;
-display: flex;
-justify-content: center;
-align-items: center;
-padding: 10px;
-box-sizing: border-box;
-transition: all ease 2s;
-border-top-left-radius: 5px;
-border-top-right-radius: 5px;
-background: rgba(0, 0, 0, 0.1);
-
-}
-
-.card-music .content .info{
-    border-top: #eee solid 1px;
-    box-sizing: border-box;
-}
-.op-music{
-    position: absolute;
-    display: flex;
-    justify-content: space-between;
-    bottom: 0px;
-    z-index: 10;
-}
-.card-music .content .info .user-music {
-  display: flex;
-  align-items: center;
-}
-.card-music .content .info  .music-info{
-border-bottom: #eee solid 1px;
-padding: 5px;
-}
-
-
-
-.card-music .content .thumbnil .container-controller .btn-player button{
-    display:none;
-    justify-content: center;
-    align-items: center;
-    border:none;
-    background: #000;
-    width: 56px;
-    height: 56px;
-    color: #fff;
-    border-radius: 50%;
-    z-index: -1;
-
-}
-.card-music .content .thumbnil .container-controller:hover{
-    background: rgba(0, 0, 0, 0.6);
-}
-.card-music .content .thumbnil .container-controller:hover .btn-player button{
-    transition: all ease 0.3s;
-    display: flex;
-}
-
-.container-user{
-    position: absolute;
-    left: 0px;
-    top: 0px;
-}
-.container-user h1{
-    color: #ccc;
-    font-weight: 100;
-}
-.btn-dedocate{
-    display: inline-block;
-    font-size: 22px;
-    color: #fff !important;
-    justify-content: center;
-    align-items: center;
-    margin:0px  20px; 
-    z-index: 10;
-}
+@import url("./music-style.css");
 </style>
 

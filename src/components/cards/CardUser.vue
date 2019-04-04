@@ -27,6 +27,8 @@ export default {
     display: inline;
     font-size: 13px !important;
     line-height: 14px;
+    font-weight: 400 !important;
+    color: #fff !important;
 
 }
    .container-user-create .thum-user{

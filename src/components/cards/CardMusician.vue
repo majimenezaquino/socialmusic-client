@@ -90,6 +90,7 @@ export default {
     border-radius: 4px;
     position: relative;
     z-index: 10;
+    background-size: cover;
   }
   .card-creactor .thumbnil .info-hidden{
     position: absolute;

@@ -67,14 +67,16 @@
 											<MusicByUser />
 											</div>
 											
+											<div class="tab-pane fadeIn" id="profile-playlist">
+											<PlaylistUser
+													/>	
+											</div>
 
 											<div class="tab-pane fadeIn" id="profile-contacts">
-											contenido elilminado	
+											     	
 											</div>
 
-											<div class="tab-pane fadeIn" id="profile-playlist">
-											contenido elilminado	
-											</div>
+											
 										</div>
 									</div>
 										</div>
@@ -112,8 +114,9 @@
 	import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
 	import MusicsByUSer from "@/components/profiles/MusicsByUSer.vue";
 	import UserProfile from "@/components/profiles/profile.vue";
-	import About from "@/components/profiles/about.vue";
+	import About from "@/components/profiles/about.vue"; 
 	import MusicByUser from "@/components/profiles/MusicsByUSer.vue";
+	import PlaylistUser from "@/components/profiles/Plylist-user.vue";
 	const axios =require('axios')
 	import ContentNotFound from "@/components/cards/ContentNotFound.vue";
     export default {
@@ -129,7 +132,8 @@
 			MusicByUser,
 			UserProfile,
 			About,
-			ContentNotFound
+			ContentNotFound,
+			PlaylistUser
 
 		}
 		,
@@ -156,15 +160,23 @@
 			//	console.log(`error--->${err}`)
 				
             })
-        }
-		},
+		}
+		, getPlaylistByUSer(_id){
+            let self = this;
+            axios.get(`${SERVER_URI}/api/albumes/?token=${this.user_data.token}`).
+            then(function(req){
+              self.playlist =req.data.playlist
+                  console.log("req.data.playlist",req.data.playlist)        
+            }).catch(function(err){
+                console.log(`error--->${err}`)
+            })
+            
+           // console.log(this.playlist)
+        
+		},},
 		mounted(){
 		this.redirectUserLogin();
 		this.getUserPublicById(this.user_id);	
-		},
-		beforeMount(){
-			//console.log("USER IN DASTBOARD",dbLocal.getDataLocalStorageOBject())
-			
 		}
 	}
 	

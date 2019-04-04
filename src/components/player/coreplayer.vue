@@ -574,7 +574,8 @@ clearCardActive(){
 		this.audio.removeEventListener("ended", this.handleEnded);
 		this.audio.removeEventListener("loadedmetadata", this.handleEnded);
 
-		clearTimeout(this.checkingCurrentPositionInTrack);
+    clearTimeout(this.checkingCurrentPositionInTrack);
+    return false;
 	}
 }
 </script>

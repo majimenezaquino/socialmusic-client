@@ -1,0 +1,173 @@
+
+.card-music{
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+.card-music .content {
+    position: relative;
+}
+.card-music .content .thumbnil{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+
+}
+
+.card-music .content .thumbnil img{
+ min-width: 100%;
+  border-radius: 5px;
+}
+
+  .card-music .content p{
+    font-size: 12px;
+    line-height: 13px !important;
+     color: #bbb;
+     border: none !important;
+   
+}
+.card-music .content p small{
+    font-size: 8px;
+    display: inline;
+}
+.card-music .content h1{
+  font-size: 11px;
+  font-weight: bold;
+   margin-top: 0px;
+   margin-bottom: 1px;
+}
+.card-music .content .thumbnil .container-controller{
+position: absolute;
+top:0px;
+bottom: 0px;
+left: 0px;
+right: 0px;
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 10px;
+box-sizing: border-box;
+transition: all ease 0.2s;
+background: rgba(0, 0, 0, 0.1);
+
+}
+
+.card-music .content .info{
+    box-sizing: border-box;
+    border: none !important;
+}
+.op-music{
+    position: absolute;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    bottom: 0px;
+    padding: 5px;
+    z-index: 10;
+    width: 100%;
+}
+.card-music .content .info .user-music {
+  display: flex;
+  align-items: center;
+}
+.card-music .content .info  .music-info{
+    background: #fff;
+    border: none !important;
+    display: flex;
+    flex-direction: column;
+    }
+/* 
+    .card-music .content .info  .music-info .played{
+        font-size: 9px;
+        line-height: 12px;
+        margin: 0px;
+        padding: 0px;
+        display: inline-block;
+        text-align: right;
+        } */
+        
+
+
+.card-music .content .thumbnil .container-controller .btn-player button{
+    display:none;
+    justify-content: center;
+    align-items: center;
+    border:none;
+    background: #000;
+    width: 56px;
+    height: 56px;
+    color: #fff;
+    border-radius: 50%;
+    z-index: -1;
+
+}
+.card-music .content .thumbnil .container-controller:hover{
+    background: rgba(0, 0, 0, 0.6);
+}
+.card-music .content .thumbnil .container-controller:hover .btn-player button{
+    transition: all ease 0.3s;
+    display: flex;
+}
+
+.container-user{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.container-user h1{
+    color: #ccc;
+    font-weight: 100;
+}
+.container-option-reaction .btn-dedocate{
+    display: flex !important;
+    font-size: 22px;
+    color:#fff !important;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    z-index: 10;
+    padding: 10px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+}
+
+.container-option-reaction .btn-dedocate:hover {
+    transform: scale(1.5);
+}
+.close-music{
+    display: flex;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color:#444;
+    width: 25px;
+    height: 25px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    z-index: 10;
+    font-size: 16px;
+    font-weight: 100;
+    margin: 0px;
+    padding: 2px;
+}
+.close-music:hover{
+border:#eee solid 1px;
+background: #fff;
+color: #444;
+
+}
+.music_active_player .thumbnil .container-controller{
+background: rgba(0, 0, 0, 0.6) !important;
+border-radius: 5px !important;
+
+}
+.music_active_player .thumbnil .container-controller .btn-player button{
+    transition: all ease 0.3s;
+    display: flex !important;
+}

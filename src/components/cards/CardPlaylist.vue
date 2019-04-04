@@ -18,7 +18,7 @@
                         </div>
                   </div>
 
-                    <a :href="'playlist/'+music._id" class="controller">
+                    <a :href="'/playlist/'+music._id" class="controller">
                     <div class="btn-player">
                             <button v-on:click.prevent="sendMusicToPlayer"><i class="fa fa-play" aria-hidden="true"></i></button>
                     </div>
