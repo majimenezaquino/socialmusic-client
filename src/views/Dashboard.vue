@@ -73,7 +73,7 @@
 											</div>
 
 											<div class="tab-pane fadeIn" id="profile-contacts">
-											     	
+											     	<CardCalendar />
 											</div>
 
 											
@@ -117,6 +117,7 @@
 	import About from "@/components/profiles/about.vue"; 
 	import MusicByUser from "@/components/profiles/MusicsByUSer.vue";
 	import PlaylistUser from "@/components/profiles/Plylist-user.vue";
+	import CardCalendar from "@/components/calendar/CardCalendar.vue";
 	const axios =require('axios')
 	import ContentNotFound from "@/components/cards/ContentNotFound.vue";
     export default {
@@ -133,7 +134,8 @@
 			UserProfile,
 			About,
 			ContentNotFound,
-			PlaylistUser
+			PlaylistUser,
+			CardCalendar
 
 		}
 		,
