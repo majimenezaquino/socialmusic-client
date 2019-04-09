@@ -42,7 +42,7 @@ export default {
        {
           icon: '',
           name: 'Nombre del evento',
-          date_start: `${new Date("2019-04-26")}`,
+          date_start: `${new Date("2019-04-09")}`,
           date_end: `${new Date()}`
       }
       ,
@@ -98,7 +98,7 @@ function writeMonth(month) {
  
     
    
-    let event= document.createElement("div");
+    let event= document.createElement("a");
      let dateSelect =undefined;
      let  date;
     _this.events.forEach((eve,index)=>{
@@ -108,9 +108,8 @@ function writeMonth(month) {
   
     if( deteisquals(new Date(currentYear,monthNumber,i),new Date( date.getFullYear(), date.getMonth(), date.getDate()+1))){
        let id_parent =document.getElementById(`date${i}`);
-       event.classList.add("event-container");
-       event.innerHTML=`<a href=""> <i class="${eve.icon}"></i></a>`;
-      id_parent.appendChild(event)
+       id_parent.innerHTML=`<a  class="event-select" href="">${i}</a>`;
+     
      
       
     }
@@ -243,28 +242,19 @@ function setNewDate() {
     background: #ccc;
   }
 
-     .event-container{
-       display: flex;
-       justify-content: center;
-       align-items: center;
-        
-      color: #444;
-    
-      
-     }
+   
 
-      .event-container >a{
+     .event-select{
         display: flex;
-        position: absolute;
-        width: 12px;
-        height: 12px;
-        bottom: 5PX;
-        font-size: 10px;
+        
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
         justify-content: center;
         align-items: center;
-        color: #fff !important;
-        z-index: 10;
-        background: lightcoral;
+        border: #666 solid 2px;
+        color: #444 !important;
+        background: #CCC;
 
       }
   .calendar__today {
