@@ -8,13 +8,13 @@
     </div>
 
     <div class="calendar__week">
-        <div class="calendar__day calendar__item">Mon</div>
-        <div class="calendar__day calendar__item">Tue</div>
-        <div class="calendar__day calendar__item">Wed</div>
-        <div class="calendar__day calendar__item">Thu</div>
-        <div class="calendar__day calendar__item">Fri</div>
-        <div class="calendar__day calendar__item">Sat</div>
-        <div class="calendar__day calendar__item">Sun</div>
+        <div class="calendar__day calendar__item">LU</div>
+        <div class="calendar__day calendar__item">MA</div>
+        <div class="calendar__day calendar__item">MI</div>
+        <div class="calendar__day calendar__item">JU</div>
+        <div class="calendar__day calendar__item">VI</div>
+        <div class="calendar__day calendar__item">SA</div>
+        <div class="calendar__day calendar__item">DO</div>
     </div>
 
     <div class="calendar__dates" id="dates"></div>
@@ -26,17 +26,38 @@ export default {
   name: 'calendar',
   data(){
     return {
-      events: [{
+      events: [
+        {
+          icon: 'fa fa-microphone',
+          name: 'Nombre del evento',
+          date_start: `${new Date("2019-04-08")}`,
+          date_end: `${new Date()}`
+      },
+       {
+          icon: 'fa fa-headphones',
+          name: 'Nombre del evento',
+          date_start: `${new Date("2019-04-08")}`,
+          date_end: `${new Date()}`
+      },
+       {
           icon: '',
           name: 'Nombre del evento',
-          date_start: new Date(),
-          date_end: new Date()
-      }]
+          date_start: `${new Date("2019-04-26")}`,
+          date_end: `${new Date()}`
+      }
+      ,
+       {
+          icon: '',
+          name: 'Nombre del evento',
+          date_start: `${new Date("2019-05-26")}`,
+          date_end: `${new Date()}`
+      }
+      ]
     }
   },
   mounted(){
     let _this =this;
-    let monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September','October', 'November', 'December'];
+    let monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre','Octubre', 'Noviembre', 'Diciembre'];
 
 let currentDate = new Date();
 let currentDay = currentDate.getDate();
@@ -76,16 +97,22 @@ function writeMonth(month) {
 
  
     
-    let date_select=new Date(currentYear,monthNumber,i)
+   
     let event= document.createElement("div");
+     let dateSelect =undefined;
+     let  date;
     _this.events.forEach((eve,index)=>{
-    if(date_select.getMonth()===eve.date_start.getMonth() &&
-     date_select.getFullYear()===eve.date_start.getFullYear() && 
-     date_select.getDay()=== eve.date_start.getDay()){
+
+        date = new Date(eve.date_start);
+       console.log("------->",date)
+  
+    if( deteisquals(new Date(currentYear,monthNumber,i),new Date( date.getFullYear(), date.getMonth(), date.getDate()+1))){
+       let id_parent =document.getElementById(`date${i}`);
        event.classList.add("event-container");
-      //  event.innerHTML=`<span> Musica Caserola</span>`;
-      document.getElementById(`date${i}`).appendChild(event)
-      console.log(i)
+       event.innerHTML=`<a href=""> <i class="${eve.icon}"></i></a>`;
+      id_parent.appendChild(event)
+     
+      
     }
     
        
@@ -95,6 +122,11 @@ function writeMonth(month) {
        // console.log(resultado)
     }
 }
+
+function deteisquals(date_a,sate_b){
+return  ( new Date(date_a).getTime() === new Date(sate_b).getTime());
+}
+
 
 function getTotalDays(month) {
     if(month === -1) month = 11;
@@ -163,13 +195,14 @@ function setNewDate() {
 
 .title {
   text-align: center;
-  color: #444; }
+  color: #fff; }
 
 .calendar {
-  background: #4ECDC4;
+  background: rgb(33, 150, 243);
   width: 100%;
-  margin: 1em auto;
+  margin: 0px auto;
   min-height: 400px;
+  color: #FFF;
    }
   .calendar__info {
     display: -webkit-box;
@@ -182,7 +215,7 @@ function setNewDate() {
     font-size: 1.2em;
     text-transform: uppercase; }
   .calendar__prev, .calendar__next {
-    color: #C7F464;
+    color: #CCC;
     cursor: pointer;
     font-size: 1.3em; }
   .calendar__prev {
@@ -200,20 +233,43 @@ function setNewDate() {
     justify-content: center;
     align-items: center;
     position: relative;
-    font-size: 22px;
-    min-height: 60px;
+    font-size: 18px;
+  line-height: 23px;
+      padding: 15px;
+
     
      }
+  .calendar__item:hover{ 
+    background: #ccc;
+  }
+
      .event-container{
-       width: 100%;
-       height: 100%;
-       position: absolute;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+        
+      color: #444;
+    
+      
      }
+
+      .event-container >a{
+        display: flex;
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        bottom: 5PX;
+        font-size: 10px;
+        justify-content: center;
+        align-items: center;
+        color: #fff !important;
+        z-index: 10;
+        background: lightcoral;
+
+      }
   .calendar__today {
     background: lightcoral;
     color: white;
-    width: 50%;
-    border-radius: 50%;
     margin: auto; }
   .calendar__last-days {
     opacity: .3; }
