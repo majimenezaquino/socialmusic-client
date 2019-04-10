@@ -1,31 +1,22 @@
 <template>
 <div class="container-calendar">
-    <FullCalendar
-    v-on:dateClick="handleDateClick"
-    v-on:select="handleDateCelect"
+   <full-calendar :events="[
+	{
+      title : 'Sunny Out of Office',
+      start : '2019-04-08',
+      end : '2019-04-15'
+    }
+]" locale="es" />
 
-    :plugins="calendarPlugins"
-    defaultView="dayGridMonth"
-   :weekends="true"
-  :events="[
-    { title: 'event 1', date: '2019-04-01' },
-    { title: 'event 2',
-     start : '2016-08-25',
-      end : '2017-07-27' }
-  ]"
-
-    />
+ 
 </div>
 </template>
 <script>
-import FullCalendar from '@fullcalendar/vue'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction';
+
 export default {
   name: 'calendar',
   components:{
-    FullCalendar,
-    dayGridPlugin
+    'full-calendar': require('vue-fullcalendar')
 
   },
   data(){
@@ -47,10 +38,11 @@ export default {
 </script>
 <style >
 
-@import '~@fullcalendar/core/main.css';
-@import '~@fullcalendar/daygrid/main.css';
+ @import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css'; 
 
-.container-calendar{
+/*
+ .container-calendar{
   width: 100%;
   padding-left: 5px;
   box-sizing: border-box;
@@ -59,5 +51,5 @@ export default {
 .fc table tr>td:first-child {
     border-left-width: 1px;
     color: #444;
-}
+} */
 </style>
