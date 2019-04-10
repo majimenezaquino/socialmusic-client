@@ -43,6 +43,15 @@
                             <a href="" 
                                 class="btn-dedocate"
                                 v-on:click.prevent="handlerToglesOption">
+                            <i class="fa fa-sellsy" aria-hidden="true"></i>
+                            </a>
+                        </div>
+
+
+                        <div class="component-dedicate">
+                            <a href="" 
+                                class="btn-dedocate"
+                                v-on:click.prevent="handlerToglesOption">
                             <i class="zmdi zmdi-more-vert"></i>
                             </a>
                         </div>

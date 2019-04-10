@@ -32,14 +32,18 @@
 						<li><router-link to="/nightclub">
 							<i class="zmdi zmdi-store"></i> Centros de diversiones</router-link>
 						</li>
+
+								<li><router-link to="/nightclub">
+							<i class="fa fa-calendar" ></i> Events</router-link>
+						</li>
 						
 	
-						<li class="nav-dropdown">
+						<!-- <li class="nav-dropdown">
 							<a href="#"><i class="zmdi zmdi-google-pages"></i>Nigthclub</a>
 							<ul class="nav-sub">
 								<li><a href="page-profile.html">Profile</a></li>
 							</ul>
-						</li> 
+						</li>  -->
 						
 						</ul>
 					</div>
