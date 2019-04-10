@@ -1,18 +1,54 @@
 <template>
 <div class="container-calendar">
     <FullCalendar
+    :plugins="calendarPlugins"
     v-on:dateClick="handleDateClick"
     v-on:select="handleDateCelect"
-
-    :plugins="calendarPlugins"
+    v-on:eventClick="handlerCLickEvent"
+    :lang="es"
+     v-on:eventDrop="handlerDrop"
+     v-on:eventResizeStop="handlerResizeStop"
     defaultView="dayGridMonth"
    :weekends="true"
-  :events="[
-    { title: 'event 1', date: '2019-04-01' },
-    { title: 'event 2',
-     start : '2016-08-25',
-      end : '2017-07-27' }
-  ]"
+    :events='[
+      {
+        start:"2019-04-10",
+        end:"2019-04-21",
+        title:"Cassio Godinho",
+        icon : "asterisk",
+       // url:"/reservas/44/edit",
+        allDay:true,
+        editable:true,
+       // updateUrl:"/reservation/44",
+        transport_id:1,
+        user_id:1,
+        textColor: "#ffffff",
+      },
+       {
+        start:"2019-04-10",
+        end:"2019-04-11",
+        title:"Cassio  2",
+       // url:"/reservas/44/edit",
+        allDay:true,
+        editable:true,
+       // updateUrl:"/reservation/44",
+        transport_id:2,
+        user_id:2,
+        textColor: "#ffffff"
+      },
+         {
+        start:"2019-04-11",
+        end:"2019-05-11",
+        title:"Cassio  2",
+       // url:"/reservas/44/edit",
+        allDay:true,
+        editable:true,
+       // updateUrl:"/reservation/44",
+        transport_id:2,
+        user_id:2,
+        textColor: "#ffffff"
+      }
+    ]'
 
     />
 </div>
@@ -21,6 +57,8 @@
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction';
+import { Calendar } from '@fullcalendar/core';
+import esLocale from '@fullcalendar/core/locales/es';
 export default {
   name: 'calendar',
   components:{
@@ -40,8 +78,21 @@ export default {
 ,
 
   handleDateCelect(arg) {
-    console.log(arg.date)
+    console.log(arg)
+  },
+  handlerCLickEvent(ev){
+    console.log(ev)
   }
+  ,
+  handlerDrop(ev){
+    console.log(ev)
+  }
+  ,
+  handlerResizeStop(ev){
+    console.log(ev)
+  }
+
+  
   }
 }
 </script>
@@ -52,12 +103,15 @@ export default {
 
 .container-calendar{
   width: 100%;
-  padding-left: 5px;
   box-sizing: border-box;
-  color: #444;
+  border-left: #ccc solid 1px;
 }
-.fc table tr>td:first-child {
-    border-left-width: 1px;
-    color: #444;
+
+.fc-toolbar.fc-header-toolbar {
+  background: #337ab7;
+color: #eee;
+  padding: 10px;
+  margin: 0px;
 }
+
 </style>
