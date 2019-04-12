@@ -1,8 +1,9 @@
 <template >
 <div class="col-md-3" v-if="show_card">
-    <section class="card-playlist">
+    <section class="card_playlist">
                 <div class="thumbnil"
-                    v-bind:style="{ 'background-image': 'url(' + getImagePlaylist(music.img) + ')' }">
+                    v-bind:style="{ 'background-image': 'url(' + getImagePlaylist(music.img) + ')' }"
+                    >
                      <div class="playlist-info">
                         <div class="info-user">
                             <CardUser 
@@ -26,16 +27,16 @@
                     <div class="card-footer-playlist">
                    
 
-                     <div class="card-playlist-info" v-if="music.musics_cout>0 ">
+                     <div class="card_playlist-info" v-if="music.musics_cout>0 ">
                          <span>{{music.musics_cout}}</span>
-                         Canciones
+                            <small>Canciones</small>
                      </div>
-                     <div class="card-playlist-info" v-else>
+                     <div class="card_playlist-info" v-else>
                         <small> No tiene canciones </small>
                        
                      </div>
 
-                     <div class="card-playlist-info" v-if="self_user_comment===music.user_published._id">
+                     <div class="card_playlist-info" v-if="self_user_comment===music.user_published._id">
                          <a href="" class="control" :name="music._id" 
                             data-toggle="modal" data-target="#modal-editail-playlist"
                             v-on:click="editailPlaylist"
@@ -66,7 +67,7 @@ const dbLocal= new DBLocal(DB_USER_NAME);
     moment.locale('es')
 
 export default {
-    name: 'card-playlist',
+    name: 'card_playlist',
     components:{
  
         CardUser
@@ -94,6 +95,9 @@ export default {
         editailPlaylist(ev){
             let playlist_id =ev.target.name;
             this.prop_playlist_select(playlist_id)
+        },
+        handlerOver(ev){
+
         },
 deletePlayList(ev){
 let playlist_id =ev.target.name;
@@ -174,14 +178,14 @@ swal({
 </script>
 <style>
 
-.card-playlist{
+.card_playlist{
     width: 100%;
     margin-bottom: 10px;
     border-radius: 5px;
     position: relative;
 }
 
-.card-playlist  .thumbnil{
+.card_playlist  .thumbnil{
         background: rgba(0, 0, 0, 0.7);
         width: 100%;
         min-height: 300px;
@@ -194,12 +198,10 @@ swal({
         background-size:contain;
         background-size:cover;
         border-radius: 4px;
-        
-
 }
 
 
-.card-playlist  .thumbnil .controller{
+.card_playlist  .thumbnil .controller{
 position: absolute;
 top:0px;
 bottom: 0px;
@@ -210,38 +212,11 @@ justify-content: center;
 align-items: center;
 padding: 10px;
 box-sizing: border-box;
-display: none;
 transition: all ease 2s;
-border-top-left-radius: 5px;
-border-top-right-radius: 5px;
-}
-.card-playlist  .thumbnil:hover .controller{
-    transition: all ease 2s;
-    display: flex;
-    background: rgba(0, 0, 0, 0.7);
-   
+background: rgba(0, 0, 0, 0.3);
 }
 
-
-.card-playlist  .info .user-music {
-  display: flex;
-  align-items: center;
-}
-.card-playlist  .info  .music-info{
-border-bottom: #eee solid 1px;
-padding: 5px;
-}
-
-.card-playlist  .info .user-music .thum-user img{
-    width: 100%;
-}
-.music_active   .thumbnil .controller{
-    transition: all ease 2s;
-    display: flex;
-  background: rgba(0, 174, 239, 0.1);
-}
 .btn-player button{
-    display: none;
     justify-content: center;
     align-items: center;
     border:none;
@@ -254,9 +229,42 @@ padding: 5px;
 
 
 }
-.music_active   .thumbnil:hover .btn-player button{
-display: flex;
+.card_playlist  .thumbnil .controller .btn-player{
+    z-index: -1;
 }
+.active .thumbnil .controller{
+    transition: all ease 2s;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.active  .thumbnil .controller .btn-player{
+    z-index: 10;
+}
+.card_playlist  .thumbnil:hover .controller{
+    transition: all ease 0.3s;
+   
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.card_playlist  .thumbnil:hover .controller .btn-player{
+    z-index: 1;
+} 
+
+.card_playlist  .info .user-music {
+  display: flex;
+  align-items: center;
+}
+.card_playlist  .info  .music-info{
+border-bottom: #eee solid 1px;
+padding: 5px;
+}
+
+.card_playlist  .info .user-music .thum-user img{
+    width: 100%;
+}
+
+
+
 .playlist-info{
     position: absolute;
     z-index: 10;
@@ -279,7 +287,7 @@ display: flex;
      color: #eee;
      padding: 0px;
  }
-.card-playlist-info{
+.card_playlist-info{
     color: #fff !important;
     display: flex;
     justify-content: flex-start;
@@ -287,23 +295,28 @@ display: flex;
     width: 100%;
     margin: 0px;
 }
- .card-playlist-info .control{
+ .card_playlist-info .control{
      display: inline-block;
      padding:2px; 
-     font-size: 10px;
+     font-size: 12px;
      text-decoration: underline;
+     color: #fff;
  }
-.card-playlist-info span{
+.card_playlist-info span{
     display: flex;
     width: 35px;
     height: 35px;
-    background: #eee;
+    background: #fff;
     border-radius: 50%;
     justify-content: center;
     align-items: center;
     font-weight: 100;
     font-size: 12px;
     color:#444;
+}
+.card_playlist-info small{
+    display: flex;
+    margin-left: 3px;
 }
 .card-footer-playlist{
     position: absolute;
@@ -331,8 +344,12 @@ display: flex;
     color: #ccc;
     font-size: 12px;
 }
-.music_active   .thumbnil:hover .info-playlist h1{
-    color: #ccc !important;
+
+
+/*active*/
+
+.active.controller .btn-player button{
+display: flex;
 }
 </style>
 

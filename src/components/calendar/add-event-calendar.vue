@@ -12,7 +12,7 @@
               <div class="form-group">
                 <label for="editTitle" class="col-md-2 control-label">Titulo </label>
                 <div class="col-md-10">
-                  <input type="text" class="form-control edit_event_title" id="editTitle" placeholder="Titulo del evento">
+                  <input type="text" class="form-control edit_event_title" id="editTitle" placeholder="Titulo del evento" v-model="events.title">
                 </div>
               </div>
               <div class="form-group">
@@ -20,7 +20,7 @@
                 <div class="col-md-10">
                   <div class="togglebutton m-t-5">
                     <label>
-                      <input type="checkbox" class="toggle-primary" id="toggle-allDay">
+                      <input type="checkbox" class="toggle-primary" id="toggle-allDay" v-model="events.allday">
                     </label>
                   </div>
                 </div>
@@ -31,7 +31,7 @@
                     <div class="form-group m-0 is-empty">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i></span>
-                        <input type="text" class="form-control datepicker" id="event_start_date" placeholder="Fecha de inicio ">
+                        <input type="text" class="form-control datepicker" id="event_start_date" placeholder="Fecha de inicio " v-model="events.date_start">
                       </div>
                     </div>
                   </div>
@@ -39,7 +39,7 @@
                     <div class="form-group m-0 is-empty">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="zmdi zmdi-time"></i></span>
-                        <input type="text" class="form-control datepicker" id="event_start_time" placeholder="Hora de inicio ">
+                        <input type="text" class="form-control datepicker" id="event_start_time" placeholder="Hora de inicio " v-model="events.hour_start">
                       </div>
                     </div>
                   </div>
@@ -51,7 +51,7 @@
                     <div class="form-group m-0 is-empty">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i></span>
-                        <input type="text" class="form-control datepicker" id="event_end_date" placeholder="Fecha fin ">
+                        <input type="text" class="form-control datepicker" id="event_end_date" placeholder="Fecha fin " v-model="events.date_start">
                       </div>
                     </div>
                   </div>
@@ -59,7 +59,7 @@
                     <div class="form-group m-0 is-empty">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="zmdi zmdi-time"></i></span>
-                        <input type="text" class="form-control datepicker" id="event_end_time" placeholder="Hora fin">
+                        <input type="text" class="form-control datepicker" id="event_end_time" placeholder="Hora fin" v-model="events.hour_end">
                       </div>
                     </div>
                   </div>
@@ -71,31 +71,31 @@
                   <div class="form-group m-t-5 p-l-10">
                     <div class="event-tag event-tag-edit">
                       <span class="mw-lightBlue">
-                        <input type="radio" value="mw-lightBlue" name="event-tag">
+                        <input type="radio" value="mw-lightBlue" name="event-tag" v-on:click.prevent="handlerColor">
                         <i></i>
                       </span>
                       <span class="mw-blue">
-                        <input type="radio" value="mw-blue" name="event-tag">
+                        <input type="radio" value="mw-blue" name="event-tag" v-on:click.prevent="handlerColor">
                         <i></i>
                       </span>
                       <span class="mw-turquoise">
-                        <input type="radio" value="mw-turquoise" name="event-tag">
+                        <input type="radio" value="mw-turquoise" name="event-tag" v-on:click.prevent="handlerColor">
                         <i></i>
                       </span>
                       <span class="mw-peach">
-                        <input type="radio" value="mw-peach" name="event-tag">
+                        <input type="radio" value="mw-peach" name="event-tag" v-on:click.prevent="handlerColor">
                         <i></i>
                       </span>
                       <span class="mw-salmon">
-                        <input type="radio" value="mw-salmon" name="event-tag">
+                        <input type="radio" value="mw-salmon" name="event-tag" v-on:click.prevent="handlerColor">
                         <i></i>
                       </span>
                       <span class="mw-green">
-                        <input type="radio" value="mw-green" name="event-tag">
+                        <input type="radio" value="mw-green" name="event-tag" v-on:click.prevent="handlerColor">
                         <i></i>
                       </span>
                       <span class="mw-purple">
-                        <input type="radio" value="mw-purple" name="event-tag">
+                        <input type="radio" value="mw-purple" name="event-tag" v-on:click.prevent="handlerColor">
                         <i></i>
                       </span>
                     </div>
@@ -173,16 +173,34 @@ export default {
     data(){
         return {
             openSearch: false,
+            events: {
+              user_id: undefined,
+              title: undefined,
+              color: undefined,
+              date_start: undefined,
+              date_end: undefined,
+              hour_start: undefined,
+              hour_end: undefined,
+              guests: [],
+              nightclub: undefined,
+            }
         }
     },
     methods:{
         openToggle(){
             this.openSearch =!this.openSearch;
         }
+        ,handlerColor(ev){
+          this.events.color =ev.target.value;
+        },
+
 
     },
     mounted(){
 
+    },
+    updated(){
+      console.log(this.events)
     }
 }
 </script>

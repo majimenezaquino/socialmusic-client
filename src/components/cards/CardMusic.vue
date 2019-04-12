@@ -40,11 +40,11 @@
                         </div>
 
                         <div class="component-dedicate">
-                            <a href="" 
+                            <button
                                 class="btn-dedocate"
-                                v-on:click.prevent="handlerToglesOption">
+                                v-on:click.prevent="handlerToglesOption" >
                             <i class="fa fa-sellsy" aria-hidden="true"></i>
-                            </a>
+                            </button>
                         </div>
 
 

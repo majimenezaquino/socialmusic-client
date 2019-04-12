@@ -7,12 +7,12 @@
     @eventClick="handlerCLickEvent"
      v-on:eventDrop="handlerDrop"
      v-on:eventResizeStop="handlerResizeStop"
-    defaultView="dayGridMonth"
+    :defaultView="'dayGridMonth'"
    :weekends="true"
     :events='[
       {
         start:"2019-04-10",
-        end:"2019-04-21",
+        end:"2019-04-11",
         title:"Cassio Godinho",
         icon : "asterisk",
        // url:"/reservas/44/edit",
@@ -22,31 +22,8 @@
         transport_id:1,
         user_id:1,
         textColor: "#ffffff",
-      },
-       {
-        start:"2019-04-10",
-        end:"2019-04-11",
-        title:"Cassio  2",
-       // url:"/reservas/44/edit",
-        allDay:true,
-        editable:true,
-       // updateUrl:"/reservation/44",
-        transport_id:2,
-        user_id:2,
-        textColor: "#ffffff"
-      },
-         {
-        start:"2019-04-11",
-        end:"2019-05-11",
-        title:"Cassio  2",
-       // url:"/reservas/44/edit",
-        allDay:true,
-        editable:true,
-       // updateUrl:"/reservation/44",
-        transport_id:2,
-        user_id:2,
-        textColor: "#ffffff"
       }
+       
     ]'
 
     />
@@ -65,6 +42,8 @@ import AddEventCalendar from './add-event-calendar.vue';
     const {DBLocal} =require('@/services/data_local')
     const dbLocal= new DBLocal(DB_USER_NAME);
     const axios = require('axios');
+    const moment =require("moment");
+    moment.locale('es')
 
 export default {
   name: 'calendar',
@@ -114,7 +93,7 @@ export default {
 
   
   },
-  beforeMount(){
+  mounted(){
     this.redirectUserLogin();
     this.user_id=this.$route.params.id;
     setTimeout(function(){
