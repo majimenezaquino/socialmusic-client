@@ -51,7 +51,6 @@
 
     />
     <AddEventCalendar />
-    <a href="#"> hola como esta</a>
 </div>
 </template>
 <script>
@@ -88,8 +87,6 @@ export default {
       this.user_data  =dbLocal.getDataLocalStorageOBject();
        },
     handleDateClick(arg) {
-    console.log(arg.date)
-    console.log()
     if(this.user_data.user.id==this.user_id && this.user_data.user.id!=undefined){
       $("#modal_add_event").modal();
     }else{
@@ -117,9 +114,12 @@ export default {
 
   
   },
-  mounted(){
+  beforeMount(){
     this.redirectUserLogin();
     this.user_id=this.$route.params.id;
+    setTimeout(function(){
+
+    },100)
 
   }
 }
@@ -143,5 +143,10 @@ color: #eee;
 }
 .card-body{
   padding: 0px;
+}
+
+
+.fc-nonbusiness {
+pointer-events: none !important;
 }
 </style>

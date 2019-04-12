@@ -112,33 +112,46 @@
                         <span class="remove-guests"><i class="zmdi zmdi-minus-circle"></i></span>
                       </li>
                      
-                      <li class="inline-block">
-                        <a href="javascript:void(0)" class="btn btn-add-gray btn-fab btn-fab-sm m-l-5" data-trigger="popover-guests">
+                      <li class="inline-block card-guests">
+                        <a href="javascript:void(0)" class="btn btn-add-gray btn-fab btn-fab-sm m-l-5" v-on:click.prevent="openToggle">
                             <i class="zmdi zmdi-plus"></i></a>
-                      </li>
-                    </ul>
-                    <div id="popover-guests">
-                      <div class="head hide">
+                     <div id="popover-guests" v-if="openSearch">
+                      <div class="head">
                         Selecciones sus invitados  
+                        <a href="" v-on:click.prevent="openToggle"><i class="zmdi zmdi-close"></i></a>
                       </div>
-                      <div class="content hide">
+                      <div class="content">
                         <div class="form-group is-empty m-10">
                           <div class="input-group">
                             <input type="text" class="form-control" id="filter_cal_input" placeholder="Filter Members">
                             <span class="input-group-addon"><i class="zmdi zmdi-search"></i></span>
                           </div>
                         </div>
-                        <ul class="list-group filter_cal_list">
-                         
-                          
-                          
+                        <ul class="list-group filter_cal_list">                        
                           <li class="list-group-item">
+                            <a href="" class="btn-guests">
                             <img src="https://st.depositphotos.com/1734074/4662/v/950/depositphotos_46622591-stock-illustration-user-man-icon.jpg" alt="" class="img-circle max-w-40">
-                            <span>andrewcoleman@materiallab.pro</span>
+                            <small>andrewcoleman@materiallab.pro</small>
+                            </a>
+                          </li>
+                          <li class="list-group-item">
+                            <a href="" class="btn-guests">
+                            <img src="https://st.depositphotos.com/1734074/4662/v/950/depositphotos_46622591-stock-illustration-user-man-icon.jpg" alt="" class="img-circle max-w-40">
+                            <small>andrewcoleman@materiallab.pro</small>
+                            </a>
+                          </li>
+                          <li class="list-group-item">
+                            <a href="" class="btn-guests">
+                            <img src="https://st.depositphotos.com/1734074/4662/v/950/depositphotos_46622591-stock-illustration-user-man-icon.jpg" alt="" class="img-circle max-w-40">
+                            <small>andrewcoleman@materiallab.pro</small>
+                            </a>
                           </li>
                         </ul>
                       </div>
                     </div>
+                      </li>
+                    </ul>
+                   
                   </div>
                 </div>
               </div>
@@ -156,6 +169,81 @@
 </template>
 <script>
 export default {
-    name: 'add-event'
+    name: 'add-event',
+    data(){
+        return {
+            openSearch: false,
+        }
+    },
+    methods:{
+        openToggle(){
+            this.openSearch =!this.openSearch;
+        }
+
+    },
+    mounted(){
+
+    }
 }
 </script>
+<style>
+.card-guests{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+   #popover-guests{
+       position: absolute;
+       z-index: 100!important;
+       bottom: 50%;
+       transform: translateY(50%);
+       left: 100%;
+       margin-left: 10px;
+       background: #fff;
+       width:260px;
+       border-radius: 5px;
+     max-width: 300px;
+    box-shadow: 0 5px 10px rgba(175,188,206,.6);
+    border: 1px solid rgba(175,188,206,.3);
+}
+
+
+     
+
+   
+    #popover-guests .head{
+      background: #EEF5F9;
+      padding: 5px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+     #popover-guests .head a{
+             color: #ec407a;
+     }
+    #popover-guests::after{
+        content: "";
+         position: absolute;
+         left: -20px;
+         border: transparent solid 10px;
+         top: 50%;
+         transform: translateY(-50%);
+         border-right: #ccc solid 10px;
+    }
+  #popover-guests  .list-group-item{
+      padding: 5px 20px;
+      margin: 3px;
+      display: flex;
+      align-items: center;
+      background: #EEF5F9;
+      color: #444;
+
+    }
+    .btn-guests{
+        color: #444 !important;
+    }
+    .user-group .list-group-item:not(.dropdown):hover img{
+        transform: scale(1.1);
+    }
+</style>
