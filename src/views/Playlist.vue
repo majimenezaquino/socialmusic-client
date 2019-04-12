@@ -155,12 +155,11 @@
             axios.get(`${SERVER_URI}/api/albumes/?token=${this.user_data.token}`).
             then(function(req){
               self.playlist =req.data.playlist
-                  console.log("req.data.playlist",req.data.playlist)        
+         
             }).catch(function(err){
                 console.log(`error--->${err}`)
             })
             
-           // console.log(this.playlist)
         }
        
         },

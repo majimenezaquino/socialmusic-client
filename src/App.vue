@@ -36,7 +36,8 @@ export default {
     
  
   
-  }
+  },
+
  
   }
 

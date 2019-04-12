@@ -130,7 +130,7 @@
             axios.get(`${SERVER_URI}/api/musics?token=${this.user_data.token}`).
             then(function(req){
                 _this.musics =req.data.musics
-              console.log( _this.musics);
+   
                              
             }).catch(function(err){
                 console.log(`error--->${err}`)
@@ -142,7 +142,7 @@
             axios.get(`${SERVER_URI}/api/musics?token=${this.user_data.token}`).
             then(function(req){
                 _this.musics =req.data.musics
-              console.log( _this.musics);
+    
                              
             }).catch(function(err){
                 console.log(`error--->${err}`)

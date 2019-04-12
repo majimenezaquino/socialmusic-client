@@ -120,12 +120,11 @@
               self.privacies =req.data.privacies;  
                if(self.privacies.length>0)
                self.playlist.privacy =req.data.privacies[0]._id;
-              console.log("req.data.privacies",req.data.privacies);
+ 
             
               })
               .catch(function (response) {
-              //handle error
-              console.log(response);
+
           });
       },
       creatPlaylist(){
@@ -152,8 +151,7 @@
             
               })
               .catch(function (response) {
-              //handle error
-              console.log(response);
+   
           });}else{
             //senuplad with image
             let self=this;
@@ -181,10 +179,7 @@
                      
                   }
             
-            if(!req.data.error){
-               
-              console.log(req.data)
-                
+            if(!req.data.error){       
             }
              })
             .catch(function (err) {
@@ -198,7 +193,6 @@
     let _this=this;
   
     let file =  event.target.files[0];
-    console.log("this.extension",this.extension_allower)
 if(this.file_allower(file.name,this.extension_allower)){                       
 
     let reader = new FileReader();
@@ -207,16 +201,13 @@ if(this.file_allower(file.name,this.extension_allower)){
         }
     reader.readAsDataURL(file);
     this.playlist.file=file;
-           
-
-console.log(file)
 }else{
 
 
 }
    },
     file_allower(file,extension_array){
-        console.log("file",extension_array)
+  
         let extension =file.split('.');
             extension=  extension[extension.length-1];
         if(extension_array.includes(extension)){
@@ -242,25 +233,22 @@ console.log(file)
             for(let i in zoneDrop){
                 zoneDrop[0].ondragover=function(ev){
                     ev.target.classList.add("active_drop")
-                    console.log("ondrop======>")
+              
                     return false;
                 };
                 zoneDrop[0].ondragleave=function(ev){
                     ev.target.classList.remove("active_drop");
                      ev.target.classList.remove("active_error");
-                     console.log("ondrop")
                     return false;
                 };
 
          document.getElementById("playlistdrap").ondragenter=function(ev){
                     ev.target.classList.remove("active_drop");
                      ev.target.classList.remove("active_error");
-                     console.log("ondrop")
                     return false;
                 };
 
                 zoneDrop[0].ondrop=function(ev){
-                  console.log("ondrop")
                     ev.preventDefault();
                     let file =ev.dataTransfer.files[0];
                     ev.target.classList.remove("active_drop");

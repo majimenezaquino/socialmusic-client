@@ -79,6 +79,9 @@
             </div>
           
   </div>
+  <CardPlayListEditail 
+     :playlist_select="playlist_select_id"
+               />
       </section>
 <!-- modal -->
 
@@ -98,7 +101,7 @@
   const {EventBus} =require('@/eventbus');
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
-  
+  import CardPlayListEditail from "@/components/cards/CardPlayListEditail.vue";
     import CardPlaylist from "@/components/cards/CardPlaylist.vue";
     import CardPlaylistItem from "@/components/cards/CardPlaylistItem.vue";
     import { setTimeout } from 'timers';
@@ -110,13 +113,16 @@
             albumes: [],
             playlist_item:[],
             musicsRelation: [],
+            playlist_select_id: undefined,
+            
   
           }
         },
         components:{
           LayoutDashboard,
           CardPlaylist,
-          CardPlaylistItem
+          CardPlaylistItem,
+          CardPlayListEditail
           
       
         },
@@ -132,7 +138,8 @@
             axios.get(`${SERVER_URI}/api/musics/${music_id}?token=${this.user_data.token}`).
             then(function(req){
                 _this.musics =req.data.music
-              console.log( "$route.params.id",_this.musics);
+              
+              
                              
             }).catch(function(err){
                 console.log(`error--->${err}`)
@@ -142,13 +149,12 @@
             let self = this;
             axios.get(`${SERVER_URI}/api/albumes/${_id}?token=${this.user_data.token}`).
             then(function(req){
-             self.albumes =req.data.albumes
-                  console.log("req.data.playlist",req.data)        
+             self.albumes =req.data.albumes       
             }).catch(function(err){
                 console.log(`error--->${err}`)
             })
             
-           // console.log(this.playlist)
+           
         }
         ,
          getPlaylistItemByPlayList(_id){
@@ -156,12 +162,12 @@
             axios.get(`${SERVER_URI}/api/playlist/${_id}?token=${this.user_data.token}`).
             then(function(req){
              self.playlist_item =req.data.playLists;
-                  console.log("playlist item",req.data)        
+                        
             }).catch(function(err){
                 console.log(`error--->${err}`)
             })
             
-           // console.log(this.playlist)
+           
         }
       
        
@@ -170,9 +176,9 @@
         mounted(){
           this.redirectUserLogin();  
           let music_id =this.$route.params.id;  
-          console.log('music_id',music_id);
           this.getPlaylistById(music_id);
           this.getPlaylistItemByPlayList(music_id);
+          this.playlist_select_id= this.$route.params.id;
         }
     
 	}

@@ -130,7 +130,7 @@ swal({
 },
 
           getImagePlaylist(image_name){
-              console.log("imagent" ,image_name)
+            
               if(image_name===undefined){
                   return 'miaga'
               }
@@ -161,8 +161,6 @@ swal({
            let playlist =await  axios.get(`${SERVER_URI}/api/playlist/${_id}?token=${this.user_data.token}`);
            return playlist.data.playLists;
 
-            
-           // console.log(this.playlist)
         }
     },
     mounted(){

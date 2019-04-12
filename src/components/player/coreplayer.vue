@@ -233,7 +233,6 @@ export default {
         _playlist.push(item);
       });
       this.playlist =_playlist;
-          console.log('props change',_playlist)
       },
       deep: true
     },
@@ -261,8 +260,6 @@ export default {
             if(this.audio.paused){
             this.playAudio();
           }
-          ;
-          console.log("addd", this.playlist)
         }
         
       },
@@ -536,7 +533,6 @@ clearCardActive(){
         
         },
         changeMusic(index){
-          console.log(index)
           let music_select =this.musicPlaylist[index].id || undefined
           if(this.music_run ==music_select){
             this.playAudio();
@@ -576,7 +572,10 @@ clearCardActive(){
 
     clearTimeout(this.checkingCurrentPositionInTrack);
     return false;
-	}
+  },
+    updated(){
+    console.log("update")
+  }
 }
 </script>
 

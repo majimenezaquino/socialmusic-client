@@ -69,11 +69,11 @@
                                   <h1 class="card-title">Músicas relacionas </h1>
                                 </header>
                              <div class="row">
-                                 <CardMusic 
+                                 <!-- <CardMusic 
                                     v-for="(_music,index) in musicsRelation"
                                     :music="_music"
                                     :key="index"
-                                 />
+                                 /> -->
                              </div>
                         </div>
                           </div>
@@ -140,7 +140,7 @@
             axios.get(`${SERVER_URI}/api/musics/${music_id}?token=${this.user_data.token}`).
             then(function(req){
                 _this.musics =req.data.music
-              console.log( "$route.params.id",_this.musics);
+              
                              
             }).catch(function(err){
                 console.log(`error--->${err}`)
@@ -151,7 +151,7 @@
             axios.get(`${SERVER_URI}/api/musics?token=${this.user_data.token}`).
             then(function(req){
                 _this.musicsRelation =req.data.musics
-              console.log( _this.musics);
+            
                              
             }).catch(function(err){
                 console.log(`error--->${err}`)

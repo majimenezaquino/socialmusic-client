@@ -129,12 +129,11 @@
               self.privacies =req.data.privacies;  
                if(self.privacies.length>0)
                self.playlist.privacy =req.data.privacies[0]._id;
-              console.log("req.data.privacies",req.data.privacies);
-            
+         
               })
               .catch(function (response) {
               //handle error
-              console.log(response);
+
           });
       },
       getPlaylistById(playlist_id){
@@ -177,8 +176,7 @@
             
               })
               .catch(function (response) {
-              //handle error
-              console.log(response);
+
           });}else{
             //senuplad with image
             let self=this;
@@ -206,11 +204,6 @@
                      
                   }
             
-            if(!req.data.error){
-               
-              console.log(req.data)
-                
-            }
              })
             .catch(function (err) {
             //handle error
@@ -221,8 +214,7 @@
       },
    
       loadFile(event){
-    let _this=this;
-  console.log( "_this.filename")   
+    let _this=this; 
     let file =  event.target.files[0];
 if(this.file_allower(file.name,this.extension_allower)){                       
 
@@ -242,7 +234,6 @@ if(this.file_allower(file.name,this.extension_allower)){
 }
    },
     file_allower(file,extension_array){
-        console.log("file",extension_array)
         let extension =file.split('.');
             extension=  extension[extension.length-1];
         if(extension_array.includes(extension)){
@@ -253,7 +244,6 @@ if(this.file_allower(file.name,this.extension_allower)){
         clearUploadFile(){
           this.filename=undefined;
           document.getElementById("input-upload-edit-playlist").value='';
-          console.log("close")
         },
           getImagePlaylist(image_name){
              
@@ -279,25 +269,24 @@ if(this.file_allower(file.name,this.extension_allower)){
             for(let i in zoneDrop){
                 zoneDrop[0].ondragover=function(ev){
                     ev.target.classList.add("active_drop")
-                    console.log("ondrop======>")
                     return false;
                 };
                 zoneDrop[0].ondragleave=function(ev){
                     ev.target.classList.remove("active_drop");
                      ev.target.classList.remove("active_error");
-                     console.log("ondrop")
+
                     return false;
                 };
 
          document.getElementById("playlistdrap").ondragenter=function(ev){
                     ev.target.classList.remove("active_drop");
                      ev.target.classList.remove("active_error");
-                     console.log("ondrop")
+
                     return false;
                 };
 
                 zoneDrop[0].ondrop=function(ev){
-                  console.log("ondrop")
+   
                     ev.preventDefault();
                     let file =ev.dataTransfer.files[0];
                     ev.target.classList.remove("active_drop");
