@@ -397,7 +397,8 @@ methods: {
 				this.currentSong++;
 				this.changeSong();
 				this.playAudio();
-			}
+      }
+      
 		},
 		onImageLoaded: function() {
 			this.imgLoaded = true;
@@ -569,13 +570,12 @@ clearCardActive(){
   beforeDestroy: function() {
 		this.audio.removeEventListener("ended", this.handleEnded);
 		this.audio.removeEventListener("loadedmetadata", this.handleEnded);
-
     clearTimeout(this.checkingCurrentPositionInTrack);
-    return false;
+     console.log("detruir el componente")
+    
   },
-    updated(){
-    console.log("update")
-  }
+
+    
 }
 </script>
 

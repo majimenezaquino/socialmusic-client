@@ -141,9 +141,11 @@
                       icon: "success",
                       button: "ok",
                     }).then((value) => {
-                        if(value) self.$router.go();
+                       // if(value) self.$router.go();
                        })
                     $("#modal-create-playlist").modal("hide");
+                    self.playlist.name=undefined;
+                 
                     
                   }
                   
@@ -173,9 +175,11 @@
                       icon: "success",
                       button: "ok",
                     }).then((value) => {
-                        if(value) self.$router.go();
+                       // if(value) self.$router.go();
                        })
                     $("#modal-create-playlist").modal("hide");
+                    self.playlist.name=undefined;
+                    self.playlist.file=undefined;
                      
                   }
             

@@ -19,7 +19,7 @@
 					</div>
 
 						<!-- component playlist -->
-					<Player />
+					<!-- <Player /> -->
 					<!-- footer -->
 					<!-- <PartFooter> 
 						

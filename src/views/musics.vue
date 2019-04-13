@@ -78,6 +78,7 @@
             <CardMusicAddToList 
             :music_dedicate="music_select_id"
             />
+            <CardPlayListCreate />
   </div>
       </section>
 <!-- modal -->
@@ -101,6 +102,7 @@
     import CardMusic from "@/components/cards/CardMusic.vue";
     import CardMusicDedicate from "@/components/cards/CardMusicDedicate.vue";
     import CardMusicAddToList from "@/components/cards/CardMusicAddToList.vue";
+     import CardPlayListCreate from "@/components/cards/CardPlaListCreate.vue";
     import { setTimeout } from 'timers';
     export default {
         name: "upload-music",
@@ -116,7 +118,8 @@
           LayoutDashboard,
           CardMusic,
           CardMusicDedicate,
-          CardMusicAddToList
+          CardMusicAddToList,
+          CardPlayListCreate
       
         },
         methods: {

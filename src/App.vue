@@ -1,26 +1,39 @@
 <template>
   <div id="app">
     <router-view/>
- 
+    <CorePlayer
+        :tracks="trackss"
+        :add_track="plylists"
+        
+        />
   </div>
 </template>
 <script>
 import io from 'socket.io-client';
 import { setTimeout } from 'timers';
   const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
-	const {DBLocal} =require('@/services/data_local')
+  const {DBLocal} =require('@/services/data_local')
+  import CorePlayer from '@/components/player/coreplayer.vue';
 	const dbLocal= new DBLocal(DB_USER_NAME);
 const socket = io(SERVER_URI);
-
 export default {
   name: 'app',
 
   data(){
     return{
       playlist: [],
-      playlist2: []
+      playlist2: [],
+    
+            plylists: {}
+       
     }
   }, 
+    components:{ 
+        CorePlayer
+    },
+  beforeDestroy(){
+    console.log("detruir el componente 2")
+  },
   mounted(){
     let self =this;
     if(!dbLocal.checkDataLocalStorageOBject())
@@ -33,10 +46,14 @@ export default {
     socket.on('connect', function(data){
       console.log("connectado")
     });
-    
- 
+   
+  // this.User.id='Miguel Jimenez';
   
   },
+   computed: {
+    trackss () {
+      return this.$store.state.tracks
+    }}
 
  
   }

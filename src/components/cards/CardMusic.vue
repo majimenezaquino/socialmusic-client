@@ -40,11 +40,15 @@
                         </div>
 
                         <div class="component-dedicate">
-                            <button
-                                class="btn-dedocate"
-                                v-on:click.prevent="handlerToglesOption" >
-                            <i class="fa fa-sellsy" aria-hidden="true"></i>
-                            </button>
+                            <a
+                                :class="{ 
+                                    'btn-dedocate ': true,
+                                    'block_doload': !music.download_allowed,
+                        
+                         }"
+                                href="#" v-on:click.prevent="handlerDownload(music.url,music.download_allowed)" >
+                            <i :class="{'zmdi zmdi-cloud-download': music.download_allowed ,'zmdi zmdi-block':!music.download_allowed }"></i>
+                            </a>
                         </div>
 
 
@@ -85,8 +89,10 @@ import Emotion from '../reactions/emotion.vue'
  import CardUser from "./CardUser.vue";
  import CardMusicOption from "./cardMusicOption.vue";
  const moment = require('moment');
- const {SERVER_URI}=require('@/config/index')
+ const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
 moment.locale('es')
+ const {DBLocal} =require('@/services/data_local')
+  const dbLocal= new DBLocal(DB_USER_NAME);
 
 export default {
     name: 'card-music',
@@ -102,7 +108,8 @@ export default {
             active: false,
             image: undefined,
             hidden: false,
-            showoption: false
+            showoption: false,
+            user_data: undefined
             
         }
     },
@@ -112,6 +119,32 @@ export default {
        music_select_callback: Function
     },
     methods:{
+        handlerDownload(ev,download_allowed){
+            if(download_allowed){
+                console.log(download_allowed)
+                this.download(ev,'dategagagagagfa')
+            }else{
+                return false;
+            }
+            
+        },
+ download(filename=undefined, text=undefined) {
+  var element = document.createElement('a');
+  element.setAttribute('href', `${SERVER_URI}/api/download/music/${filename}?token=${this.user_data.token}`);
+  element.setAttribute('download', `${SERVER_URI}/api/download/music/${filename}`);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+},
+
+redirectUserLogin(){
+    if(dbLocal.checkDataLocalStorageOBject())
+    this.user_data  =dbLocal.getDataLocalStorageOBject();
+         },
         getImageMusic(image_name){
             return `${SERVER_URI}/api/files/image/${image_name}`;
         }
@@ -155,7 +188,7 @@ export default {
          }
     },
     mounted(){
-       
+       this.redirectUserLogin();
     }
     
 
@@ -165,5 +198,6 @@ export default {
 </script>
 <style>
 @import url("./music-style.css");
+
 </style>
 

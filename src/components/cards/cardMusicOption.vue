@@ -5,7 +5,7 @@
         <ul class="list-group-option">
         
             <li class="list-group-option-item" >
-                <a href="" v-on:click.prevent="handlerOpenPlaylist"> Agregar a lista de reproducción 
+                <a href="" v-on:click.prevent="handlerOpenPlaylist"> Agregar a lista de playlist 
                     <i :class="{ 
                         'color-green': true,
                         'fa fa-angle-right': !openPlaylist,
@@ -13,9 +13,12 @@
                          }">
                         </i> </a>
                 <ul class="list-group-in" v-if="openPlaylist">
-                <li class="list-group-item" v-for="playlist in playlists" :key="playlist._id">
+                 <li class="list-group-item" v-for="playlist in playlists" :key="playlist._id">
                     <a href=""
                     v-on:click.prevent="addMusicPlayList(playlist._id)"><i class="fa fa-plus-square"></i> {{playlist.name}} </a>
+                </li>
+                <li class="list-group-item __create_playlist_btn">
+                    <a href=""  data-toggle="modal" data-target="#modal-create-playlist"><i class="zmdi zmdi-playlist-plus"></i> <span>Crear una playlist</span>  </a>
                 </li>
         
              </ul>
@@ -123,39 +126,53 @@ export default {
     z-index: 10;
    padding: 0px 0.5px;
     border: #eee solid 1px;
+    background: #fff;
+ 
     
 }
 .music-option-hidden .list-group-option{
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    padding: 0px;
+    padding: 10px 0px;
  background: #fff;
+
 }
+
+
+
 .music-option-hidden a{
 color:#444 !important;
 }
 .music-option-hidden .list-group-option .list-group-option-item{
-    border-bottom: #eee solid 1px;
+
     flex-grow: 1;
     width: 100% !important;
     padding: 5px 10px;
     position: relative;
+    border-bottom: #ccc solid 1px;
 }
 .list-group-in {
     position: absolute;
     top: 100%;
-    left: 0px;
     right: 0px;
     max-height: 120px;
     z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+    display: inline-block;
     border-top: 0px;
-    
+    padding: 0px;
+ overflow-y: scroll;
+ padding-bottom: 20px;
+ background: #fff;
+ margin-top: 2px;
+}
 
+.list-group-in::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+}
+.list-group-in::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
 }
 .list-group-in .list-group-item{
     padding: 0px 5px;
@@ -165,11 +182,34 @@ color:#444 !important;
    font-size: 12px;
    z-index: 100;
 }
+
+
 .list-group-in .list-group-item:hover{
- background: #eee;
+ background: #ccc;
  
 }
 .list-group-in .list-group-item i{
-    color: green !important;
+    color: green 
+}
+.__create_playlist_btn{
+    padding: 0px;
+    margin: 0px;
+    background: #eee;
+     display: flex;
+    justify-items: center;
+    z-index: 10;
+
+}
+.__create_playlist_btn a{
+    display: flex;
+    justify-items: center;
+    z-index: 10;
+}
+.__create_playlist_btn i{
+    color: #444 !important;
+    display: inline-block;
+    font-size: 20px;
+    margin: auto;
+    margin-right: 4px;
 }
 </style>

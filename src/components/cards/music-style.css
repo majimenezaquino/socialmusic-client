@@ -171,3 +171,12 @@ border-radius: 5px !important;
     transition: all ease 0.3s;
     display: flex !important;
 }
+.block_doload{
+    color: #eee!important;
+    transform: none !important;
+    cursor: no-drop;
+}
+
+.block_doload i{
+    color: #eee !important;
+}
