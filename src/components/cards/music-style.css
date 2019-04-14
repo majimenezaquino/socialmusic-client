@@ -92,8 +92,9 @@ background: rgba(0, 0, 0, 0.1);
         
 
 
-.card-music .content .thumbnil .container-controller .btn-player button{
-    display:none;
+.card-music .content .thumbnil .container-controller button.btn-player 
+{
+    display: flex;
     justify-content: center;
     align-items: center;
     border:none;
@@ -108,9 +109,13 @@ background: rgba(0, 0, 0, 0.1);
 .card-music .content .thumbnil .container-controller:hover{
     background: rgba(0, 0, 0, 0.6);
 }
-.card-music .content .thumbnil .container-controller:hover .btn-player button{
+.card-music .content .thumbnil .container-controller:hover  button.btn-player{
     transition: all ease 0.3s;
     display: flex;
+    z-index:1;
+}
+button.btn_active_play{
+    z-index: 10 !important;
 }
 
 .container-user{
@@ -167,7 +172,7 @@ background: rgba(0, 0, 0, 0.6) !important;
 border-radius: 5px !important;
 
 }
-.music_active_player .thumbnil .container-controller .btn-player button{
+.music_active_player .thumbnil .container-controller  button.btn-player{
     transition: all ease 0.3s;
     display: flex !important;
 }

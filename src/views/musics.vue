@@ -22,34 +22,18 @@
                       <div class="card-search">
                         <div id="productsTable_wrapper" class="form-group label-floating is-empty">
                           <i class="zmdi zmdi-search search-icon-left"></i>
-                          <input type="text" class="form-control filter-input" placeholder="Filter Products..." autocomplete="off">
+                          <input type="text" class="form-control filter-input" placeholder="mucic" autocomplete="off">
                           <a href="javascript:void(0)" class="close-search" data-card-search="close" data-toggle="tooltip" data-placement="top" title="Close"><i class="zmdi zmdi-close"></i></a>
                         </div>
                       </div>
                       <ul class="card-actions icons right-top">
-                        <li id="deleteItems" style="display: none;">
-                          <span class="label label-info pull-left m-t-5 m-r-10 text-white"></span>
-                          <a href="javascript:void(0)" id="confirmDelete" data-toggle="tooltip" data-placement="top" data-original-title="Delete Product(s)">
-                            <i class="zmdi zmdi-delete"></i>
-                          </a>
-                        </li>
+                    
                         <li>
                           <a href="javascript:void(0)" data-card-search="open" data-toggle="tooltip" data-placement="top" data-original-title="Filter Products">
                             <i class="zmdi zmdi-search search-icon-left"></i>
                           </a>
                         </li>
-                        <li class="dropdown" data-toggle="tooltip" data-placement="top" data-original-title="Show Entries">
-                          <a href="javascript:void(0)" data-toggle="dropdown">
-                            <i class="zmdi zmdi-more-vert"></i>
-                          </a>
-                          <div id="dataTablesLength">
-                          </div>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" data-original-title="Export All">
-                            <i class="zmdi zmdi-inbox"></i>
-                          </a>
-                        </li>
+                    
                       </ul>
                     </header>
                     <div class="card-body">
@@ -78,11 +62,11 @@
             <CardMusicAddToList 
             :music_dedicate="music_select_id"
             />
-            <CardPlayListCreate />
+            <CardPlayListCreate  :music_dedicate="music_select_id" />
   </div>
       </section>
 <!-- modal -->
-
+    
   </div>
       	
      </LayoutDashboard>
@@ -119,7 +103,7 @@
           CardMusic,
           CardMusicDedicate,
           CardMusicAddToList,
-          CardPlayListCreate
+          CardPlayListCreate,
       
         },
         methods: {

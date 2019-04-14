@@ -19,6 +19,7 @@
     "socket.io-client": "^2.1.1",
     "sweetalert": "^2.1.2",
     "vue": "^2.5.17",
+    "vue-cookies": "^1.5.13",
     "vue-full-calendar": "^2.7.0",
     "vue-fullcalendar": "^1.0.9",
     "vue-router": "^3.0.1",

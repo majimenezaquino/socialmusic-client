@@ -1,7 +1,7 @@
 <template>
 <div class="col-md-3" v-if="!hidden">
-    <section :class="{'card-music': true ,
-    'music_active_player':active}">
+    <section :class="['card-music', active ? 'music_active_player' : '' ,'card_'+music._id]"
+        >
             <div class="content">
                 <div class="thumbnil">
                 <a href="" class="close-music" v-on:click.prevent="hanlerHiddenCard">
@@ -18,10 +18,14 @@
                     <a :href="'musics/'+music._id">
                         <img :src="getImageMusic(music.img)" :alt="music.title">
                     </a>
-                    <a :href="'musics/'+music._id" class="container-controller">
-                    <div class="btn-player">
-                            <button v-on:click.prevent="sendMusicToPlayer"><i class="fa fa-play" aria-hidden="true"></i></button>
-                    </div>
+                    <router-link :to="'musics/'+music._id" class="container-controller">
+               
+                            <button 
+                                class="btn-player"
+                            v-on:click.prevent="sendMusicToPlayer"
+                            ><i class="fa fa-play" aria-hidden="true"></i>
+                            </button>
+              
                     
                     <div class="op-music container-option-reaction">
                             <Emotion 
@@ -63,7 +67,7 @@
                                 <CardMusicOption 
                                 :music_id="music._id"
                                 v-if="showoption" />
-                    </a>
+                    </router-link>
                  
                 </div>
     
@@ -146,6 +150,12 @@ redirectUserLogin(){
     this.user_data  =dbLocal.getDataLocalStorageOBject();
          },
         getImageMusic(image_name){
+              if(image_name===undefined){
+                  return 'miaga'
+              }
+            if(image_name.includes("https://") || image_name.includes("http://")){
+                return image_name;
+            }
             return `${SERVER_URI}/api/files/image/${image_name}`;
         }
         ,

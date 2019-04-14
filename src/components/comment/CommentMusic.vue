@@ -131,6 +131,12 @@ export default {
             })
         },
         getUrlImage(image_name){
+             if(image_name===undefined){
+                  return 'miaga'
+              }
+            if(image_name.includes("https://") || image_name.includes("http://")){
+                return image_name;
+            }
             return `${SERVER_URI}/api/files/image/${image_name}`;
         },
         getCommentByMusic(music_id){

@@ -152,13 +152,20 @@
   
 </template>
 <script>
-const {EventBus} =require('@/eventbus');
-const {SERVER_URI,DB_MUSICPLAYER_NAME}=require('@/config/index')
-
- const {mousePositionElement} =require('@/services/mouseposition.js')
-
-import Emotion from '../reactions/emotion-no-info.vue';
-import { setTimeout } from 'timers';
+    const {EventBus} =require('@/eventbus');
+    const {mousePositionElement} =require('@/services/mouseposition.js')
+    import Emotion from '../reactions/emotion-no-info.vue';
+    import { setTimeout } from 'timers';
+    import CardUser from "../cards/CardUser.vue";
+    import TextMore from "../forms/ShowMore.vue";
+    import io from 'socket.io-client';
+    const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
+    const {DBLocal} =require('@/services/data_local')
+    const moment = require('moment');
+    const dbLocal= new DBLocal(DB_USER_NAME);
+    const axios = require('axios');
+    const socket = io(SERVER_URI);
+    moment.locale('es')
 export default {
   name: "playler",
   components:{
@@ -166,9 +173,17 @@ export default {
   },
  data() {
       return {
+        played:{
+              current_time: this.currentTime,
+              _id: undefined,
+              music_id: undefined,
+              location_id: this.getCookie("user_location") || null,
+          },
+        user_data: undefined,
       playlist: undefined,
       playlist_rando: false,
       playlist_item: [],
+
       openPlaylistStore: false,
       music_run: undefined,
        audio: "",
@@ -193,6 +208,7 @@ export default {
 		musicPlaylist: [
 		 
         {
+          id: '555555555555555555555555555555',
           artist: 'Miguel Jimenez',
           image: 'https://source.unsplash.com/crs2vlkSe98',
           title: 'Hitman', 
@@ -267,6 +283,7 @@ export default {
     },
     'currentTime': function() {
       this.currentTime = Math.round(this.currentTime);
+      this.saveMusicPlayed();
      
 		}
     },
@@ -276,6 +293,7 @@ updated(){
       }
 },
   mounted(){
+      this.redirectUserLogin();
       if(!this.musicPlaylist.length>0){
           return false;
       }
@@ -287,6 +305,10 @@ updated(){
     
   },
 methods: {
+     redirectUserLogin(){
+        if(dbLocal.checkDataLocalStorageOBject())
+        this.user_data  =dbLocal.getDataLocalStorageOBject();
+    },
 		togglePlaylist: function() {
 			this.isPlaylistActive = !this.isPlaylistActive;
 		},
@@ -313,6 +335,7 @@ methods: {
          this.activeCardMusic(content_id);
          this.music_run = content_id;
           //check is random
+          console.log("this.music_run",this.music_run)
         
             this.audioFile = this.musicPlaylist[this.currentSong].url;
           
@@ -327,7 +350,8 @@ methods: {
 			this.audio.addEventListener("ended", this.handleEnded);
 			if (wasPlaying) {
 				this.playAudio();
-			}
+      }
+      
     },
    shuffle(arra1) {
     let ctr = arra1.length;
@@ -360,6 +384,7 @@ methods: {
              if(!this.musicPlaylist.length>0){
                      return false;
                 }
+                this.activeCardMusic(this.music_run)
 			if (
 				this.currentlyStopped == true &&
 				this.currentSong + 1 == this.musicPlaylist.length
@@ -380,6 +405,7 @@ methods: {
       }else{
         this.isPlaying=false;
       }
+      
 		},
 		stopAudio: function() {
 			this.audio.pause();
@@ -507,30 +533,69 @@ clearCardActive(){
             }
           }
 },
+clearCardMusicActive(){
+    let  btn_active=document.querySelectorAll(`button.btn_active_play`);
+      let  unactive=document.querySelectorAll(`.card-music`);
+  for(let i in unactive){
+              try{
+              
+                unactive[i].classList.remove("active");
+                btn_active[i].classList.remove("btn_active_play");
+                btn_active[i].innerHTML='<i class="zmdi zmdi-play"></i>'
+                
+              }catch(e){
+
+              }
+            }
+},
         activeCardMusic(name_class){
-         
+          
          let _this=this;
 
-       let   card_class_active=document.querySelectorAll(`.music${name_class}`);
-           
-          for(let i in card_class_active){
-            try{
-              card_class_active[i].classList.add("active_card_music")
-               setTimeout(function(){
-                
-               },100)
-            }catch(e){
+         let  card_active=document.querySelectorAll(`.card_${name_class}`);
+         let  card_active_btn=document.querySelectorAll(`.card_${name_class} .btn-player`);
+       
+          //clear
+            this.clearCardMusicActive();
 
+             for(let i in card_active){
+              try{
+                
+                card_active[i].classList.add("active");
+                card_active_btn[i].classList.add('btn_active_play');
+                if(!_this.isPlaying){
+                  console.log("acive card",name_class)
+                  card_active_btn[i].innerHTML='<i class="spinner spinner-bounce-bottom"></i>';
+                }else{
+                  console.log("no  card",name_class)
+                  card_active_btn[i].innerHTML='<i class="zmdi zmdi-play"></i>';
+                }
+                
+              }catch(e){
+
+              }
             }
-          }
-          card_class_active=document.querySelectorAll(`.music${name_class} .btn_player`); 
-          for( let i in card_class_active){
-            try {
+               
+    
+           
+          // for(let i in card_class_active){
+          //   try{
+          //     card_class_active[i].classList.add("active_card_music")
+          //      setTimeout(function(){
+                
+          //      },100)
+          //   }catch(e){
+
+          //   }
+          // }
+          // card_class_active=document.querySelectorAll(`.music${name_class} .btn_player`); 
+          // for( let i in card_class_active){
+          //   try {
    
-            } catch (error) {
+          //   } catch (error) {
               
-            }
-          }
+          //   }
+          // }
         
         },
         changeMusic(index){
@@ -547,6 +612,49 @@ clearCardActive(){
           }
           //
         },
+        saveMusicPlayed(){
+          let self =this;
+          
+          if(this.isPlaying){
+           if(!this.getCookie('played').includes(self.music_run)){
+            this.played.music_id= this.music_run;
+            this.played.current_time= this.currentTime;
+            self.setCookie('played',this.music_run , 10)
+              axios.post(`${SERVER_URI}/api/played?token=${this.user_data.token}`,this.played).
+            then(function(req){
+              self.played._id=req.data.played._id;
+            }).catch(function(err){
+                console.log(`error--->`,err.response)
+            })
+           }
+           
+            
+
+          }
+          
+        },
+  setCookie(cname, cvalue, exseg) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exseg * 1000));
+  var expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+,
+   getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+},
         toggleRandom(){
           this.active_random=!this.active_random;
           let index =undefined;

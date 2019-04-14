@@ -1,7 +1,7 @@
 <template>
     <section class="content-music-detail">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-4">
                     <div class="content-music">
                         <div class="thum-music">
                             <img :src="getUrlImage(music.img)" alt="">
@@ -25,7 +25,7 @@
                         </div>
                      </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-3">
                     <div class="content-music">
                 <div class="content-header">
                    
@@ -59,13 +59,16 @@
                     <div class="colaboradores">
                         colaboradores
                     </div>
+                    
+                </div>
+            </div>
+                </div>
+                <div class="col-md-5">
                     <div class="conta-comment-up">
                         <div class="conet">
                             <CommentMusic  :music_id="music._id" />
                         </div>
                     </div>
-                </div>
-            </div>
                 </div>
             </div>
     </section>
@@ -96,6 +99,12 @@ export default {
     },
     methods:{
           getUrlImage(image_name){
+            if(image_name===undefined){
+                  return 'miaga'
+              }
+            if(image_name.includes("https://") || image_name.includes("http://")){
+                return image_name;
+            }
             return `${SERVER_URI}/api/files/image/${image_name}`;
         },
          changeTimeTodate(time){

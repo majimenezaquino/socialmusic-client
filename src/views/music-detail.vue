@@ -57,14 +57,14 @@
                       
                      <div class="row">
                           
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <CardMusicDetail 
                       v-for="(_music,index) in musics"
                       :music="_music"
                       :key="index"
                       />
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                               <header class="card-heading ">
                                   <h1 class="card-title">Músicas relacionas </h1>
                                 </header>
@@ -106,7 +106,7 @@
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
   
-    import CardMusicDetail from "@/components/cards/cardMusicDetail.vue";
+    import CardMusicDetail from "@/components/cards/CardMusicDateil.vue";
     import CardMusic from "@/components/cards/CardMusicRelaction.vue";
   
     import ModalDedicate from "@/components/cards/ModalDedicate.vue";
