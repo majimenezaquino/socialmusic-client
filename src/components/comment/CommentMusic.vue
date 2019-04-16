@@ -5,24 +5,25 @@
     </div>
     <div class="card-body" v-if="!show_comment">
         <div class="coment-item" v-for=" comment in comments_bisable" :key="comment._id">
-    <div class="tum-user">
-      <a :href="'/profile/'+comment.user_commented._id"><img :src="getUrlImage(comment.user_commented.profile_picture)" alt=""></a>
-    </div>
-    <div class="comment-con" >
-        <p> <a :href="'/profile/'+comment.user_commented._id">{{comment.user_commented.name}} {{comment.user_commented.last_name}}</a>
-    
-         <TextMore :text="comment.comment_message" :lengths="80" />
-            <small> {{getTime(comment.date_create)}} </small>
-                <span class="container-show-btn" v-if="self_user_comment== comment.user_commented._id">
-                    <a href="" v-on:click.prevent="commentEdite" :name="comment._id" :data-text_comment="comment.comment_message">Editar</a>
-                    <a href="" v-on:click.prevent="deletComment" :name="comment._id">Eliminar</a>
-                </span>
-          </p>
-    </div>
+            <div class="tum-user">
+            <a :href="'/profile/'+comment.user_commented._id"><img :src="getUrlImage(comment.user_commented.profile_picture)" alt=""></a>
+            </div>
+            <div class="comment-con" >
+                <p> <a :href="'/profile/'+comment.user_commented._id">{{comment.user_commented.name}} {{comment.user_commented.last_name}}</a>
+            
+                <TextMore :text="comment.comment_message" :lengths="80" />
+                    <small> {{getTime(comment.date_create)}} </small>
+                        <span class="container-show-btn" v-if="self_user_comment== comment.user_commented._id">
+                            <a href="" v-on:click.prevent="commentEdite" :name="comment._id" :data-text_comment="comment.comment_message">Editar</a>
+                            <a href="" v-on:click.prevent="deletComment" :name="comment._id">Eliminar</a>
+                        </span>
+                </p>
+            </div>
 </div>
     </div>
 <div class="card-body" v-if="show_comment">
-    <div class="coment-item" v-for=" comment in comments" :key="comment._id">
+   <div class="content-row">
+        <div class="coment-item" v-for=" comment in comments" :key="comment._id">
     <div class="tum-user">
       <a :href="'/profile/'+comment.user_commented._id"><img :src="getUrlImage(comment.user_commented.profile_picture)" alt=""></a>
     </div>
@@ -37,6 +38,7 @@
           </p>
     </div>
 </div>
+   </div>
 </div>
 <div class="form-group">
 <div class="input-group">
@@ -215,18 +217,12 @@ export default {
 }
 </script>
 <style>
-.conta-comment-up{
-    border: #eee solid 1px;
-    position: relative;
-}
 
 .container-comment{
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
+    width: 100%;
+    position: relative;
+    background: #eee;
 }
-
 
 .header-comment{
     display: flex;
@@ -246,17 +242,10 @@ export default {
    background: #eee;
     margin: 0px;
 }
-.container-comment  .input-group .form-control{
-margin: 0px;
-padding: 0px;
-}
+
 .container-comment .card-body{
-    overflow-y: scroll;
-    background: white;
-    z-index: 10;
-    margin: 0px;
-    padding: 0px;
-    max-height: 350px;
+   position: relative;
+   background-color: #f00;
 }
     .coment-item{
         width: 100%;
@@ -289,15 +278,8 @@ padding: 0px;
             position: relative;
     }
     
-     .coment-item:last-child .comment-con{
-         border-bottom: 0px;
-     }
-    .coment-item p a{
-        display: inline-block;
-        padding-right: 5px;
-        font-weight: 700;
-        color: #365899;
-    }
+ 
+  
     .coment-item p{
         position: relative;
         display: block;
@@ -322,5 +304,26 @@ padding: 0px;
         padding:2px 5px;
         font-weight: 100;
         text-decoration: underline;
+        max-height: 100%;
     }
+    .content-row{
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        background: #eee;
+        max-height: 400px;
+        width: 100%;
+        overflow-y: scroll;
+        z-index: 10;
+
+    }
+
+    .content-row::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+}
+.content-row::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+}
 </style>

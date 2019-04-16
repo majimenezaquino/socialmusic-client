@@ -130,11 +130,7 @@
                 </div>
                 </div>
                 <div class="col-md-12">
-                    <div class="container-comment">
-                        <div class="conet">
-                            <!-- <CommentMusic  :music_id="music._id" /> -->
-                        </div>
-                    </div>
+                         <CommentMusic  :music_id="music._id" />
                 </div>
             </div>
             </div>
@@ -272,22 +268,22 @@ export default {
        height: 40px;
        display: flex;
    }
-   .card-colaboradores{
+  .content-music-detail .card-colaboradores{
        display: flex;
        flex-direction: column;
        justify-content: center;
        align-items: center;
    }
-   .container-guestes{
+  .content-music-detail .container-guestes{
        padding-left: 15px;
        display: inline-block;
    }
-   .container-heren{
+  .content-music-detail .container-heren{
        display: flex;
        flex-wrap: wrap;
        color: #fff;
    }
-   .tags-item{
+  .content-music-detail .tags-item{
        display: inline-block;
        font-size: 12px;
        padding: 3px;
@@ -299,24 +295,36 @@ export default {
       margin: 3px;
     
    }
-   .tags-item:hover{
+ .content-music-detail  .tags-item:hover{
        transform: scale(1.1);
    }
-   .tags-item span{
+  .content-music-detail .tags-item span{
        display: inline-block;
        margin-left: 5px;
    }
-   .container-info{
+ .content-music-detail  .container-info{
        display: flex;
       flex-direction: column;
        width: 100%;
       margin: 30px 0px;
 
    }
-   .container-info span {
+ .content-music-detail  .container-info span {
        display: inline-block;
        font-size: 12px;
        color:#ccc;
        line-height: 17px;
    }
+  .content-music-detail .container-footer{
+       color:#fff;
+   }
+ .content-music-detail  .container-footer h1{
+       color: #fff;
+   }
+  .content-music-detail  .container-footer p{
+        color:#ccc;
+    }
+  .content-music-detail  .col-md-12{
+        padding: 0px;
+    }
 </style>
