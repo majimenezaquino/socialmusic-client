@@ -1,69 +1,62 @@
 <template>
-<div class="container-comment">
-    <div class="header-comment">
-            <p>{{commentCount}} comentarios <a href="" v-on:click.prevent="toggleComment"> {{message_btn}} <i class="fa fa-eye"></i></a></p>
+    <div class="col-md-12 comment-wrapper">
+  <div class="comment-border">
+    <div class="comment-box">
+      <textarea class="form-control comment-input" placeholder="Escribe un comentario" id="comment-box" rows=""></textarea>
+      <button class="btn pull-right">
+          <i class="fa fa-paper-plane"></i>
+      </button>
     </div>
-    <div class="card-body" v-if="!show_comment">
-        <div class="coment-item" v-for=" comment in comments_bisable" :key="comment._id">
-            <div class="tum-user">
-            <a :href="'/profile/'+comment.user_commented._id"><img :src="getUrlImage(comment.user_commented.profile_picture)" alt=""></a>
-            </div>
-            <div class="comment-con" >
-                <p> <a :href="'/profile/'+comment.user_commented._id">{{comment.user_commented.name}} {{comment.user_commented.last_name}}</a>
-            
-                <TextMore :text="comment.comment_message" :lengths="80" />
-                    <small> {{getTime(comment.date_create)}} </small>
-                        <span class="container-show-btn" v-if="self_user_comment== comment.user_commented._id">
-                            <a href="" v-on:click.prevent="commentEdite" :name="comment._id" :data-text_comment="comment.comment_message">Editar</a>
-                            <a href="" v-on:click.prevent="deletComment" :name="comment._id">Eliminar</a>
-                        </span>
-                </p>
-            </div>
-</div>
+  </div>
+  <div class="comment-body-box">
+
+    <div class="comment-post-box"
+    v-for=" comment in comments" :key="comment._id"
+    >
+      <div class="comment-post">
+        <div class="comment-post-header">
+          <img src="http://media3.popsugar-assets.com/files/2015/02/24/107/n/1922398/444078e0_edit_img_image_845205_1424827942_KendallJenner.xxlarge/i/Kendall-Jenner.jpg" class="img-circle" />
+          <h5>
+                <a href="">Kendall</a>
+                <small>Posted 12 hr ago</small>
+              </h5>
+        </div>
+        <div class="panel-body comment-post-body">
+          <div class="comment-post-content">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
-<div class="card-body" v-if="show_comment">
-   <div class="content-row">
-        <div class="coment-item" v-for=" comment in comments" :key="comment._id">
-    <div class="tum-user">
-      <a :href="'/profile/'+comment.user_commented._id"><img :src="getUrlImage(comment.user_commented.profile_picture)" alt=""></a>
-    </div>
-    <div class="comment-con" >
-        <p> <a :href="'/profile/'+comment.user_commented._id">{{comment.user_commented.name}} {{comment.user_commented.last_name}}</a>
-         <TextMore :text="comment.comment_message" :lengths="80" />
-            <small> {{getTime(comment.date_create)}} </small>
-            <span class="container-show-btn" v-if="self_user_comment== comment.user_commented._id" >
-                    <a href="" v-on:click.prevent="commentEdite" :name="comment._id" :data-text_comment="comment.comment_message">Editar</a>
-                    <a href="" v-on:click.prevent="deletComment" :name="comment._id" >Eliminar</a>
-                </span>
-          </p>
-    </div>
-</div>
-   </div>
-</div>
-<div class="form-group">
-<div class="input-group">
-    <span class="input-group-addon"><i class="fa fa-comments-o" aria-hidden="true"></i></span>
-    <textarea name="" id="" cols="30" rows="3"  class="form-control" placeholder="comenente aqui" v-model="comment" @keyup.enter="addCommentByMusic"></textarea>
-</div>
-</div>
+
+    <a class="btn  more show hidden" id="see-more">
+      <small>Show more comments</small>
+      <i class="fa fa-caret-down"></i>
+    </a>
+    <a class="btn  more show hidden" id="see-less">
+      <small>Show less comments</small>
+      <i class="fa fa-caret-up"></i>
+    </a>
+  </div>
 </div>
 </template>
 <script>
+import io from 'socket.io-client';
 import { setTimeout } from 'timers';
-  import CardUser from "../cards/CardUser.vue";
-  import TextMore from "../forms/ShowMore.vue";
+import CardUser from "../cards/CardUser.vue";
+import TextMore from "../forms/ShowMore.vue";
 const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
 const {DBLocal} =require('@/services/data_local')
- const moment = require('moment');
- moment.locale('es')
+const moment = require('moment');
+moment.locale('es')
 const dbLocal= new DBLocal(DB_USER_NAME);
 const axios = require('axios');
-import io from 'socket.io-client';
 const socket = io(SERVER_URI);
-
 export default {
     name: 'comment',
-    props:{
+        props:{
         music_id: String,
     },
     data(){
@@ -85,8 +78,35 @@ export default {
         CardUser ,
         TextMore
     },
+    mounted(){
+        this.setConfigComment();
+    },
     methods:{
-          redirectUserLogin(){
+      setConfigComment(){
+         $(".comment-body-box").each(function(index) {
+        $(this).children(".comment-post-box").slice(-3).show();
+        });
+
+        $("#see-more").removeClass('hidden');
+
+        $("#see-more").click(function(e) { // click event for load more
+        e.preventDefault();
+        $(this).siblings(".comment-post-box:hidden").slice(-3).show(); // select next 5 hidden divs and show them
+        if ($(this).siblings(".comment-post-box:hidden").length == 0) { // check if any hidden divs
+            $("#see-less").removeClass('hidden');
+            $("#see-more").addClass('hidden')
+        }
+        });
+
+        $("#see-less").click(function(e) {
+        e.preventDefault();
+        $(this).siblings(".comment-post-box").slice(3).hide();
+        $("#see-less").addClass('hidden');
+        $("#see-more").removeClass('hidden')
+        });
+
+            },
+              redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
         this.on_sockt_user = this.user_data.user.id;
@@ -118,7 +138,7 @@ export default {
             then(function(req){
                 if(!req.data.error){
                     _this.comment ='';
-                  //  _this.comments =req.data.songcomments;
+                        console.log("get data")
                     _this.getCommentByMusic(_this.music_id);
                     _this.edit_comment=false;
                     _this.comments =_this.comments.filter(function(comment){
@@ -145,6 +165,7 @@ export default {
              let _this = this
          axios.get(`${SERVER_URI}/api/songcomment/${music_id}?token=${this.user_data.token}`).
             then(function(req){
+                console.log(req)
               _this.comments =req.data.songcomments;
               _this.commentCount =req.data.commentCount;
               _this.comments_bisable = req.data.songcomments.filter(function(ob,index){
@@ -205,125 +226,127 @@ export default {
             }).catch(function(err){
                 console.log(`error--->${err}`)
             })
-            }
-
-
-        }
-    },
-    mounted(){
-        this.redirectUserLogin();
-        this.getCommentByMusic(this.music_id);
+            }}
     }
 }
 </script>
 <style>
-
-.container-comment{
-    width: 100%;
-    position: relative;
-    background: #eee;
+   .comment-wrapper{
+       background-color: #EEF5F9;
+   }
+.no-padding {
+  padding-right: 0;
+  padding-left: 0;
 }
-
-.header-comment{
+.comment-wrapper .comment-border {
+  margin: 10px 5px 0 5px;
+  border-top: 1px solid #eee;
+  background: #fff;
+}
+.comment-box{
     display: flex;
-    justify-content: center;
-    margin: 0px 50px;
-    border-bottom: #eee solid 1px;
-    color: #365899;
+    justify-content: space-between;
+    align-items: center;
 }
-.header-comment a{
-      color: #365899;
-      font-size: 11px;
-      display: inline-block;
-      padding-top: 10px;
-      text-decoration: underline;
+.comment-wrapper .comment-border .comment-box .form-control {
+  margin: 20px 0 10px;
+  padding: 0px 10px;
+  font-size: 1em;
+  border: none;
+  border-radius: 0;
 }
-.container-comment .form-group{
-   background: #eee;
-    margin: 0px;
+.comment-wrapper .comment-border .comment-box .btn {
+  padding: 5px;
+  font-size: 1.3em;
+  background: transparent;
+ color: #3B3E44;
+}
+.comment-wrapper .comment-border .comment-box .btn:hover {
+  text-decoration: none;
+}
+.comment-wrapper .comment-post-box {
+  padding: 5px;
+  border-bottom: 2px solid #eee;
+
+}
+.comment-wrapper .comment-post-box .comment-post {
+  border-radius: 0;
+  margin-top: 10px;
+}
+.comment-wrapper .comment-post-box .comment-post .comment-post-header {
+  border-radius: 0;
+}
+.comment-wrapper .comment-post-box .comment-post .comment-post-header img {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+}
+.comment-wrapper .comment-post-box .comment-post .comment-post-header h5 {
+  display: inline-block;
+  margin: 0;
+  padding-left: 6px;
+}
+.comment-wrapper .comment-post-box .comment-post .comment-post-header h5 a {
+  color: #000;
+}
+.comment-wrapper .comment-post-box .comment-post .comment-post-header h5 small {
+  margin-top: 5px;
+  padding: 8px;
+}
+.comment-wrapper .comment-post-box .comment-post .comment-post-header .fa {
+  color: #8A8B8F;
+}
+@media screen and (max-width: 768px) {
+  .comment-wrapper .comment-post-box .comment-post .comment-post-box {
+    margin-top: 70px;
+  }
+}
+.comment-wrapper .show {
+  border-radius: 5px;
+}
+.comment-wrapper .comment-post-box {
+  display: none;
+}
+.recent-wrapper .center {
+  text-align: center;
+}
+.recent-wrapper .recent-act {
+  color: #3B3E44;
+  border-top: 1px solid #ccc;
+  padding: 35px 0;
+  text-transform: uppercase;
+  background-color: #F4F4F1;
+}
+.recent-wrapper .recent-act .glyphicon {
+  font-size: 4em;
+}
+.recent-wrapper .recent-act .title {
+  padding: 20px 0;
+  font-weight: 400;
+}
+.comment-post-content{
+    color: #aaa;
+}
+.recent-wrapper .recent-act .notif-list {
+  height: 300px;
+  overflow: scroll;
+}
+.recent-wrapper .recent-act .per-notif {
+  margin: 0 36px 0 36px;
+  padding: 13px;
+  font-size: 0.9em;
+}
+.recent-wrapper .recent-act .per-notif img {
+  max-width: 30px;
+  max-heigth: 30px;
+}
+.recent-wrapper .recent-act .per-notif .glyphicon {
+  font-size: 30px;
+  color: #3B3E44;
+}
+.recent-wrapper .recent-act .per-notif .per-notif-body {
+  text-align: justify;
+  text-justify: inter-word;
 }
 
-.container-comment .card-body{
-   position: relative;
-   background-color: #f00;
-}
-    .coment-item{
-        width: 100%;
-        font-size: 12px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        position: relative;
-    }
-     .coment-item .tum-user{
-         display: block;
-         width: 40px;
-         height: 40px;
-         border: #eee solid 3px;
-         border-radius: 50%;
-         box-sizing: border-box;
-         margin:0px 5px;
-         padding: 0px;
-    }
-    .coment-item .tum-user img{
-        width: 100%;
-        border-radius: 50%;
-    }
-    .coment-item .comment-con{
-            width: 200px;
-            flex-grow: 1;
-            margin-top: 15px;
-            overflow: hidden;
-            border-bottom: #eee solid 1px;
-            position: relative;
-    }
-    
- 
-  
-    .coment-item p{
-        position: relative;
-        display: block;
-        font-size: 13px;
-        line-height: 17px;
-        padding-bottom: 5px;
-    }
-   .coment-item p small{
-        display: block;
-        position: absolute;
-        bottom: -12px;
-        left: 0px;
-        font-size: 9px;
-        color: #ccc;
-    }
-    .container-show-btn{
-        display: flex;
-        position: absolute;
-        bottom: -10px;
-        right: 0px;
-        font-size: 10px;
-        padding:2px 5px;
-        font-weight: 100;
-        text-decoration: underline;
-        max-height: 100%;
-    }
-    .content-row{
-        position: absolute;
-        bottom: 0px;
-        left: 0px;
-        right: 0px;
-        background: #eee;
-        max-height: 400px;
-        width: 100%;
-        overflow-y: scroll;
-        z-index: 10;
-
-    }
-
-    .content-row::-webkit-scrollbar {
-    width: 6px;
-    background-color: #F5F5F5;
-}
-.content-row::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-}
 </style>
