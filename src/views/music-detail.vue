@@ -57,14 +57,14 @@
                       
                      <div class="row">
                           
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <CardMusicDetail 
                       v-for="(_music,index) in musics"
                       :music="_music"
                       :key="index"
                       />
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                               <header class="card-heading ">
                                   <h1 class="card-title">Músicas relacionas </h1>
                                 </header>

@@ -63,10 +63,12 @@
                             <i class="zmdi zmdi-more-vert"></i>
                             </a>
                         </div>
-                    </div>
-                                <CardMusicOption 
+
+                        <CardMusicOption 
                                 :music_id="music._id"
                                 v-if="showoption" />
+                    </div>
+                                
                     </router-link>
                  
                 </div>

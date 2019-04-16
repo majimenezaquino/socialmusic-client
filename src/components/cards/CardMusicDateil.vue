@@ -1,7 +1,8 @@
 <template>
     <section class="content-music-detail">
-            <div class="row">
-                <div class="col-md-4">
+            <div class="container-fluid">
+                <div class="row">
+                <div class="col-md-7 col-xs-12">
                     <div class="content-music">
                         <div class="thum-music">
                             <img :src="getUrlImage(music.img)" alt="">
@@ -15,61 +16,127 @@
                                 />
                                     <small><span>{{changeTimeTodate(music.date_create)}}</span></small>
                                 </div>
-                                <button><i class="fa fa-play"></i></button>
-                                <div class="info-footer">
-                                <span class="info-views">{{music.played_count}}  Escuchadas</span>
-                                <span class="info-views">{{music.dedicated}}  Dedicadas</span>
-                                <span class="info-views">{{music.downloaded}}  Descargadas</span>
+                                <button class="bnt-player"><i class="fa fa-play"></i></button>
+                                <div class="footer-card-music">
+                                    <div class="op-controller">
+                            <Emotion 
+                            :music_id="music._id"
+                            :reactiones="music.reactions" />
+
+                            <div class="component-dedicate">
+                                <a href="" 
+                                    data-toggle="modal"
+                                    class="btn-dedocate"
+                                    v-on:click="setMusicDedicate(music._id)"
+                                    data-target="#modal-music-dedicataction"
+                                    :name="music._id" >
+                                <i class="fa fa-share-square-o"></i>
+                                </a>
+                            </div>
+
+                            <div class="component-dedicate">
+                                <a
+                                    :class="{ 
+                                        'btn-dedocate ': true,
+                                        'block_doload': !music.download_allowed,
+                            
+                            }"
+                                    href="#" v-on:click.prevent="handlerDownload(music.url,music.download_allowed)" >
+                                <i :class="{'zmdi zmdi-cloud-download': music.download_allowed ,'zmdi zmdi-block':!music.download_allowed }"></i>
+                                </a>
+                            </div>
+
+
+                            <div class="component-dedicate">
+                                <a href="" 
+                                    class="btn-dedocate"
+                                    v-on:click.prevent="handlerToglesOption">
+                                <i class="zmdi zmdi-more-vert"></i>
+                                </a>
+                            </div>
+
+                            <CardMusicOption 
+                                    :music_id="music._id"
+                                    v-if="showoption" />
+                        </div>
                             </div>
                             </div>
+                        </div>
+                        <div class="container-footer">
+                            <h1>Nombre de la cancion</h1>
+                            <p>Description de la cansions</p>
                         </div>
                      </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="content-music">
-                <div class="content-header">
-                   
-
-
-                    <Emotion 
-                    :music_id="music._id"
-                    :reactiones="music.reactions"
-                    />
-
-
-                        <SondDedocate 
-                    :music_id="music._id"
-                    :reactiones="music.reactions"
-                    />
-                    
-                        <MoreOption 
-                    :music_id="music._id"
-                    :reactiones="music.reactions"
-                    />
-                </div>
-                <div class="content-body">
-                        <h1>{{music.title}}</h1>
-                        <p>{{music.description}}</p>
-                        <QualificationStars 
-                        :contend_id="music._id"
-                        :props_qualification="music.qualification"
-                        />
-                </div>
-                <div class="content-footer">
-                    <div class="colaboradores">
-                        colaboradores
+                <div class="col-md-5 col-xs-12">
+                <div class="content-music">
+                    <div class="content-header">
+                        <div class="container-info">
+                            <span>Reproduciones 0</span>
+                            <span>En lista de reproducion 0</span>
+                        </div>
+                            <div class="container-heren">
+                                <a href="" class="tags-item">
+                                    <i class="fa fa-music" aria-hidden="true"></i>
+                                    <span> tag</span>
+                                </a>
+                                <a href="" class="tags-item">
+                                    <i class="fa fa-music" aria-hidden="true"></i>
+                                    <span>Nonmbre </span>
+                                </a>
+                                <a href="" class="tags-item">
+                                    <i class="fa fa-music" aria-hidden="true"></i>
+                                    <span> tag</span>
+                                </a>
+                                <a href="" class="tags-item">
+                                    <i class="fa fa-music" aria-hidden="true"></i>
+                                    <span>Nonmbre </span>
+                                </a>
+                                <a href="" class="tags-item">
+                                    <i class="fa fa-music" aria-hidden="true"></i>
+                                    <span>Nonmbre tag</span>
+                                </a>
+                            </div>
+                            
+                            <QualificationStars 
+                            :contend_id="music._id"
+                            :props_qualification="music.qualification"
+                            />
                     </div>
-                    
+                    <div class="content-footer">
+                        <div class="card-colaboradores">
+                            <small>Colaboradores</small>
+                        <div class="container-guestes">
+                                <div class="form-group m-t-0">
+                                <ul class="list-group user-group">
+                                    <li class="list-group-item">
+                                        <img src="https://www.trastornoevitacion.com/images/kim-basinger.jpg" alt="" class="img-circle max-w-40">
+                                        <span class="remove-guests"><i class="zmdi zmdi-minus-circle"></i></span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <img src="https://significadodenombres.net/wp-content/uploads/2014/07/triana-ramos.jpg" alt="" class="img-circle max-w-40">
+                                        <span class="remove-guests"><i class="zmdi zmdi-minus-circle"></i></span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <img src="https://miguelangelbravo.files.wordpress.com/2017/06/perfil6_small.jpg?w=200" alt="" class="img-circle max-w-40">
+                                        <span class="remove-guests"><i class="zmdi zmdi-minus-circle"></i></span>
+                                    </li>
+                                </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
-            </div>
                 </div>
-                <div class="col-md-5">
-                    <div class="conta-comment-up">
+                <div class="col-md-12">
+                    <div class="container-comment">
                         <div class="conet">
-                            <CommentMusic  :music_id="music._id" />
+                            <!-- <CommentMusic  :music_id="music._id" /> -->
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
     </section>
 </template>
@@ -121,125 +188,135 @@ export default {
 }
 </script>
 <style>
-.content-music-detail{
-     position: relative;
-}
-.content-music-detail .content-music{
-     width: 100%;
-     display: flex;
-     justify-content: center;
-     position: relative;
-      background: #fff;
+
+  .content-music-detail{
+      background: rgb(32, 148, 242);
+      /* background-color: #EEF5F9; */
+      color: #eee;
+  }
+     .content-music-detail  .thum-music{
+      border-radius: 4px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       flex-wrap: wrap;
-}
-.content-music-detail .content-music .thum-music{
-    display: inline-block;
-    position: relative;
-    padding: 0px;
-    margin: 0px;
-}
-.content-music-detail .content-music .content-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 30px;
-}
+      margin: 10px 0px;
+      overflow: hidden;
+      
+  }
+  .content-music-detail  .thum-music > img{
+      display: inline-block;
+      border-radius: 5px;
+  }
 
- .content-music-detail .content-music .content-body {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-    align-items: center;
-    background: #fff;
-    padding: 10px;
-}
- .content-music-detail .content-music .content-body h1{
-     font-size: 17px;
-     font-weight: 900;
-     line-height: 17px;
-     margin: 0px;
- }
- .content-music-detail .content-music .content-body p{
-     color: #ccc;
- }
-.content-music-detail .content-music:last-child{
-  background: #42a5f5;
-}
-.content-music-detail .content-play{
-    position: absolute;
-    top: 0px; bottom: 0px; left: 0px; right: 0px;
-    background: rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+  .content-music-detail .content-play{
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      bottom: 0px;
+      right: 0px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+  }
+  .content-music-detail .user-header{
+       position: absolute;
+       top: 10px;
+       left: 10px;
+       display: flex;
+       align-content: space-between;
+       align-items: center;
+       width: 100%;
+   }
+ .content-music-detail  button.bnt-player{
+       position: absolute;
+       top: 50%;
+       left: 50%;
+        transform: translate(-50%,-50%);
+        border: none;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #000;
+            z-index: -1;
+   }
+    .content-music-detail .content-play:hover{
+        background: rgba(0,0,0,0.8);
+    }
 
-.content-music-detail .content-play button{
-                 display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    border: none;
-    background: #000;
-    width: 56px;
-    height: 56px;
-    color: #fff;
-    border-radius: 50%;
-}
-.content-music-detail .content-play .info-footer{
-    position: absolute;
-    bottom: 0px;
-    background: rgba(0, 0, 0, 0.5);
-    left: 0px;
-    right: 0px;
+    .content-music-detail .content-play:hover button.bnt-player{
+        z-index: 1;
+    }
+
+ .content-music-detail  .footer-card-music{
+       position: absolute;
+       bottom: 0px;
+       width: 100%;
+       flex-grow: 1;
+       left: 0px;
+   }
+  .content-music-detail .op-controller{
+       display: flex;
+       justify-content: space-around;
+       width: 100%;
+       color: #fff;
+       font-size: 22px;
+       padding-bottom: 10px;
+   }
+  .content-music-detail .list-group-item{
+       width: 40px;
+       height: 40px;
+       display: flex;
+   }
+   .card-colaboradores{
+       display: flex;
+       flex-direction: column;
+       justify-content: center;
+       align-items: center;
+   }
+   .container-guestes{
+       padding-left: 15px;
+       display: inline-block;
+   }
+   .container-heren{
+       display: flex;
+       flex-wrap: wrap;
+       color: #fff;
+   }
+   .tags-item{
+       display: inline-block;
+       font-size: 12px;
+       padding: 3px;
+       border: #eee solid 1px;
+       line-height: 13px;
+       border-radius: 4px;
+       background: #eee;
+       color: #444;
+      margin: 3px;
     
+   }
+   .tags-item:hover{
+       transform: scale(1.1);
+   }
+   .tags-item span{
+       display: inline-block;
+       margin-left: 5px;
+   }
+   .container-info{
+       display: flex;
+      flex-direction: column;
+       width: 100%;
+      margin: 30px 0px;
 
-}
-.content-music-detail .content-play  .user-header{
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 10;
-    width: 100%;
-    height: 60px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    color: #fff;
-}
-.content-music-detail .container-user-create h1{
-    color: #fff;
-}
-.info-views{
-    font-size: 10px;
-    font-weight: 100;
-    display: inline-block;
-    padding: 0px 20px;
-    color: #eee;
-}
-.content-footer{
-width: 100%;
-position: relative;
-bottom: 0px;
-left: 0px;;
-}
-.container-comment{
-
-    background: #fff;
-    height: 200px;
-}
-.conta-comment-up{
-    position: relative;
-    width: 100%;
-    background: #fff;
-    height: 150px;
-    background: #000;
-}
-
+   }
+   .container-info span {
+       display: inline-block;
+       font-size: 12px;
+       color:#ccc;
+       line-height: 17px;
+   }
 </style>
