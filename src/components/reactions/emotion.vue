@@ -151,10 +151,10 @@ disabledReactionsbyUser(id){
 
 .btn-emotion >a span{
     font-size: 10px;
-    color: #ccc;
-    display: inline-block;
+    color: #fff;
+    display: flex;
     position: absolute;
-    right: 5px;
+    right: -6px;
     padding: 5px;
 }
 

@@ -3,7 +3,7 @@
   <div class="comment-border">
     <div class="comment-box">
       <textarea class="form-control comment-input" placeholder="Escribe un comentario" id="comment-box" v-model="comment"
-      rows="" v-on:keyup.enter="addCommentByMusic"></textarea>
+      rows=""></textarea>
       <button class="btn pull-right" v-on:click.prevent="addCommentByMusic">
           <i class="fa fa-paper-plane"></i>
       </button>
@@ -40,11 +40,18 @@
     </div>
 
 
-    <a class="btn  more show hidden" id="see-more">
+    <a class="btn  more show" 
+        v-if="this.allComment.length>this.page && this.allComment.length>0"
+        v-on:click.prevent="handlerShowMore('more')"
+        >
       <small>Ver más comentarios </small>
       <i class="fa fa-caret-down"></i>
     </a>
-    <a class="btn  more show hidden" id="see-less">
+    <a class="btn  more show" 
+        v-if="this.allComment.length <=this.page && this.allComment.length>0"
+        v-on:click.prevent="handlerShowMore('less')" 
+      
+        >
       <small>Ver menos comentarios </small>
       <i class="fa fa-caret-up"></i>
     </a>
@@ -81,6 +88,8 @@ export default {
             commentCount: 0,
             comment_id: undefined,
             comment_content: undefined,
+            allComment: [],
+            page: 5,
 
             self_user_comment: undefined,
         }
@@ -93,34 +102,24 @@ export default {
         
          this.redirectUserLogin();
         this.getCommentByMusic(this.music_id);
-        this.setConfigComment();
+       
     },
     methods:{
-      setConfigComment(){
-         $(".comment-body-box").each(function(index) {
-         $(this).children(".comment-post-box").slice(-3).show();
-        });
+      handlerShowMore(ev){
 
-        $("#see-more").removeClass('hidden');
-
-        $("#see-more").click(function(e) { // click event for load more
-        e.preventDefault();
-        $(this).siblings(".comment-post-box:hidden").slice(-3).show(); // select next 5 hidden divs and show them
-        if ($(this).siblings(".comment-post-box:hidden").length == 0) { // check if any hidden divs
-            $("#see-less").removeClass('hidden');
-            $("#see-more").addClass('hidden')
-        }
-        });
-
-        $("#see-less").click(function(e) {
-        e.preventDefault();
-        $(this).siblings(".comment-post-box").slice(3).hide();
-        $("#see-less").addClass('hidden');
-        $("#see-more").removeClass('hidden')
-        });
-
-            },
-              redirectUserLogin(){
+          if(ev=='more'){
+            this.page=this.page+5;
+          }else{
+            this.page=5;
+            this.comments =this.commmentPagination(this.allComment,this.page);
+          }
+        
+          if(this.comments.length<this.allComment.length){
+              this.comments =this.commmentPagination(this.allComment,this.page);
+          }
+      },
+      
+          redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
         this.on_sockt_user = this.user_data.user.id;
@@ -159,6 +158,13 @@ export default {
                 console.log(`error--->${err}`)
             })
         },
+        commmentPagination(comment_array=[],retun_count=0){
+        return   comment_array.filter(function(comment,index){
+                if(index<retun_count){
+                  return comment;
+                }
+              })
+        },
         getUrlImage(image_name){
              if(image_name===undefined){
                   return 'miaga'
@@ -172,8 +178,8 @@ export default {
              let _this = this
          axios.get(`${SERVER_URI}/api/songcomment/${music_id}?token=${this.user_data.token}`).
             then(function(req){
-               
-              _this.comments =req.data.songcomments;
+               _this.allComment=req.data.songcomments;
+              _this.comments =_this.commmentPagination(_this.allComment,_this.page);
             
             }).catch(function(err){
                 console.log(`error--->${err}`)
@@ -218,6 +224,7 @@ export default {
                             return false;
                          }
                      }
+                     _this.edit_comment=false;
                     
                 }
             }).catch(function(err){
@@ -331,9 +338,7 @@ export default {
 .comment-wrapper .show {
   border-radius: 5px;
 }
-.comment-wrapper .comment-post-box {
-  display: none;
-}
+
 .recent-wrapper .center {
   text-align: center;
 }
@@ -352,8 +357,8 @@ export default {
   font-weight: 400;
 }
 .comment-post-content{
-    color: #aaa;
-    font-size: 13px;
+    color: #444;
+    font-size: 15px;
 }
 .comment-post-content p{
     padding-top: 10px;

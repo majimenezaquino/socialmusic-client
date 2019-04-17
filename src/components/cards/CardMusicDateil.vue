@@ -26,7 +26,7 @@
                             <div class="component-dedicate">
                                 <a href="" 
                                     data-toggle="modal"
-                                    class="btn-dedocate"
+                                    class="btn_option_music"
                                     v-on:click="setMusicDedicate(music._id)"
                                     data-target="#modal-music-dedicataction"
                                     :name="music._id" >
@@ -37,7 +37,7 @@
                             <div class="component-dedicate">
                                 <a
                                     :class="{ 
-                                        'btn-dedocate ': true,
+                                        'btn_option_music ': true,
                                         'block_doload': !music.download_allowed,
                             
                             }"
@@ -49,22 +49,20 @@
 
                             <div class="component-dedicate">
                                 <a href="" 
-                                    class="btn-dedocate"
+                                    class="btn_option_music"
                                     v-on:click.prevent="handlerToglesOption">
                                 <i class="zmdi zmdi-more-vert"></i>
                                 </a>
                             </div>
 
-                            <CardMusicOption 
-                                    :music_id="music._id"
-                                    v-if="showoption" />
+                            
                         </div>
                             </div>
                             </div>
                         </div>
                         <div class="container-footer">
-                            <h1>Nombre de la cancion</h1>
-                            <p>Description de la cansions</p>
+                            <h1>{{music.title}}</h1>
+                            <p>{{music.description}}</p>
                         </div>
                      </div>
                 </div>
@@ -327,4 +325,13 @@ export default {
   .content-music-detail  .col-md-12{
         padding: 0px;
     }
+    .btn_option_music{
+        display: flex;
+        position: relative;
+        width: 32px;
+        margin: 0px;
+        font-size: 22px;
+        color: #fff !important;
+    }
+
 </style>

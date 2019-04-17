@@ -13,7 +13,7 @@
                 v-if="onw_calification>0"><span>({{onw_calification}}) </span> <i class="fa fa-check"></i> </a>
             </div>
             <div class="star-info">
-               <span >All Qualification <a>({{qualification}})</a></span>
+               <span >Calificaciones <a>({{qualification}})</a></span>
             </div>
         </div>
         <div id="container-star" class="container-star stars-editail" v-if="allower_qualification">
