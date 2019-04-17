@@ -2,41 +2,50 @@
     <div class="col-md-12 comment-wrapper">
   <div class="comment-border">
     <div class="comment-box">
-      <textarea class="form-control comment-input" placeholder="Escribe un comentario" id="comment-box" rows=""></textarea>
-      <button class="btn pull-right">
+      <textarea class="form-control comment-input" placeholder="Escribe un comentario" id="comment-box" v-model="comment"
+      rows="" v-on:keyup.enter="addCommentByMusic"></textarea>
+      <button class="btn pull-right" v-on:click.prevent="addCommentByMusic">
           <i class="fa fa-paper-plane"></i>
       </button>
     </div>
   </div>
   <div class="comment-body-box">
-
+      
     <div class="comment-post-box"
     v-for=" comment in comments" :key="comment._id"
     >
       <div class="comment-post">
         <div class="comment-post-header">
-          <img src="http://media3.popsugar-assets.com/files/2015/02/24/107/n/1922398/444078e0_edit_img_image_845205_1424827942_KendallJenner.xxlarge/i/Kendall-Jenner.jpg" class="img-circle" />
+           <div class="conten-u">
+                <a href=""><img :src="getUrlImage(comment.user_commented.profile_picture)" class="img-circle" /></a>
           <h5>
-                <a href="">Kendall</a>
-                <small>Posted 12 hr ago</small>
+                <a href="">{{comment.user_commented.name}}</a>
+                <small>{{getTime(comment.date_create)}}</small>
               </h5>
+           </div>
+              <span class="container-show-btn" v-if="self_user_comment== comment.user_commented._id" >
+                    <a href="" v-on:click.prevent="commentEdite" :name="comment._id" :data-text_comment="comment.comment_message">Editar</a>
+                    <a href="" v-on:click.prevent="deletComment" :name="comment._id" >Eliminar</a>
+             </span>
         </div>
         <div class="panel-body comment-post-body">
           <div class="comment-post-content">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            <p>
+                {{comment.comment_message}}
             </p>
+            
           </div>
         </div>
       </div>
     </div>
 
+
     <a class="btn  more show hidden" id="see-more">
-      <small>Show more comments</small>
+      <small>Ver más comentarios </small>
       <i class="fa fa-caret-down"></i>
     </a>
     <a class="btn  more show hidden" id="see-less">
-      <small>Show less comments</small>
+      <small>Ver menos comentarios </small>
       <i class="fa fa-caret-up"></i>
     </a>
   </div>
@@ -71,6 +80,8 @@ export default {
             show_comment: false,
             commentCount: 0,
             comment_id: undefined,
+            comment_content: undefined,
+
             self_user_comment: undefined,
         }
     },
@@ -79,12 +90,15 @@ export default {
         TextMore
     },
     mounted(){
+        
+         this.redirectUserLogin();
+        this.getCommentByMusic(this.music_id);
         this.setConfigComment();
     },
     methods:{
       setConfigComment(){
          $(".comment-body-box").each(function(index) {
-        $(this).children(".comment-post-box").slice(-3).show();
+         $(this).children(".comment-post-box").slice(-3).show();
         });
 
         $("#see-more").removeClass('hidden');
@@ -116,19 +130,12 @@ export default {
             
             return moment(date_create,"YYYYMMDD").fromNow();
         },
-        toggleComment(){
-            this.show_comment=!this.show_comment;
-            if(this.show_comment){
-                this.message_btn=`Ocultar`;
-            }else{
-                this.message_btn=`Ver`;
-            }
-            
-        },
+       
         commentEdite(ev){
                 this.comment_id=ev.target.name;
                 this.comment= ev.target.dataset.text_comment;
                 this.edit_comment=true;
+
         },
 
         deletComment(ev){
@@ -165,18 +172,8 @@ export default {
              let _this = this
          axios.get(`${SERVER_URI}/api/songcomment/${music_id}?token=${this.user_data.token}`).
             then(function(req){
-                console.log(req)
+               
               _this.comments =req.data.songcomments;
-              _this.commentCount =req.data.commentCount;
-              _this.comments_bisable = req.data.songcomments.filter(function(ob,index){
-                  return index <1;
-              })
-               if(_this.commentCount>0 && _this.show_comment){
-                   _this.message_btn=`Ocultar`;
-               }
-               if(_this.commentCount>0 && !_this.show_comment){
-                   _this.message_btn=` Ver `;
-               }
             
             }).catch(function(err){
                 console.log(`error--->${err}`)
@@ -234,9 +231,28 @@ export default {
    .comment-wrapper{
        background-color: #EEF5F9;
    }
+   .comment-body-box{
+      height: 300px;
+      width: 100%;
+      overflow-x: hidden;
+      overflow-y: scroll;
+   }
+    .comment-body-box::-webkit-scrollbar {
+    width: 6px;
+    background-color: #eeee;
+} 
+.comment-body-box::-webkit-scrollbar-track {
+  background: #fff; 
+}
+   .comment-body-box::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+}
 .no-padding {
   padding-right: 0;
   padding-left: 0;
+}
+ .comment-wrapper .panel-body{
+    padding: 0px;
 }
 .comment-wrapper .comment-border {
   margin: 10px 5px 0 5px;
@@ -247,6 +263,15 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.container-show-btn{
+    display: flex;
+    font-size: 10px;
+}
+.container-show-btn a{
+    display: inline-block;
+    padding: 0px 5px;
+    text-decoration: underline;
 }
 .comment-wrapper .comment-border .comment-box .form-control {
   margin: 20px 0 10px;
@@ -271,10 +296,12 @@ export default {
 }
 .comment-wrapper .comment-post-box .comment-post {
   border-radius: 0;
-  margin-top: 10px;
 }
 .comment-wrapper .comment-post-box .comment-post .comment-post-header {
   border-radius: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .comment-wrapper .comment-post-box .comment-post .comment-post-header img {
   display: inline-block;
@@ -326,6 +353,12 @@ export default {
 }
 .comment-post-content{
     color: #aaa;
+    font-size: 13px;
+}
+.comment-post-content p{
+    padding-top: 10px;
+    overflow-wrap: break-word;
+
 }
 .recent-wrapper .recent-act .notif-list {
   height: 300px;
