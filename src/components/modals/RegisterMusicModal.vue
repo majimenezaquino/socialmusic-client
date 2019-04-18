@@ -77,8 +77,8 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" role="tabpanel" id="stepper-step-2">
-                                <div class="p-5">
-                                        <h3>Selecciones sus géneros de músicas </h3>
+                                <div>
+                                        <h3 class="text-center p-b-10 p-t-0 m-t-0">Selecciones sus géneros de músicas </h3>
                                     <div class="container-upload">
                                             <div class="container">
                                                 <ul class="container-genren">
@@ -116,19 +116,11 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" role="tabpanel" id="stepper-step-3">
+                              
                                 <div class="">
                      <section class="stepper-body">
                          <div class="card">
-                  <header class="card-heading ">
-                    <h2 class="card-title">Inputs with icon prefixes</h2>
-                    <ul class="card-actions icons right-top">
-                      <li>
-                        <a href="javascript:void(0)" data-toggle-view="code">
-                          <i class="zmdi zmdi-code"></i>
-                        </a>
-                      </li>
-                    </ul>
-                  </header>
+                               <h3 class="text-center p-b-10 p-t-0 m-t-0">Información de la música </h3>
                   <div class="card-body">
                     <div class="form-group">
                       <div class="input-group">
@@ -145,24 +137,46 @@
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="zmdi zmdi-phone"></i></span>
-                        <input type="text" class="form-control" placeholder="Etiquetas" v-model="music.tags">
+                        <input type="text" class="form-control" placeholder="Etiquetas separada por ,  Ej. Músicas, Recuerdo y mas..." v-model="music.tags">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="row">
-                      <div class="col-xs-6">
+                      <div class="col-xs-4">
                         <div class="form-group is-empty">
                           <div class="input-group">
-                            <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i></span>
-                            <input type="text" class="form-control datepicker" id="start_date"  placeholder="Start Date...">
+                                <CardAddUser :title="'Elegir colaboradores' " />
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-6">
+                      <div class="col-xs-4">
                         <div class="form-group is-empty">
                           <div class="input-group">
-                            <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i></span>
-                            <input type="text" class="form-control datepicker" id="end_date" placeholder="End Date...">
+                            <label for="select-privacy">Privacidad</label>
+                            <select class="form-control form-control-sm" id="select-privacy"
+                            v-on:change="handlerSelectPrivacy"
+                            >
+                                     <option v-for="priv in privacies" :key="priv._id"
+                                     :value="priv._id"
+                                     >
+                                         {{priv.name}}
+                                        </option>
+                                     
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-xs-4">
+                        <div class="form-group is-empty">
+                          <div class="input-group">
+                            <label for="select-download">Permitir descargar</label>
+                                <select class="form-control form-control-sm" id="select-download"
+                                     v-on:change="handlerSelectDownloadAllower" >
+                                    <option value="false">NO</option>
+                                    <option value="true">SI</option>
+                                   
+                                </select>
                           </div>
                         </div>
                       </div>
@@ -176,13 +190,11 @@
                                 <div class="modal-footer">
                                     <ul class="list-inline pull-right">
                                         <li>
-                                            <a class="btn btn-default prev-step">Back</a>
+                                            <a class="btn btn-default prev-step">Volver  atrás</a>
                                         </li>
+
                                         <li>
-                                            <a class="btn btn-default cancel-stepper">Cancel Payment</a>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-primary next-step">Submit Payment</a>
+                                            <a class="btn btn-primary next-step">Publicar la canción</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -216,6 +228,7 @@
 </div>
 </template>
 <script>
+import CardAddUser from '@/components/users/CardAddUser.vue'
  const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
   const {DBLocal} =require('@/services/data_local')
   const dbLocal= new DBLocal(DB_USER_NAME);
@@ -223,10 +236,15 @@
   import swal from 'sweetalert';
 export default {
     name: 'upload-music',
+    components:{
+        CardAddUser
+    },
     data(){
         return {
             extension_allower:["mp3","wpw","ogg"],
             user_data: undefined,
+            privacies: [],
+            privacy: undefined,
             genres: [],
             genres_limit:5,
             music: {
@@ -236,6 +254,8 @@ export default {
                 genres: [],
                 tmp_name: undefined,
                 description: undefined,
+                privacy: undefined,
+                download_allowed: false,
             },
             isloaded: false,
             size_allower: 2097152*5, //dos megas
@@ -257,6 +277,22 @@ export default {
             //handle error
             console.log("errrr",response);
         });
+    },
+     getPrivacies(){
+          let self=this;
+        axios.get(`${SERVER_URI}/api/privacies?token=${this.user_data.token}`)
+             .then(function (req) {
+             self.privacies =req.data.privacies;  
+              self.privacy=  self.privacies[0]._id;     
+             })
+            .catch(function (response) {
+            //handle error
+            console.log(response);
+        });
+    },
+ handlerSelectDownloadAllower(ev){
+    let  allower_d =ev.target.value;
+    this.music.download_allowed =allower_d;
     },
  handlerLoadMusic(event){
     let _this=this;
@@ -312,14 +348,20 @@ if(_this.extensionIsAllower(file.name,this.extension_allower)){
            }
             
         }
+        ,handlerSelectPrivacy(ev){
+            let priv =ev.target.value;
+            this.music.privacy = priv;
+        }
         },
         mounted(){
             this.redirectUserLogin();
             this.getGenres();
+            this.getPrivacies();
         }
 }
 </script>
 <style>
+  
     .container-upload{
         display: flex; 
         justify-content: center;
@@ -461,4 +503,9 @@ if(_this.extensionIsAllower(file.name,this.extension_allower)){
        background: rgba(32, 148, 242,0.8);
        color: #fff;
    }
+
+#register_music_modal .form-group {
+    padding-bottom: 0;
+    margin: 0
+}
 </style>

@@ -102,59 +102,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group">
-                <label for="eventColor" class="col-md-2 control-label">Invitar </label>
-                <div class="col-md-10">
-                  <div class="form-group m-t-5">
-                    <ul class="list-group user-group p-l-10">
-                      <li class="list-group-item">
-                        <img src="https://st.depositphotos.com/1734074/4662/v/950/depositphotos_46622591-stock-illustration-user-man-icon.jpg" alt="" class="img-circle max-w-40">
-                        <span class="remove-guests"><i class="zmdi zmdi-minus-circle"></i></span>
-                      </li>
-                     
-                      <li class="inline-block card-guests">
-                        <a href="javascript:void(0)" class="btn btn-add-gray btn-fab btn-fab-sm m-l-5" v-on:click.prevent="openToggle">
-                            <i class="zmdi zmdi-plus"></i></a>
-                     <div id="popover-guests" v-if="openSearch">
-                      <div class="head">
-                        Selecciones sus invitados  
-                        <a href="" v-on:click.prevent="openToggle"><i class="zmdi zmdi-close"></i></a>
-                      </div>
-                      <div class="content">
-                        <div class="form-group is-empty m-10">
-                          <div class="input-group">
-                            <input type="text" class="form-control" id="filter_cal_input" placeholder="Filter Members">
-                            <span class="input-group-addon"><i class="zmdi zmdi-search"></i></span>
-                          </div>
-                        </div>
-                        <ul class="list-group filter_cal_list">                        
-                          <li class="list-group-item">
-                            <a href="" class="btn-guests">
-                            <img src="https://st.depositphotos.com/1734074/4662/v/950/depositphotos_46622591-stock-illustration-user-man-icon.jpg" alt="" class="img-circle max-w-40">
-                            <small>andrewcoleman@materiallab.pro</small>
-                            </a>
-                          </li>
-                          <li class="list-group-item">
-                            <a href="" class="btn-guests">
-                            <img src="https://st.depositphotos.com/1734074/4662/v/950/depositphotos_46622591-stock-illustration-user-man-icon.jpg" alt="" class="img-circle max-w-40">
-                            <small>andrewcoleman@materiallab.pro</small>
-                            </a>
-                          </li>
-                          <li class="list-group-item">
-                            <a href="" class="btn-guests">
-                            <img src="https://st.depositphotos.com/1734074/4662/v/950/depositphotos_46622591-stock-illustration-user-man-icon.jpg" alt="" class="img-circle max-w-40">
-                            <small>andrewcoleman@materiallab.pro</small>
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                      </li>
-                    </ul>
-                   
-                  </div>
-                </div>
-              </div>
+               <CardAddUser />
             </form>
           </div>
           <div class="modal-footer">
@@ -168,8 +116,12 @@
     </div>
 </template>
 <script>
+import CardAddUser from '@/components/users/CardAddUser.vue'
 export default {
     name: 'add-event',
+    components:{
+      CardAddUser
+    },
     data(){
         return {
             openSearch: false,
@@ -205,63 +157,5 @@ export default {
 }
 </script>
 <style>
-.card-guests{
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-   #popover-guests{
-       position: absolute;
-       z-index: 100!important;
-       bottom: 50%;
-       transform: translateY(50%);
-       left: 100%;
-       margin-left: 10px;
-       background: #fff;
-       width:260px;
-       border-radius: 5px;
-     max-width: 300px;
-    box-shadow: 0 5px 10px rgba(175,188,206,.6);
-    border: 1px solid rgba(175,188,206,.3);
-}
 
-
-     
-
-   
-    #popover-guests .head{
-      background: #EEF5F9;
-      padding: 5px 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-     #popover-guests .head a{
-             color: #ec407a;
-     }
-    #popover-guests::after{
-        content: "";
-         position: absolute;
-         left: -20px;
-         border: transparent solid 10px;
-         top: 50%;
-         transform: translateY(-50%);
-         border-right: #ccc solid 10px;
-    }
-  #popover-guests  .list-group-item{
-      padding: 5px 20px;
-      margin: 3px;
-      display: flex;
-      align-items: center;
-      background: #EEF5F9;
-      color: #444;
-
-    }
-    .btn-guests{
-        color: #444 !important;
-    }
-    .user-group .list-group-item:not(.dropdown):hover img{
-        transform: scale(1.1);
-    }
 </style>
