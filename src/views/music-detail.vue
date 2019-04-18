@@ -84,13 +84,20 @@
                 </div>
               </div>
             </div>
-            <ModalDedicate />
+          
   </div>
       </section>
 <!-- modal -->
 
   </div>
-      	
+      	  <CardMusicDedicate 
+            :music_dedicate="music_select_id"
+            />
+
+            <CardMusicAddToList 
+            :music_dedicate="music_select_id"
+            />
+            <CardPlayListCreate  :music_dedicate="music_select_id" />
      </LayoutDashboard>
 
 </template>
@@ -105,10 +112,11 @@
   const {EventBus} =require('@/eventbus');
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
-  
-    import CardMusicDetail from "@/components/cards/CardMusicDateil.vue";
+    import CardMusicDedicate from "@/components/cards/CardMusicDedicate.vue";
+    import CardMusicAddToList from "@/components/cards/CardMusicAddToList.vue";
+    import CardPlayListCreate from "@/components/cards/CardPlaListCreate.vue";
+    import CardMusicDetail from "@/components/cards/CardMusicDetail.vue";
     import CardMusic from "@/components/cards/CardMusicRelaction.vue";
-  
     import ModalDedicate from "@/components/cards/ModalDedicate.vue";
     import { setTimeout } from 'timers';
     export default {
@@ -125,7 +133,10 @@
           LayoutDashboard,
           CardMusicDetail,
           CardMusic,
-          ModalDedicate
+          ModalDedicate,
+          CardMusicDedicate,
+          CardMusicAddToList,
+          CardPlayListCreate
       
         },
         methods: {

@@ -4,62 +4,10 @@
                 <div class="row">
                 <div class="col-md-7 col-xs-12">
                     <div class="content-music">
-                        <div class="thum-music">
-                            <img :src="getUrlImage(music.img)" alt="">
-                            <div class="content-play">
-                                <div class="user-header">
-                            <CardUser 
-                                :user_id="music.user_published._id"
-                                :user_name="music.user_published.name"
-                                :user_last_name="music.user_published.last_name"
-                                :user_img="getUrlImage(music.user_published.profile_picture)"
-                                />
-                                    <small><span>{{changeTimeTodate(music.date_create)}}</span></small>
-                                </div>
-                                <button class="bnt-player"><i class="fa fa-play"></i></button>
-                                <div class="footer-card-music">
-                                    <div class="op-controller">
-                            <Emotion 
-                            :music_id="music._id"
-                            :reactiones="music.reactions" />
-
-                            <div class="component-dedicate">
-                                <a href="" 
-                                    data-toggle="modal"
-                                    class="btn_option_music"
-                                    v-on:click="setMusicDedicate(music._id)"
-                                    data-target="#modal-music-dedicataction"
-                                    :name="music._id" >
-                                <i class="fa fa-share-square-o"></i>
-                                </a>
-                            </div>
-
-                            <div class="component-dedicate">
-                                <a
-                                    :class="{ 
-                                        'btn_option_music ': true,
-                                        'block_doload': !music.download_allowed,
-                            
-                            }"
-                                    href="#" v-on:click.prevent="handlerDownload(music.url,music.download_allowed)" >
-                                <i :class="{'zmdi zmdi-cloud-download': music.download_allowed ,'zmdi zmdi-block':!music.download_allowed }"></i>
-                                </a>
-                            </div>
-
-
-                            <div class="component-dedicate">
-                                <a href="" 
-                                    class="btn_option_music"
-                                    v-on:click.prevent="handlerToglesOption">
-                                <i class="zmdi zmdi-more-vert"></i>
-                                </a>
-                            </div>
-
-                            
-                        </div>
-                            </div>
-                            </div>
-                        </div>
+                         <CardMusicNoInfo 
+                          :music="music"
+                          :music_select_callback="handlerMusicSElect"
+                      />
                         <div class="container-footer">
                             <h1>{{music.title}}</h1>
                             <p>{{music.description}}</p>
@@ -70,8 +18,8 @@
                 <div class="content-music">
                     <div class="content-header">
                         <div class="container-info">
-                            <span>Reproduciones 0</span>
-                            <span>En lista de reproducion 0</span>
+                            <span>Reproduciones {{music.played_count}}</span>
+                            <span>En lista de reproducion {{music.inplaylist}}</span>
                         </div>
                             <div class="container-heren">
                                 <a href="" class="tags-item">
@@ -132,6 +80,9 @@
                 </div>
             </div>
             </div>
+            <CardMusicDedicate 
+            :music_dedicate="music_select_id"
+            />
     </section>
 </template>
 <script>
@@ -141,7 +92,9 @@ import Emotion from '../reactions/emotion.vue'
  import SondDedocate from "../reactions/songdedicate.vue";
  import MoreOption from "../reactions/option-music.vue";
   import CardUser from "./CardUser.vue";
+  import CardMusicNoInfo from "./CardMusicNoInfo.vue";
   import CommentMusic from "../comment/CommentMusic.vue";
+  import CardMusicDedicate from "@/components/cards/CardMusicDedicate.vue";
  const moment = require('moment');
  const {SERVER_URI}=require('@/config/index')
 moment.locale('es')
@@ -149,14 +102,21 @@ export default {
     name: 'music-detail',
     components:{
      QualificationStars,
+     CardMusicNoInfo,
      Emotion,
         SondDedocate,
         MoreOption ,
         CardUser ,
-        CommentMusic
+        CommentMusic,
+        CardMusicDedicate
     },
     props:{
         music: Object,
+    },
+    data(){
+        return {
+            music_select_id: undefined,
+        }
     },
     methods:{
           getUrlImage(image_name){
@@ -168,6 +128,10 @@ export default {
             }
             return `${SERVER_URI}/api/files/image/${image_name}`;
         },
+         handlerMusicSElect(music_id){
+             console.log(music_id)
+          this.music_select_id=music_id;
+         },
          changeTimeTodate(time){
          
           return   moment(time,"YYYYMMDD").fromNow();
@@ -199,45 +163,8 @@ export default {
       overflow: hidden;
       
   }
-  .content-music-detail  .thum-music > img{
-      display: inline-block;
-      border-radius: 5px;
-  }
+ 
 
-  .content-music-detail .content-play{
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      bottom: 0px;
-      right: 0px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      background: rgba(0,0,0,0.5);
-      color: #fff;
-  }
-  .content-music-detail .user-header{
-       position: absolute;
-       top: 10px;
-       left: 10px;
-       display: flex;
-       align-content: space-between;
-       align-items: center;
-       width: 100%;
-   }
- .content-music-detail  button.bnt-player{
-       position: absolute;
-       top: 50%;
-       left: 50%;
-        transform: translate(-50%,-50%);
-        border: none;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: #000;
-            z-index: -1;
-   }
     .content-music-detail .content-play:hover{
         background: rgba(0,0,0,0.8);
     }

@@ -1,12 +1,9 @@
 <template>
-<div class="col-md-3" v-if="!hidden">
+<div class="col-md-12" v-if="!hidden">
     <section :class="['card-music', active ? 'music_active_player' : '' ,'card_'+music._id]"
         >
             <div class="content">
                 <div class="thumbnil">
-                <a href="" class="close-music" v-on:click.prevent="hanlerHiddenCard">
-                    <i class="zmdi zmdi-close"></i>
-                </a>
                     <div class="container-user">
                         <CardUser 
                     :user_id="music.user_published._id"
@@ -15,10 +12,10 @@
                     :user_img="getImageMusic(music.user_published.profile_picture)"
                     />
                     </div>
-                    <a :href="'musics/'+music._id">
+                    <a href="">
                         <img :src="getImageMusic(music.img)" :alt="music.title">
                     </a>
-                    <a :href="'musics/'+music._id" class="container-controller">
+                    <a href="" class="container-controller">
                
                             <button 
                                 class="btn-player"
@@ -71,15 +68,6 @@
                                 
                     </a>
                  
-                </div>
-    
-                <div class="info">
-                    <div class="music-info">
-                        <a :href="'musics/'+music._id"><h1> {{music.title}}</h1></a>
-                    <p>{{music.description}} Publicado   <small>{{ getTime(music.date_update)}}</small> </p>
-                    </div>
-                  
-                    
                 </div>
             </div>
 

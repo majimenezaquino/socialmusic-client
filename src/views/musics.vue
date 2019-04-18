@@ -12,8 +12,11 @@
                     <header class="card-heading search-option-header">
                               <div class="music-header-search">
                                 <h1>Musicas</h1>
-                                 <div class="uplod">
-                                    <a href="/uploads" class="button">
+                                 <div class="uplod"> 
+                                    <a href="" class="button"
+                                    data-toggle="modal"
+                                   data-target="#register_music_modal"
+                                    >
                                        <i class="fa fa-cloud-upload"></i> 
                                     </a>
                                     <span class="hover-uplad">sube tu música aquí</span>
@@ -62,11 +65,12 @@
             <CardMusicAddToList 
             :music_dedicate="music_select_id"
             />
-            <CardPlayListCreate  :music_dedicate="music_select_id" />
+            <CardPlayListCreate />
+            <RegisterMusicModal />
   </div>
       </section>
 <!-- modal -->
-    
+
   </div>
       	
      </LayoutDashboard>
@@ -87,6 +91,7 @@
     import CardMusicDedicate from "@/components/cards/CardMusicDedicate.vue";
     import CardMusicAddToList from "@/components/cards/CardMusicAddToList.vue";
      import CardPlayListCreate from "@/components/cards/CardPlaListCreate.vue";
+     import RegisterMusicModal from "@/components/modals/RegisterMusicModal.vue";
     import { setTimeout } from 'timers';
     export default {
         name: "upload-music",
@@ -104,6 +109,7 @@
           CardMusicDedicate,
           CardMusicAddToList,
           CardPlayListCreate,
+          RegisterMusicModal
       
         },
         methods: {
