@@ -2,6 +2,14 @@
 <div class="modal modal-stepper fade" id="register_music_modal" tabindex="-1" role="dialog" aria-labelledby="register_music_modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+            <div class="show-card-incom" v-if="show_vies.user_info || show_vies.address">
+                     <div class="row">
+                         <div class="col-xs-12">
+                             <FormUser v-if="show_vies.user_info" />
+                             <FormAddress v-if="show_vies.address"/>
+                         </div>
+                     </div>
+             </div>
             <div class="modal-header">
                 
                 <h4 class="modal-title" id="myModalLabel-2">Sube tu música aquí</h4>
@@ -14,6 +22,7 @@
             </ul>
         </div>
         <div class="modal-body p-0">
+             
             <div class="stepper">
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active">
@@ -145,7 +154,7 @@
                       <div class="col-xs-4">
                         <div class="form-group is-empty">
                           <div class="input-group">
-                                <CardAddUser :title="'Elegir colaboradores' " />
+                                <CardAddUser :title="'Colaboradores' " :callback="handlerCallback" />
                           </div>
                         </div>
                       </div>
@@ -194,7 +203,7 @@
                                         </li>
 
                                         <li>
-                                            <a class="btn btn-primary next-step">Publicar la canción</a>
+                                            <a class="btn btn-primary next-step" v-on:click.prevent="handlerUploadMusic">Publicar</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -228,6 +237,12 @@
 </div>
 </template>
 <script>
+import FormUser from "@/components/forms/User.vue";
+import FormAddress from "@/components/address/address.vue";
+import WizanItem from "@/components/forms/wizan-btns.vue";
+import UploadMusic from "@/components/forms/uploadmusic.vue";
+import UploadPending from "@/components/forms/information-musics.vue";
+
 import CardAddUser from '@/components/users/CardAddUser.vue'
  const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
   const {DBLocal} =require('@/services/data_local')
@@ -237,10 +252,20 @@ import CardAddUser from '@/components/users/CardAddUser.vue'
 export default {
     name: 'upload-music',
     components:{
-        CardAddUser
+        CardAddUser,
+        FormUser,
+        FormAddress,
+        UploadMusic,
+        UploadPending
     },
     data(){
         return {
+            show_vies:{
+               user_info: false,
+               upload: false,
+               address: false,
+               pending: false,
+            },
             extension_allower:["mp3","wpw","ogg"],
             user_data: undefined,
             privacies: [],
@@ -252,6 +277,7 @@ export default {
                 size: undefined,
                 title: undefined,
                 genres: [],
+                colaborations: [],
                 tmp_name: undefined,
                 description: undefined,
                 privacy: undefined,
@@ -265,6 +291,9 @@ export default {
     redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
+    },
+    handlerCallback(user_id){
+        this.music.colaborations = user_id;
     },
       getGenres(){
         let self=this;
@@ -283,7 +312,8 @@ export default {
         axios.get(`${SERVER_URI}/api/privacies?token=${this.user_data.token}`)
              .then(function (req) {
              self.privacies =req.data.privacies;  
-              self.privacy=  self.privacies[0]._id;     
+              self.music.privacy=  self.privacies[0]._id;
+                   
              })
             .catch(function (response) {
             //handle error
@@ -351,12 +381,81 @@ if(_this.extensionIsAllower(file.name,this.extension_allower)){
         ,handlerSelectPrivacy(ev){
             let priv =ev.target.value;
             this.music.privacy = priv;
-        }
+        },
+        handlerUploadMusic(){
+            console.log("music", this.music)
+            this.uploadFilesForm();
+        },
+        getUploadStatus(){
+            let _this =this;
+        axios.get(`${SERVER_URI}/api/checkuseruploadmusics?token=${this.user_data.token}`)
+        
+             .then(function (req) {
+             let uploadInfo =req.data.upload_info;
+
+                if(!uploadInfo.user_complete){
+                _this.show_vies.user_info=true;
+                return;
+                }
+
+                if(!uploadInfo.address){
+                _this.show_vies.address=true;
+                return;
+                }
+
+              if(!uploadInfo.address){
+                _this.show_vies.address=true;
+                return;
+                }
+                if(!_this.music_penging){
+                  _this.show_vies.pending=false;
+                  _this.show_vies.upload=true;
+                return;
+                }
+                
+            
+             })
+            .catch(function (response) {
+            //handle error
+
+        });
+      },
+         uploadFilesForm(){
+             
+     
+        
+        let self=this;
+        let formData = new FormData();
+        formData.append('music',self.music.file);
+        formData.append('title',self.music.title);
+        formData.append('description',self.music.description);
+        formData.append('tags',self.music.tags);
+        formData.append('genres',self.music.genres);
+        formData.append('privacy',self.music.privacy);
+        formData.append('size',self.music.size);
+        formData.append('colaborations',self.music.colaborations);
+        formData.append('download_allowed',self.music.download_allowed);
+            axios.post(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
+             {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              })
+             .then(function (response) {
+                
+                  console.log('respuesta' ,response)
+             })
+            .catch(function (err) {
+                 console.log('respuesta' ,err.response)
+        });
+       
+    }
         },
         mounted(){
             this.redirectUserLogin();
             this.getGenres();
             this.getPrivacies();
+            this.getUploadStatus();
         }
 }
 </script>
@@ -392,6 +491,17 @@ if(_this.extensionIsAllower(file.name,this.extension_allower)){
         color: #aaa;
         line-height: 13px
     }
+   #register_music_modal  .modal-content{
+       position: relative;
+    }
+  #register_music_modal   .show-card-incom{
+        position: absolute;
+        left: 0px; top:0px;
+        right: 0px;
+        bottom: -50px;
+        background: #fff;
+        z-index: 10;
+   }
     #register_music_modal .close-music-upload{
         display: flex;
         position: absolute;
@@ -448,7 +558,7 @@ if(_this.extensionIsAllower(file.name,this.extension_allower)){
             box-shadow: 1px -4px 11px 7px rgba(194,184,194,0.44);
             cursor: pointer;
     }
-   
+  
    /*genres*/
    .container-genren{
        width: 100%;

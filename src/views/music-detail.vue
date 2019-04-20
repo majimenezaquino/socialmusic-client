@@ -152,7 +152,7 @@
             then(function(req){
                 _this.musics =req.data.music
               
-                             
+                   console.log(_this.musics )          
             }).catch(function(err){
                 console.log(`error--->${err}`)
             })

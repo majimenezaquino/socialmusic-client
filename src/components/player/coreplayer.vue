@@ -27,7 +27,7 @@
                                         :reactiones="_playlist.reactions"
                                         />
                                 <div class="tumbnil-music"
-                                v-bind:style="{ 'background-image': 'url('+ getFileUrlmg(_playlist.img)+' )' }"
+                                v-bind:style="{ 'background-image': 'url('+ ImgPath(_playlist.img)+' )' }"
                                 >
                                 <button class="btn_player">
                                   <i :class="{
@@ -152,6 +152,7 @@
   
 </template>
 <script>
+ import stattic_image from '@/assets/img/music-no-image.png'
     const {EventBus} =require('@/eventbus');
     const {mousePositionElement} =require('@/services/mouseposition.js')
     import Emotion from '../reactions/emotion-no-info.vue';
@@ -261,7 +262,7 @@ export default {
             return {
                 id: track._id,
                 artist: track.user_published.name,
-                image: self.getFileUrlmg(track.img),
+                image: self.ImgPath(track.img),
                 title: track.title, 
                 url: self.getFileUrMusic(track.url)
             }
@@ -509,16 +510,7 @@ setBarProgress(ev){
  //this.audio.currentTime=20;
 console.log( this.audio.currentTime)
 },
-getFileUrlmg(image_name){
 
-              if(image_name===undefined){
-                  return 'miaga'
-              }
-            if(image_name.includes("https://") || image_name.includes("http://")){
-                return image_name;
-            }
-            return `${SERVER_URI}/api/files/image/${image_name}`;
-        },
  getFileUrMusic(image_name){
             return `${SERVER_URI}/api/files/music/${image_name}`;
         },
@@ -612,6 +604,16 @@ clearCardMusicActive(){
           }
           //
         },
+        ImgPath(img){
+       if(img===undefined || img == null ){
+        return stattic_image
+    }
+  if(img.includes("https://") || img.includes("http://")){
+      return img;
+  }
+  return `${SERVER_URI}/api/files/image/${img}`;
+},
+
         saveMusicPlayed(){
           let self =this;
           

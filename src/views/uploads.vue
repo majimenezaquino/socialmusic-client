@@ -55,7 +55,7 @@
             </div>
           </div> 
       </section>
-		 </div>
+		 </div> 
      </LayoutDashboard>
 
 </template>
@@ -70,7 +70,7 @@
   const {EventBus} =require('@/eventbus');
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
-    import FormAddress from "@/components/forms/address.vue";
+    import FormAddress from "@/components/address/address.vue";
     import WizanItem from "@/components/forms/wizan-btns.vue";
     import UploadMusic from "@/components/forms/uploadmusic.vue";
     import UploadPending from "@/components/forms/information-musics.vue";

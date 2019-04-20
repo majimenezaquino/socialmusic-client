@@ -12,11 +12,11 @@
                     :user_id="music.user_published._id"
                     :user_name="music.user_published.name"
                     :user_last_name="music.user_published.last_name"
-                    :user_img="getImageMusic(music.user_published.profile_picture)"
+                    :user_img="ImgPath (music.user_published.profile_picture)"
                     />
                     </div>
                     <a :href="'musics/'+music._id">
-                        <img :src="getImageMusic(music.img)" :alt="music.title">
+                        <img :src="ImgPath(music.img)" :alt="music.title">
                     </a>
                     <a :href="'musics/'+music._id" class="container-controller">
                
@@ -96,6 +96,9 @@ import Emotion from '../reactions/emotion.vue'
  import CardMusicOption from "./cardMusicOption.vue";
  const moment = require('moment');
  const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
+
+ import stattic_image from '@/assets/img/music-no-image.png'
+
 moment.locale('es')
  const {DBLocal} =require('@/services/data_local')
   const dbLocal= new DBLocal(DB_USER_NAME);
@@ -127,7 +130,7 @@ export default {
     methods:{
         handlerDownload(ev,download_allowed){
             if(download_allowed){
-                console.log(download_allowed)
+        
                 this.download(ev,'dategagagagagfa')
             }else{
                 return false;
@@ -146,21 +149,22 @@ export default {
 
   document.body.removeChild(element);
 },
+ImgPath(img){
+       if(img===undefined || img == null ){
+        return stattic_image
+    }
+  if(img.includes("https://") || img.includes("http://")){
+      return img;
+  }
+  return `${SERVER_URI}/api/files/image/${img}`;
+},
 
 redirectUserLogin(){
     if(dbLocal.checkDataLocalStorageOBject())
     this.user_data  =dbLocal.getDataLocalStorageOBject();
          },
-        getImageMusic(image_name){
-              if(image_name===undefined){
-                  return 'miaga'
-              }
-            if(image_name.includes("https://") || image_name.includes("http://")){
-                return image_name;
-            }
-            return `${SERVER_URI}/api/files/image/${image_name}`;
-        }
-        ,
+   
+
         getTime(date_create){
             
             return moment(date_create,"YYYYMMDD").fromNow();

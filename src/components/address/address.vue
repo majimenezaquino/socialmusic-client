@@ -7,16 +7,14 @@
 </div>
 </template>
 <script>
-  const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
-  const {DBLocal} =require('@/services/data_local')
-  const dbLocal= new DBLocal(DB_USER_NAME);
-  const axios = require('axios');
-    const {EventBus} =require('@/eventbus');
-    import NewAddress from './new-address.vue';
-    import UpdateAddress from './update-address.vue';
-   
-
-    import { setInterval, setImmediate } from 'timers';
+const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
+const {DBLocal} =require('@/services/data_local')
+const dbLocal= new DBLocal(DB_USER_NAME);
+const axios = require('axios');
+const {EventBus} =require('@/eventbus');
+import NewAddress from './new-address.vue';
+import UpdateAddress from './update-address.vue';
+import { setInterval, setImmediate } from 'timers';
 export default {
     name: 'avatar',
     components:{

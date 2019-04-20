@@ -1,25 +1,27 @@
 <template>
       <div class="form-group">
-                <label for="eventColor" class="col-md-2 control-label">{{title}} </label>
-                <div class="col-md-10">
+                <label for="eventColor" class="col-md-12 control-label">{{title}} {{user_select.length}}</label>
+                <div class="col-md-2">
                   <div class="form-group m-t-5">
                     <ul class="list-group user-group p-l-10">
-                      <li class="list-group-item"
-                       v-for="ut in users_temp" :key="ut._id">
+                      <!-- <li class="list-group-item"
+                         v-for="ut in users_temp" :key="ut._id">
                         <img :src="getImageURL(ut.profile_picture)" alt="" class="img-circle max-w-40">
                         <a class="remove-guests"><i class="zmdi zmdi-minus-circle"></i></a>
-                      </li>
+                      </li> -->
                      
-                      <li class="inline-block card-guests">
+                      <li class="list-group-item card-guests">
                         <a href="javascript:void(0)" class="btn btn-add-gray btn-fab btn-fab-sm m-l-5" v-on:click.prevent="openToggle">
-                            <i class="zmdi zmdi-plus"></i></a>
+                        <i class="zmdi zmdi-plus"></i>
+                    </a> 
+                    </li>
                      <div id="popover-guests" v-if="openSearch">
                       <div class="head">
-                        Buscar usuarios 
+                        <p>Buscar usuarios </p>
                         <a href=""  v-on:click.prevent="openToggle"><i class="zmdi zmdi-close"></i></a>
                       </div>
                       <div class="content">
-                        <div class="form-group is-empty m-10">
+                        <div class="form-group is-empty m-10 m-b-0">
                           <div class="input-group">
                             <input type="text" class="form-control" id="filter_cal_input" placeholder="Filter Members" v-model="word_seach">
                             <span class="input-group-addon"><i class="zmdi zmdi-search"></i></span>
@@ -31,7 +33,7 @@
                           v-for="u in users" :key="u._id"
                           >
                             <a href=""
-                             :class="{'btn-guests': true, 'active': this.user_select.includes(u._id)}"
+                             :class="{'btn-guests': true,'active': isActivet(u._id)}"
                              :name="u._id"
                              v-on:click.prevent="toggleSelectUser"
                             >
@@ -45,11 +47,11 @@
                         </ul>
                          <li class="list-group-item"> 
                               <a class="btn btn-default btn-xs" v-on:click.prevent="openToggle">Salir</a>
-                              <a class="btn btn-primary  btn-xs" v-on:click.prevent="handlerSaveGuestes">Guardar</a>
+                              <a class="btn btn-primary  btn-xs" v-on:click.prevent="handlerSaveGuestes" :disabled="!user_select.length">Guardar</a>
                           </li>
                       </div>
                     </div>
-                      </li>
+                   
                       
                     </ul>
                    
@@ -89,10 +91,18 @@ export default {
                 type: Number,
                 default: 10
             },
+            callback: Function,
     },
     methods:{
         handlerSaveGuestes(){
+            this.callback(this.user_select);
             this.openSearch =!this.openSearch;
+        },
+        isActivet(id){
+            if(this.user_select.includes(id)){
+                return true;
+            }
+            return false;
         },
         openToggle(){
             this.openSearch =!this.openSearch;
@@ -103,13 +113,10 @@ export default {
         toggleSelectUser(ev){
             let element =ev.target;
             element.classList.toggle("active")
-
-
-
-
-
-
-
+            if(element.name===undefined ){
+              return false; 
+            }
+            console.log('element.name',element.name)
               if(this.user_select.includes(element.name)){
                   this.user_select=this.user_select.filter(function(id){
                       return id!== element.name;
@@ -131,7 +138,7 @@ export default {
 
                     }) 
                  }
-                  console.log("user select ",this.users_temp)
+                
             }else{
                  swal({
                       text: "Ya alcánzate el límite de colaboradores para esa música.",
@@ -150,13 +157,10 @@ export default {
                 let _this = this;
                 axios.get(`${SERVER_URI}/api/followers?token=${this.user_data.token}`).
                 then(function(req){
-                 let us=  req.data.followers.map(function(u){
+                 _this.users  =  req.data.followers.map(function(u){
                      return u.user_follower
                  });
-                   _this.users =us;
-                   console.log("get user " , _this.users)
-     
-                                
+                            
                 }).catch(function(err){
                     console.log(`error--->${err}`)
                 })
@@ -168,8 +172,8 @@ export default {
                 let _this = this;
                 axios.get(`${SERVER_URI}/api/search/${word}?token=${this.user_data.token}`).
                 then(function(req){
-                 _this.users= req.data.users;    
-                _this.user_select =[];
+                 _this.users= req.data.users;  
+                //_this.user_select =[];
                 }).catch(function(err){
                     console.log(`error--->${err}`)
                 })
@@ -202,18 +206,18 @@ export default {
     align-items: center;
 }
    #popover-guests{
-       position: absolute;
-       z-index: 100!important;
-       bottom: 50%;
-       transform: translateY(50%);
-       left: 100%;
-       margin-left: 10px;
-       background: #fff;
-       width:260px;
-       border-radius: 5px;
-     max-width: 300px;
+    position: absolute;
+    z-index: 10!important;
+    bottom: 50%;
+    transform: translateY(50%);
+    left: 100%;
+    width:260px;
+    border-radius: 5px;
+    max-width: 300px;
     box-shadow: 0 5px 10px rgba(175,188,206,.6);
     border: 1px solid rgba(175,188,206,.3);
+    background: #fff;
+    margin-left: 65px;
 }
 
 
@@ -222,13 +226,20 @@ export default {
    
     #popover-guests .head{
       background: #EEF5F9;
-      padding: 5px 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      color:#444 !important;
+      z-index: 10;
+      position: relative;
+      padding: 0 10px;
     }
      #popover-guests .head a{
-             color: #ec407a;
+             color: #ec407a !important;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             z-index: 100;
      }
     #popover-guests::after{
         content: "";
@@ -266,8 +277,9 @@ export default {
         transform: scale(1.1);
     }
     .container-guests{
-        max-height: 300px;
+        max-height: 200px;
         overflow-y: scroll;
+        margin: 0px;
     }
 
     

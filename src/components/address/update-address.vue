@@ -1,9 +1,7 @@
 <template>
-<div class="container__music">
-    <div class="col-music">
-        <!-- <UserAvatar :propImageUrl="user_profile" /> -->
-    </div>
-     <div class="col-music">
+<div class="col-xs-12">
+
+     <div class="row">
             <div class="form-upload">
                 <div class="card">
                   <header class="card-heading ">
@@ -79,10 +77,10 @@
   const dbLocal= new DBLocal(DB_USER_NAME);
   const axios = require('axios');
     const {EventBus} =require('@/eventbus');
-    import LimitUpladMusic from './limit-upload-music.vue';
-        import AlertError from './AlertError.vue';
-        import AlertSuccess from './AlertSuccess.vue';
-    import { setInterval, setImmediate, setTimeout } from 'timers';
+import LimitUpladMusic from '@/components/forms/limit-upload-music.vue';
+import AlertError from '@/components/forms/AlertError.vue';
+import AlertSuccess from '@/components/forms/AlertSuccess.vue';
+import { setInterval, setImmediate, setTimeout } from 'timers';
 export default {
     name: 'avatar',
     components:{
@@ -324,9 +322,12 @@ export default {
 }
 </script>
 <style>
-@import url("./styles.css");
+/* @import url("./styles.css");
     .form-card-address{
         display: flex;
         justify-content: space-around;
+    } */
+    .container__music{
+        background: transparent;
     }
 </style>

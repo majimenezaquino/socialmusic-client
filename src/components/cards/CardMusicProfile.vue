@@ -12,11 +12,11 @@
                     :user_id="music.user_published._id"
                     :user_name="music.user_published.name"
                     :user_last_name="music.user_published.last_name"
-                    :user_img="getImageMusic(music.user_published.profile_picture)"
+                    :user_img="ImgPath(music.user_published.profile_picture)"
                     />
                     </div>
                     <a :href="'musics/'+music._id">
-                        <img :src="getImageMusic(music.img)" :alt="music.title">
+                        <img :src="ImgPath(music.img)" :alt="music.title">
                     </a>
                     <a :href="'musics/'+music._id" class="container-controller">
                     <div class="btn-player">
@@ -67,6 +67,7 @@
 </template>
 <script>
 import { setTimeout } from 'timers';
+ import stattic_image from '@/assets/img/music-no-image.png'
 import Emotion from '../reactions/emotion.vue'
  import QualificationStars from "../qualifications/qualifications.vue";
  import SondDedocate from "../reactions/songdedicate.vue";
@@ -101,10 +102,15 @@ export default {
        music_select_callback: Function
     },
     methods:{
-        getImageMusic(image_name){
-            return `${SERVER_URI}/api/files/image/${image_name}`;
-        }
-        ,
+           ImgPath(img){
+       if(img===undefined || img == null ){
+        return stattic_image
+    }
+  if(img.includes("https://") || img.includes("http://")){
+      return img;
+  }
+  return `${SERVER_URI}/api/files/image/${img}`;
+},
         getTime(date_create){
             
             return moment(date_create,"YYYYMMDD").fromNow();

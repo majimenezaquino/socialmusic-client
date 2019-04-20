@@ -22,26 +22,11 @@
                             <span>En lista de reproducion {{music.inplaylist}}</span>
                         </div>
                             <div class="container-heren">
-                                <a href="" class="tags-item">
-                                    <i class="fa fa-music" aria-hidden="true"></i>
-                                    <span> tag</span>
+                                <a href="" class="tags-item" v-for="genre in music.genres" :key="genre._id">
+                                    <i class="fa fa-music"></i>
+                                    <span> {{genre.name}}</span>
                                 </a>
-                                <a href="" class="tags-item">
-                                    <i class="fa fa-music" aria-hidden="true"></i>
-                                    <span>Nonmbre </span>
-                                </a>
-                                <a href="" class="tags-item">
-                                    <i class="fa fa-music" aria-hidden="true"></i>
-                                    <span> tag</span>
-                                </a>
-                                <a href="" class="tags-item">
-                                    <i class="fa fa-music" aria-hidden="true"></i>
-                                    <span>Nonmbre </span>
-                                </a>
-                                <a href="" class="tags-item">
-                                    <i class="fa fa-music" aria-hidden="true"></i>
-                                    <span>Nonmbre tag</span>
-                                </a>
+                               
                             </div>
                             
                             <QualificationStars 
@@ -55,18 +40,12 @@
                         <div class="container-guestes">
                                 <div class="form-group m-t-0">
                                 <ul class="list-group user-group">
-                                    <li class="list-group-item">
-                                        <img src="https://www.trastornoevitacion.com/images/kim-basinger.jpg" alt="" class="img-circle max-w-40">
-                                        <span class="remove-guests"><i class="zmdi zmdi-minus-circle"></i></span>
+                                    <li class="list-group-item"  v-for="colab in music.colaborations" :key="colab._id">
+                                        <router-link  :to="'/profile/'+colab._id">
+                                            <img :src="ImgPath(colab.profile_picture)" alt="" class="img-circle max-w-40">
+                                        </router-link>
                                     </li>
-                                    <li class="list-group-item">
-                                        <img src="https://significadodenombres.net/wp-content/uploads/2014/07/triana-ramos.jpg" alt="" class="img-circle max-w-40">
-                                        <span class="remove-guests"><i class="zmdi zmdi-minus-circle"></i></span>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <img src="https://miguelangelbravo.files.wordpress.com/2017/06/perfil6_small.jpg?w=200" alt="" class="img-circle max-w-40">
-                                        <span class="remove-guests"><i class="zmdi zmdi-minus-circle"></i></span>
-                                    </li>
+                                   
                                 </ul>
                                 </div>
                             </div>
@@ -86,6 +65,7 @@
     </section>
 </template>
 <script>
+import stattic_image from '@/assets/img/music-no-image.png'
 import { setTimeout } from 'timers';
 import Emotion from '../reactions/emotion.vue'
  import QualificationStars from "../qualifications/qualifications.vue";
@@ -119,15 +99,18 @@ export default {
         }
     },
     methods:{
-          getUrlImage(image_name){
-            if(image_name===undefined){
-                  return 'miaga'
-              }
-            if(image_name.includes("https://") || image_name.includes("http://")){
-                return image_name;
-            }
-            return `${SERVER_URI}/api/files/image/${image_name}`;
+         ImgPath(img){
+         
+       if(img===undefined || img == null ){
+        return stattic_image
+    }
+  if(img.includes("https://") || img.includes("http://")){
+      return img;
+  }
+  return `${SERVER_URI}/api/files/image/${img}`;
+
         },
+        
          handlerMusicSElect(music_id){
              console.log(music_id)
           this.music_select_id=music_id;
