@@ -13,7 +13,7 @@
 </article>
 </template>
 <script>
-import CardUserListSmoll from "./CardUserListSmoll.vue";
+import CardUserListSmoll from "@/components/cards/CardUserListSmoll.vue";
 export default {
     name: "comment",
     props:{

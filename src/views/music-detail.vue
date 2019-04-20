@@ -112,11 +112,11 @@
   const {EventBus} =require('@/eventbus');
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
-    import CardMusicDedicate from "@/components/cards/CardMusicDedicate.vue";
-    import CardMusicAddToList from "@/components/cards/CardMusicAddToList.vue";
+    import CardMusicDedicate from "@/components/musics/CardMusicDedicate.vue";
+    import CardMusicAddToList from "@/components/musics/CardMusicAddToList.vue";
     import CardPlayListCreate from "@/components/cards/CardPlaListCreate.vue";
-    import CardMusicDetail from "@/components/cards/CardMusicDetail.vue";
-    import CardMusic from "@/components/cards/CardMusicRelaction.vue";
+    import CardMusicDetail from "@/components/musics/CardMusicDetail.vue";
+    import CardMusic from "@/components/musics/CardMusicRelaction.vue";
     import ModalDedicate from "@/components/cards/ModalDedicate.vue";
     import { setTimeout } from 'timers';
     export default {

@@ -1,21 +1,24 @@
 <template>
-<div class="col-md-12" v-if="!hidden">
+<div class="col-md-3" v-if="!hidden">
     <section :class="['card-music', active ? 'music_active_player' : '' ,'card_'+music._id]"
         >
             <div class="content">
                 <div class="thumbnil">
+                <a href="" class="close-music" v-on:click.prevent="hanlerHiddenCard">
+                    <i class="zmdi zmdi-close"></i>
+                </a>
                     <div class="container-user">
                         <CardUser 
                     :user_id="music.user_published._id"
                     :user_name="music.user_published.name"
                     :user_last_name="music.user_published.last_name"
-                    :user_img="ImgPath(music.user_published.profile_picture)"
+                    :user_img="ImgPath (music.user_published.profile_picture)"
                     />
                     </div>
-                    <a href="">
+                    <a :href="'musics/'+music._id">
                         <img :src="ImgPath(music.img)" :alt="music.title">
                     </a>
-                    <a href="" class="container-controller">
+                    <a :href="'musics/'+music._id" class="container-controller">
                
                             <button 
                                 class="btn-player"
@@ -53,21 +56,30 @@
                         </div>
 
 
-                        <div class="component-dedicate">
+                        <!-- <div class="component-dedicate">
                             <a href="" 
-                                class="btn-dedocate"
+                                class=""
                                 v-on:click.prevent="handlerToglesOption">
                             <i class="zmdi zmdi-more-vert"></i>
                             </a>
-                        </div>
-
+                        </div> -->
+                            <!-- btn-dedocate -->
                         <CardMusicOption 
                                 :music_id="music._id"
-                                v-if="showoption" />
+                                 />
                     </div>
                                 
                     </a>
                  
+                </div>
+    
+                <div class="info">
+                    <div class="music-info">
+                        <a :href="'musics/'+music._id"><h1> {{music.title}}</h1></a>
+                    <p>{{music.description}} Publicado   <small>{{ getTime(music.date_update)}}</small> </p>
+                    </div>
+                  
+                    
                 </div>
             </div>
 
@@ -75,19 +87,21 @@
     </div>
 </template>
 <script>
- import stattic_image from '@/assets/img/music-no-image.png';
 import { setTimeout } from 'timers';
-import Emotion from '../reactions/emotion.vue';
- import QualificationStars from "../qualifications/qualifications.vue";
- import SondDedocate from "../reactions/songdedicate.vue";
- import MoreOption from "../reactions/option-music.vue";
- import CardUser from "./CardUser.vue";
- import CardMusicOption from "./cardMusicOption.vue";
- const moment = require('moment');
- const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
+import Emotion from '@/components/reactions/emotion.vue';
+import QualificationStars from "@/components/qualifications/qualifications.vue";
+import SondDedocate from "@/components/reactions/songdedicate.vue";
+import MoreOption from "@/components/reactions/option-music.vue";
+import CardUser from "@/components/cards/CardUser.vue";
+import CardMusicOption from "./cardMusicOption.vue";
+const moment = require('moment');
+const {SERVER_URI,DB_USER_NAME}=require('@/config/index');
+
+import stattic_image from '@/assets/img/music-no-image.png';
+
 moment.locale('es')
- const {DBLocal} =require('@/services/data_local')
-  const dbLocal= new DBLocal(DB_USER_NAME);
+const {DBLocal} =require('@/services/data_local');
+const dbLocal= new DBLocal(DB_USER_NAME);
 
 export default {
     name: 'card-music',
@@ -116,7 +130,7 @@ export default {
     methods:{
         handlerDownload(ev,download_allowed){
             if(download_allowed){
-                console.log(download_allowed)
+        
                 this.download(ev,'dategagagagagfa')
             }else{
                 return false;
@@ -135,12 +149,7 @@ export default {
 
   document.body.removeChild(element);
 },
-
-redirectUserLogin(){
-    if(dbLocal.checkDataLocalStorageOBject())
-    this.user_data  =dbLocal.getDataLocalStorageOBject();
-         },
-      ImgPath(img){
+ImgPath(img){
        if(img===undefined || img == null ){
         return stattic_image
     }
@@ -149,6 +158,12 @@ redirectUserLogin(){
   }
   return `${SERVER_URI}/api/files/image/${img}`;
 },
+
+redirectUserLogin(){
+    if(dbLocal.checkDataLocalStorageOBject())
+    this.user_data  =dbLocal.getDataLocalStorageOBject();
+         },
+   
 
         getTime(date_create){
             

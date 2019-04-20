@@ -68,12 +68,13 @@
 <script>
 import { setTimeout } from 'timers';
  import stattic_image from '@/assets/img/music-no-image.png'
-import Emotion from '../reactions/emotion.vue'
- import QualificationStars from "../qualifications/qualifications.vue";
- import SondDedocate from "../reactions/songdedicate.vue";
- import MoreOption from "../reactions/option-music.vue";
- import CardUser from "./CardUser.vue";
- import CardMusicOption from "./cardMusicOption.vue";
+ import Emotion from '@/components/reactions/emotion.vue';
+import QualificationStars from "@/components/qualifications/qualifications.vue";
+import SondDedocate from "@/components/reactions/songdedicate.vue";
+import MoreOption from "@/components/reactions/option-music.vue";
+import CardUser from "@/components/cards/CardUser.vue";
+import CardMusicOption from "./cardMusicOption.vue";
+
  const moment = require('moment');
  const {SERVER_URI}=require('@/config/index')
 moment.locale('es')

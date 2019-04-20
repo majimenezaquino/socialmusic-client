@@ -14,7 +14,7 @@
 	const {DBLocal} =require('@/services/data_local')
 	const dbLocal= new DBLocal(DB_USER_NAME);
 	const axios = require('axios')
-import CardMusic from "../cards/CardMusicProfile.vue";
+import CardMusic from "@/components/musics/CardMusicProfile.vue";
 
 export default {
     name: "music-profiles",

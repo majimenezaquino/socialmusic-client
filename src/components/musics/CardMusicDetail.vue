@@ -65,18 +65,19 @@
     </section>
 </template>
 <script>
-import stattic_image from '@/assets/img/music-no-image.png'
 import { setTimeout } from 'timers';
-import Emotion from '../reactions/emotion.vue'
- import QualificationStars from "../qualifications/qualifications.vue";
- import SondDedocate from "../reactions/songdedicate.vue";
- import MoreOption from "../reactions/option-music.vue";
-  import CardUser from "./CardUser.vue";
-  import CardMusicNoInfo from "./CardMusicNoInfo.vue";
-  import CommentMusic from "../comment/CommentMusic.vue";
-  import CardMusicDedicate from "@/components/cards/CardMusicDedicate.vue";
- const moment = require('moment');
- const {SERVER_URI}=require('@/config/index')
+import stattic_image from '@/assets/img/music-no-image.png'
+import Emotion from '@/components/reactions/emotion.vue';
+import QualificationStars from "@/components/qualifications/qualifications.vue";
+import SondDedocate from "@/components/reactions/songdedicate.vue";
+import MoreOption from "@/components/reactions/option-music.vue";
+import CardUser from "@/components/cards/CardUser.vue";
+import CardMusicOption from "./cardMusicOption.vue";
+import CardMusicNoInfo from "./CardMusicNoInfo.vue";
+import CommentMusic from "@/components/comment/CommentMusic.vue";
+import CardMusicDedicate from "./CardMusicDedicate.vue";
+const moment = require('moment');
+const {SERVER_URI}=require('@/config/index')
 moment.locale('es')
 export default {
     name: 'music-detail',
