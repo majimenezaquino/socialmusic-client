@@ -209,11 +209,11 @@ export default {
 		musicPlaylist: [
 		 
         {
-          id: '555555555555555555555555555555',
-          artist: 'Miguel Jimenez',
-          image: 'https://source.unsplash.com/crs2vlkSe98',
-          title: 'Hitman', 
-         url: 'http://incompetech.com/music/royalty-free/mp3-royaltyfree/Hitman.mp3'}
+          id: undefined,
+          artist: undefined,
+          image: undefined,
+          title: undefined, 
+         url: undefined}
 
 		],
 		audioFile: ""
@@ -224,7 +224,7 @@ export default {
     props:{
       tracks: {
         type: Object,
-        required: true
+        required: false,
       },
        add_track: {
         type: Object,
@@ -234,21 +234,17 @@ export default {
     },
 
    watch: {
-    // 'tracks': {
-    //   handler: function (tracks) {
-    //     this.playlist=tracks;
-    //     console.log("track init")
-    //   },
-    //   deep: true
-    // },
+  
 
      'add_track': {
       handler: function (tracks) {
+        
         let _playlist=this.playlist;
         
         tracks.forEach(function(item) {
         _playlist.push(item);
       });
+     
       this.playlist =_playlist;
       },
       deep: true
@@ -258,6 +254,7 @@ export default {
         let playlist ;
         let self=this ;
         if(data.tracks.length>0){
+         
           playlist=data.tracks.map(function(track){
             return {
                 id: track._id,
@@ -267,17 +264,23 @@ export default {
                 url: self.getFileUrMusic(track.url)
             }
           });
-
+            
+          
+          let _stop =false;
           this.musicPlaylist = playlist;
-          this.playlist=data.tracks;
-
-          this.changeSong(data.index_play);
-        
-          this.isPlaylistActive=!this.isPlaylistActive;
+          if(playlist[data.index_play].id ==this.music_run){
+             this.playAudio();
+          }else{
+          this.changeSong(parseInt(data.index_play));
+           this.isPlaylistActive=!this.isPlaylistActive;
+           this.playlist=data.tracks;
+          
             if(this.audio.paused){
             this.playAudio();
           }
+          }
         }
+        
         
       },
       deep: true
@@ -331,21 +334,17 @@ methods: {
 				this.stopAudio();
 				this.currentSong = index;
       }
-        let content_id =this.musicPlaylist[this.currentSong].id ;
-        this.clearCardActive();
-         this.activeCardMusic(content_id);
-         this.music_run = content_id;
-          //check is random
-          console.log("this.music_run",this.music_run)
-        
-            this.audioFile = this.musicPlaylist[this.currentSong].url;
-          
-			
-			this.audio = new Audio(this.audioFile);
-			var localThis = this;
-			this.audio.addEventListener("loadedmetadata", function() {
-				localThis.trackDuration = Math.round(this.duration);
-        localThis.volumeBar = Math.round(this.volume*100);
+      let content_id =this.musicPlaylist[this.currentSong].id ;
+      this.clearCardActive();
+      this.activeCardMusic(content_id);
+      this.music_run = content_id;
+
+      this.audioFile = this.musicPlaylist[this.currentSong].url;
+      this.audio = new Audio(this.audioFile);
+      var localThis = this;
+      this.audio.addEventListener("loadedmetadata", function() {
+      localThis.trackDuration = Math.round(this.duration);
+      localThis.volumeBar = Math.round(this.volume*100);
         
 			});
 			this.audio.addEventListener("ended", this.handleEnded);
@@ -508,7 +507,7 @@ setBarProgress(ev){
  this.audio.currentTime = (this.trackDuration * barSize/100);
  this.currentProgressBar= barSize;
  //this.audio.currentTime=20;
-console.log( this.audio.currentTime)
+
 },
 
  getFileUrMusic(image_name){
