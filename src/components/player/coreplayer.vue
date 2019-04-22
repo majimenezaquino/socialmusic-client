@@ -19,31 +19,40 @@
                               
                             
                         <li   v-for="(_playlist,index) in playlist"  :key="index"
-                        v-on:click.prevent="changeMusic(index)"
-                        :class="'item-music-in-player card-music'+  ' music'+_playlist._id ">
-                            <a href="">
-                                  <Emotion 
-                                        :music_id="_playlist._id"
-                                        :reactiones="_playlist.reactions"
-                                        />
-                                <div class="tumbnil-music"
+                        
+                        :class="[
+                        {'item-music-in-player card-music': true},
+                         {'active': _playlist._id==music_run}]">
+                                       
+                              <div class="tumbnil-music"
                                 v-bind:style="{ 'background-image': 'url('+ ImgPath(_playlist.img)+' )' }"
+                                v-on:click.prevent="changeMusic(index)"
                                 >
-                                <button class="btn_player">
+                                <button class="btn-player"
+                                v-on:click.prevent="changeMusic(index)"
+                                >
                                   <i :class="{
-                                    'zmdi zmdi-play': !isPlaying, 
-                                    'spinner spinner-bounce-bottom': isPlaying
-                                    }"></i></button>
+                                    'zmdi zmdi-play': audio.paused, 
+                                    'spinner spinner-bounce-bottom': !audio.paused
+                                    }"></i>
+                                    
+                                    </button>
                             </div>
                             <div class="content-musi">
                                 <h1>{{_playlist.title}}</h1>
                                 <p><a href="">{{_playlist.user_published.name}} {{_playlist.user_published.last_name}}</a></p>
                             </div>
+                            <div class="content-controll">
+                              <Emotion 
+                                        :music_id="_playlist._id"
+                                        :reactiones="_playlist.reactions"
+                                        />
+                            
                             <div class="info">
                                 <a href=""><i class="zmdi zmdi-more"></i></a>
                                 <span>{{(_playlist.duration/60).toFixed(2)}}</span>
                             </div>
-                            </a>
+                            </div>
                 </li>
                             
                           </ul>
@@ -155,7 +164,7 @@
  import stattic_image from '@/assets/img/music-no-image.png'
     const {EventBus} =require('@/eventbus');
     const {mousePositionElement} =require('@/services/mouseposition.js')
-    import Emotion from '../reactions/emotion-no-info.vue';
+    import Emotion from '../reactions/emotion.vue';
     import { setTimeout } from 'timers';
     import CardUser from "../cards/CardUser.vue";
     import TextMore from "../forms/ShowMore.vue";
@@ -253,6 +262,7 @@ export default {
       handler: function (data) {
         let playlist ;
         let self=this ;
+      
         if(data.tracks.length>0){
          
           playlist=data.tracks.map(function(track){
@@ -261,18 +271,19 @@ export default {
                 artist: track.user_published.name,
                 image: self.ImgPath(track.img),
                 title: track.title, 
+                reactions: track.reactions,
                 url: self.getFileUrMusic(track.url)
             }
           });
             
-          
+    
           let _stop =false;
           this.musicPlaylist = playlist;
-          if(playlist[data.index_play].id ==this.music_run){
+          if(playlist[data.index_play].id ==this.music_run && playlist.length<2){
              this.playAudio();
           }else{
           this.changeSong(parseInt(data.index_play));
-           this.isPlaylistActive=!this.isPlaylistActive;
+           this.isPlaylistActive=true;
            this.playlist=data.tracks;
           
             if(this.audio.paused){
@@ -351,7 +362,8 @@ methods: {
 			if (wasPlaying) {
 				this.playAudio();
       }
-      
+     
+    
     },
    shuffle(arra1) {
     let ctr = arra1.length;
@@ -384,7 +396,7 @@ methods: {
              if(!this.musicPlaylist.length>0){
                      return false;
                 }
-                this.activeCardMusic(this.music_run)
+                
 			if (
 				this.currentlyStopped == true &&
 				this.currentSong + 1 == this.musicPlaylist.length
@@ -545,7 +557,7 @@ clearCardMusicActive(){
 
          let  card_active=document.querySelectorAll(`.card_${name_class}`);
          let  card_active_btn=document.querySelectorAll(`.card_${name_class} .btn-player`);
-       
+        console.log(card_active)
           //clear
             this.clearCardMusicActive();
 
@@ -692,6 +704,7 @@ clearCardMusicActive(){
     @import "./player.css";
     .isDisabled {
 			background: #ccc;
-		}
+    }
+    
 </style>
 

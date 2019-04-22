@@ -1,5 +1,5 @@
 <template>
-<li class="playlist-item-music-inline">
+<li :class="[{' card-music playlist-item-music-inline ': true}, 'card_'+music._id]">
         <div class="btn-like">
           <Emotion 
                 :music_id="music._id"
@@ -7,10 +7,10 @@
              />
         </div>
         <div class="thumb-music"
-        v-bind:style="{ 'background-image': 'url('+getImagePlaylist(music.img)+')' }"
+        v-bind:style="{ 'background-image': 'url('+ImgPath(music.img)+')' }"
         >
         <div class="lamina-hidden">
-            <a href="" ><i class="fa fa-play"></i></a>
+            <button ><i class="fa fa-play"></i></button>
         </div>
         </div>
         <div class="content-info">
@@ -32,7 +32,7 @@
 <script>
 import { setTimeout } from 'timers';
 import Emotion from '../reactions/emotion-no-info.vue'
-
+import stattic_image from '@/assets/img/music-no-image.png';
  const moment = require('moment');
  const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
 moment.locale('es')
@@ -50,20 +50,19 @@ user: Object,
             show_option: false
         }
     },
-    methods:{
+    methods:{ 
            toggleOption(){
                this.show_option=!this.show_option;
            },
-         getImagePlaylist(image_name){
-      
-              if(image_name===undefined || image_name==='' || image_name===null){
-                  return undefined;
-              }
-            if(image_name.includes("https://") || image_name.includes("http://")){
-                return image_name;
-            }
-            return `${SERVER_URI}/api/files/image/${image_name}`;
-        }
+        ImgPath(img){
+       if(img===undefined || img == null ){
+        return stattic_image
+    }
+  if(img.includes("https://") || img.includes("http://")){
+      return img;
+  }
+  return `${SERVER_URI}/api/files/image/${img}`;
+},
     }
 }
 </script>
@@ -169,5 +168,8 @@ color:#444 !important;
            padding: 0px 5px;
            border-bottom: #eee solid 1px;
            font-size: 13px;
+       }
+     #playlist-item li.active {
+           background: #ccc !important;
        }
 </style>
