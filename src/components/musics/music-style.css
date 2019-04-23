@@ -166,14 +166,16 @@ background: #fff;
 color: #444;
 
 }
-.music_active_player .thumbnil .container-controller{
-background: rgba(0, 0, 0, 0.6) !important;
+.active_card_music .thumbnil .container-controller{
+background: rgba(0, 0, 0, 0.8) !important;
 border-radius: 5px !important;
 
 }
-.music_active_player .thumbnil .container-controller  button.btn-player{
+.active_card_music   button.btn-player{
     transition: all ease 0.3s;
     display: flex !important;
+    color: #fff !important;
+    z-index: 10 !important;
 }
 .block_doload{
     color: #eee!important;

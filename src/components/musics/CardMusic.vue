@@ -1,6 +1,8 @@
 <template>
 <div class="col-md-3" v-if="!hidden">
-    <section :class="['card-music', active ? 'music_active_player' : '' ,'card_'+music._id]"
+    <section :class="[
+            {'card-music': true},
+            'card_'+music._id]"
         >
             <div class="content">
                 <div class="thumbnil">
@@ -55,15 +57,6 @@
                             </a>
                         </div>
 
-
-                        <!-- <div class="component-dedicate">
-                            <a href="" 
-                                class=""
-                                v-on:click.prevent="handlerToglesOption">
-                            <i class="zmdi zmdi-more-vert"></i>
-                            </a>
-                        </div> -->
-                            <!-- btn-dedocate -->
                         <CardMusicOption 
                                 :music_id="music._id"
                                  />

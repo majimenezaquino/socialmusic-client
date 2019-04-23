@@ -21,19 +21,18 @@
                         <li   v-for="(_playlist,index) in playlist"  :key="index"
                         
                         :class="[
-                        {'item-music-in-player card-music': true},
+                        {'item-music-in-player': true},
                          {'active': _playlist._id==music_run}]">
                                        
                               <div class="tumbnil-music"
                                 v-bind:style="{ 'background-image': 'url('+ ImgPath(_playlist.img)+' )' }"
-                                v-on:click.prevent="changeMusic(index)"
                                 >
                                 <button class="btn-player"
                                 v-on:click.prevent="changeMusic(index)"
                                 >
                                   <i :class="{
-                                    'zmdi zmdi-play': audio.paused, 
-                                    'spinner spinner-bounce-bottom': !audio.paused
+                                    'zmdi zmdi-play': true, 
+                                    'spinner spinner-bounce-bottom': !audio.paused &&  _playlist._id==music_run
                                     }"></i>
                                     
                                     </button>
@@ -271,12 +270,13 @@ export default {
                 artist: track.user_published.name,
                 image: self.ImgPath(track.img),
                 title: track.title, 
+                duration: track.duration, 
                 reactions: track.reactions,
                 url: self.getFileUrMusic(track.url)
             }
           });
-            
-    
+       
+          console.log(data)
           let _stop =false;
           this.musicPlaylist = playlist;
           if(playlist[data.index_play].id ==this.music_run && playlist.length<2){
@@ -314,11 +314,15 @@ updated(){
       }
    this.changeSong();
 		this.audio.loop = false;
-        
-      
-     
-    
+   
+       window.addEventListener('beforeunload', (e) => {
+      console.log(event)
+    event.returnValue = `Are you sure you want to leave?`;
+
+       });
   },
+
+ 
 methods: {
      redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
@@ -346,24 +350,23 @@ methods: {
 				this.currentSong = index;
       }
       let content_id =this.musicPlaylist[this.currentSong].id ;
-      this.clearCardActive();
-      this.activeCardMusic(content_id);
-      this.music_run = content_id;
+  
+     
 
       this.audioFile = this.musicPlaylist[this.currentSong].url;
       this.audio = new Audio(this.audioFile);
       var localThis = this;
       this.audio.addEventListener("loadedmetadata", function() {
       localThis.trackDuration = Math.round(this.duration);
-      localThis.volumeBar = Math.round(this.volume*100);
-        
+      localThis.volumeBar = Math.round(this.volume*100);   
 			});
 			this.audio.addEventListener("ended", this.handleEnded);
 			if (wasPlaying) {
 				this.playAudio();
       }
-     
-    
+      
+      this.music_run = content_id;
+      this.activeCardMusic(this.music_run);
     },
    shuffle(arra1) {
     let ctr = arra1.length;
@@ -417,7 +420,7 @@ methods: {
       }else{
         this.isPlaying=false;
       }
-      
+      this.activeCardMusic(this.music_run);
 		},
 		stopAudio: function() {
 			this.audio.pause();
@@ -525,81 +528,45 @@ setBarProgress(ev){
  getFileUrMusic(image_name){
             return `${SERVER_URI}/api/files/music/${image_name}`;
         },
-        /** change music */
-clearCardActive(){
-   let card_class=document.querySelectorAll(".card-music");
-          for(let i in card_class){
-            try{
-              card_class[i].classList.remove("active_card_music")
-            }catch(e){
 
-            }
+clearCardMusicActive(){
+      let  unactive=document.querySelectorAll(`.card-music`);
+      let  bntsPlayer=document.querySelectorAll(`.card-music button.btn-player`);
+      for(let i in unactive){
+              try{
+                unactive[i].classList.remove("active_card_music");                       
+                bntsPlayer[i].innerHTML=`<i class="zmdi zmdi-play"></i>`;                     
+              }catch(e){
+              }
           }
 },
-clearCardMusicActive(){
-    let  btn_active=document.querySelectorAll(`button.btn_active_play`);
-      let  unactive=document.querySelectorAll(`.card-music`);
-  for(let i in unactive){
-              try{
-              
-                unactive[i].classList.remove("active");
-                btn_active[i].classList.remove("btn_active_play");
-                btn_active[i].innerHTML='<i class="zmdi zmdi-play"></i>'
-                
-              }catch(e){
-
-              }
-            }
-},
         activeCardMusic(name_class){
-          
+         console.log("id active ==>",name_class)
+         console.log("id active ==>",this.music_run)
+          this.clearCardMusicActive();
          let _this=this;
 
          let  card_active=document.querySelectorAll(`.card_${name_class}`);
-         let  card_active_btn=document.querySelectorAll(`.card_${name_class} .btn-player`);
-        console.log(card_active)
-          //clear
-            this.clearCardMusicActive();
-
-             for(let i in card_active){
-              try{
-                
-                card_active[i].classList.add("active");
-                card_active_btn[i].classList.add('btn_active_play');
-                if(!_this.isPlaying){
-                  console.log("acive card",name_class)
-                  card_active_btn[i].innerHTML='<i class="spinner spinner-bounce-bottom"></i>';
-                }else{
-                  console.log("no  card",name_class)
-                  card_active_btn[i].innerHTML='<i class="zmdi zmdi-play"></i>';
-                }
-                
-              }catch(e){
-
-              }
-            }
-               
-    
-           
-          // for(let i in card_class_active){
-          //   try{
-          //     card_class_active[i].classList.add("active_card_music")
-          //      setTimeout(function(){
-                
-          //      },100)
-          //   }catch(e){
-
-          //   }
-          // }
-          // card_class_active=document.querySelectorAll(`.music${name_class} .btn_player`); 
-          // for( let i in card_class_active){
-          //   try {
-   
-          //   } catch (error) {
-              
-          //   }
-          // }
+         let  bntsPlayer=document.querySelectorAll(`.card_${name_class} button.btn-player`);
+         for(let i in card_active){
+           try {
         
+             card_active[i].classList.add("active_card_music")
+            
+             if(!this.audio.paused){
+               bntsPlayer[i].innerHTML=`<i class="spinner spinner-bounce-bottom"></i>`;
+                console.log("change status rum")
+             }else{
+               bntsPlayer[i].innerHTML=`<i class="zmdi zmdi-play"></i>`;
+               console.log("change status pause")
+             }
+           } catch (error) {
+             
+           }
+         }
+    
+        
+       
         },
         changeMusic(index){
           let music_select =this.musicPlaylist[index].id || undefined
@@ -695,6 +662,13 @@ clearCardMusicActive(){
      console.log("detruir el componente")
     
   },
+  updated(){
+    let cla =document.getElementsByClassName("active_card_music");
+    if(!cla.length>0){
+      this.activeCardMusic(this.music_run)
+    }
+   
+  }
 
     
 }
