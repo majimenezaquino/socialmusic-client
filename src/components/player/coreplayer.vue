@@ -315,13 +315,19 @@ updated(){
    this.changeSong();
 		this.audio.loop = false;
    
-       window.addEventListener('beforeunload', (e) => {
-      console.log(event)
-    event.returnValue = `Are you sure you want to leave?`;
 
-       });
   },
+created(){
 
+
+window.addEventListener('beforeunload', (event) => {
+ 
+    event.returnValue = 'There is pending work. Sure you want to leave?';
+  
+});
+
+
+},
  
 methods: {
      redirectUserLogin(){
@@ -367,6 +373,7 @@ methods: {
       
       this.music_run = content_id;
       this.activeCardMusic(this.music_run);
+      console.log("terminar la cancion.")
     },
    shuffle(arra1) {
     let ctr = arra1.length;
@@ -541,8 +548,6 @@ clearCardMusicActive(){
           }
 },
         activeCardMusic(name_class){
-         console.log("id active ==>",name_class)
-         console.log("id active ==>",this.music_run)
           this.clearCardMusicActive();
          let _this=this;
 
@@ -551,11 +556,10 @@ clearCardMusicActive(){
          for(let i in card_active){
            try {
         
-             card_active[i].classList.add("active_card_music")
-            
-             if(!this.audio.paused){
+             card_active[i].classList.add("active_card_music");
+             if(!this.audio.paused && !this.audio.ended){
                bntsPlayer[i].innerHTML=`<i class="spinner spinner-bounce-bottom"></i>`;
-                console.log("change status rum")
+                
              }else{
                bntsPlayer[i].innerHTML=`<i class="zmdi zmdi-play"></i>`;
                console.log("change status pause")
@@ -664,8 +668,9 @@ clearCardMusicActive(){
   },
   updated(){
     let cla =document.getElementsByClassName("active_card_music");
-    if(!cla.length>0){
-      this.activeCardMusic(this.music_run)
+    let card_music =document.getElementsByClassName("card-music");
+    if(!cla.length>0 && this.music_run && card_music.length>0){
+      this.activeCardMusic(this.music_run);
     }
    
   }
