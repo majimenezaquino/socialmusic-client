@@ -54,9 +54,9 @@
                                     
                                     <section class="stepper-body">
                                         <div class="container-upload">
-                                            <div class="previes" v-if="isloaded">
+                                            <div class="previes" v-if=" isloaded_music">
                                                 <a href="" class="close-music-upload"
-                                                 v-on:click.prevent="handlerCloseLoadFile"
+                                                 v-on:click.prevent=" handlerCloseLoadMusic"
                                                 > <i class="zmdi zmdi-close"></i></a>
                                                     <div class="card-show-music">
                                                         <i class="zmdi zmdi-collection-music"></i>
@@ -65,7 +65,7 @@
                                                         </p>
                                                     </div>
                                             </div>
-                                            <div class="previes" v-if="!isloaded">
+                                            <div class="previes" v-if="! isloaded_music">
                                                 <label for="inpu-upload-music" class="btn-upload-music">
                                                     <i class="zmdi zmdi-cloud-upload"></i> 
                                                     </label>
@@ -80,7 +80,10 @@
                                 <div class="modal-footer">
                                     <ul class="list-inline pull-right">
                                         <li>
-                                            <a class="btn btn-primary next-step" :disabled="!isloaded">Guardar </a>
+                                            <button class="btn btn-primary next-step" 
+                                            :disabled="! isloaded_music"
+                                            v-on:click.prevent="handlerNext"
+                                            >Guardar </button>
                                         </li>
                                     </ul>
                                 </div>
@@ -117,9 +120,10 @@
                                             <a class="btn btn-default prev-step">Volver  atrás</a>
                                         </li>
                                         <li>
-                                            <a class="btn btn-primary next-step"
+                                            <button class="btn btn-primary next-step"
                                              :disabled="!music.genres.length>0"
-                                            >Guardar</a>
+                                             v-on:click.prevent="handlerNext"
+                                            >Guardar</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -203,18 +207,35 @@
                                         </li>
 
                                         <li>
-                                            <a class="btn btn-primary next-step" v-on:click.prevent="handlerUploadMusic">Publicar</a>
+                                            <button class="btn btn-primary next-step" v-on:click.prevent="handlerUploadMusic">Publicar</button>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="tab-pane fade" role="tabpanel" id="stepper-step-4">
                                 <div class="p-20">
-                                    <header>
-                                        <h3>4. All done!</h3>
-                                    </header>
-                                    <section class="stepper-body">
-                                        <p>You have successfully completed all steps.</p>
+                                     <section class="stepper-body">
+                                        <div class="container-upload">
+                                            <div class="previes" v-if="isloaded_image">
+                                                <a href="" class="close-music-upload"
+                                                 v-on:click.prevent=" handlerCloseLoadImage"
+                                                > <i class="zmdi zmdi-close"></i></a>
+                                                    <div class="card-show-music ">
+                                                        <img :src="upload_image" alt="">
+                                                       
+                                                       <p> {{image.tmp_name}}
+                                                        </p>
+                                                    </div>
+                                            </div>
+                                            <div class="previes" v-if="! isloaded_image">
+                                                <label for="music-upload-image" class="btn-upload-music">
+                                                    <i class="fa fa-camera" aria-hidden="true"></i>
+                                                    </label>
+                                                <input type="file" id="music-upload-image" accept="image/*" v-on:change="handlerLoadImage" class="hidden">
+                                                <p class="text-info">Máximo de 2mb</p>
+                                            </div>
+                                            
+                                        </div>
                                     </section>
                                 </div>
                                 <div class="modal-footer">
@@ -266,7 +287,8 @@ export default {
                address: false,
                pending: false,
             },
-            extension_allower:["mp3","wpw","ogg"],
+            extension_allower_music:["mp3","wpw","ogg"],
+            extension_allower_imag:["jpg","jpeg"],
             user_data: undefined,
             privacies: [],
             privacy: undefined,
@@ -283,11 +305,24 @@ export default {
                 privacy: undefined,
                 download_allowed: false,
             },
-            isloaded: false,
-            size_allower: 2097152*5, //dos megas
+            upload_image: undefined,
+            image: {
+                music_id: undefined,
+                file: undefined,
+                size: undefined,
+                title: undefined,
+                tmp_name: undefined,
+            },
+             isloaded_music: false,
+             isloaded_image: false,
+            music_max_size: 2097152*7, //dos megas
+            image_max_size: 2097152*2, //dos megas
         }
     },
     methods:{
+        handlerNext(e){
+            console.log(e)
+        },
     redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())
         this.user_data  =dbLocal.getDataLocalStorageOBject();
@@ -327,16 +362,39 @@ export default {
  handlerLoadMusic(event){
     let _this=this;
     let file =  event.target.files[0];
-if(_this.extensionIsAllower(file.name,this.extension_allower)){                       
+if(_this.extensionIsAllower(file.name,this.extension_allower_music)){                       
     _this.music.file=file;
     _this.music.tmp_name=file.name;
     _this.music.size =file.size;
-    if(Math.round(file.size)<=Math.round(_this.size_allower)){
-    _this.isloaded=true; return true;
+    if(Math.round(file.size)<=Math.round(_this.music_max_size)){
+    _this. isloaded_music=true; return true;
     }
     return false;
 }
     },
+
+
+     handlerLoadImage(event){
+    let _this=this;
+    let file =  event.target.files[0];
+if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){                       
+    _this.image.file=file;
+    _this.image.tmp_name=file.name;
+    _this.image.size =file.size;
+    if(Math.round(file.size)<=Math.round(_this.image_max_size)){
+        //load file url 
+    let reader = new FileReader();
+        reader.onload = function(e) {        
+       _this.upload_image =e.target.result;    
+        }
+    reader.readAsDataURL(file);
+
+    _this. isloaded_image=true; return true;
+    }
+    return false;
+}
+    },
+
 
     extensionIsAllower(file=undefined,extension_array=[]){
         let extension =file.split('.');
@@ -346,11 +404,17 @@ if(_this.extensionIsAllower(file.name,this.extension_allower)){
         }
         return false;
         },
-        handlerCloseLoadFile(){
+         handlerCloseLoadMusic(){
             this.music.file=undefined;
             this.music.tmp_name=undefined;
             this.music.size =undefined;
-            this.isloaded=false;
+            this. isloaded_music=false;
+        },
+         handlerCloseLoadImage(){
+            this.image.file=undefined;
+            this.image.tmp_name=undefined;
+            this.image.size =undefined;
+            this. isloaded_image=false;
         },
         handlerSelectMusicGenge(ev){
            let btn=ev.target;
@@ -529,6 +593,10 @@ if(_this.extensionIsAllower(file.name,this.extension_allower)){
          flex-direction: column;
          align-items: center;
          flex-wrap: wrap;
+    }
+
+      #register_music_modal  .card-show-music img {
+        border-radius: 20px;
     }
      #register_music_modal  .card-show-music i{
     font-size:  62px;

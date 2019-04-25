@@ -320,11 +320,11 @@ updated(){
 created(){
 
 
-window.addEventListener('beforeunload', (event) => {
+// window.addEventListener('beforeunload', (event) => {
  
-    event.returnValue = 'There is pending work. Sure you want to leave?';
+//     event.returnValue = 'There is pending work. Sure you want to leave?';
   
-});
+// });
 
 
 },

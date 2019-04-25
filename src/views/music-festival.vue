@@ -33,7 +33,7 @@
                        </div>
                   </div>
 
-                  <div class="container-navbar">
+                  <div class="container-navbar drawer-fixed">
                       <div class="navbar-menu">
                         <div class="logo"><h1>SOCIALMUSIC</h1></div>
                        <div class="navbar">
@@ -46,6 +46,7 @@
                       </div>
                   </div>
             </div>
+            
     </header>
     <!-- secion de musica -->
      <section class="container-music">
