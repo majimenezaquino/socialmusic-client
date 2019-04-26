@@ -64,16 +64,7 @@
                                                         {{music.size }}
                                                         </p>
                                                     </div>
-                                                    <div class="load-pross">
-                                            <div class="progress" data-progress="90">
-                                                <div class="progress_mask isFull">
-                                                <div class="progress_fill"></div>
-                                                </div>
-                                                <div class="progress_mask">
-                                                <div class="progress_fill"></div>
-                                                </div>
-                                            </div>
-                                            </div>
+                                          
                                             </div>
                                             <div class="previes" v-if="! isloaded_music">
                                                 <label for="inpu-upload-music" class="btn-upload-music">
@@ -233,8 +224,18 @@
                                                     <div class="card-show-music ">
                                                         <img :src="upload_image" alt="">
                                                        
-                                                       <p> {{image.tmp_name}}
-                                                        </p>
+                                                <div class="load-pross"
+                                                v-if="progress_image_upload>0 && progress_image_upload<100"
+                                                >
+                                                <div class="progress" :data-progress="progress_image_upload">
+                                                    <div class="progress_mask isFull">
+                                                    <div class="progress_fill"></div>
+                                                    </div>
+                                                    <div class="progress_mask">
+                                                    <div class="progress_fill"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                                     </div>
                                             </div>
                                             <div class="previes" v-if="! isloaded_image">
@@ -300,6 +301,7 @@ export default {
                address: false,
                pending: false,
             },
+            progress_image_upload: 0,
             extension_allower_music:["mp3","wpw","ogg"],
             extension_allower_imag:["jpg","jpeg"],
             user_data: undefined,
@@ -462,7 +464,7 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
             this.music.privacy = priv;
         },
         handlerUploadMusic(){
-            console.log("music", this.music)
+            
             this.uploadFilesForm();
         },
         getUploadStatus(){
@@ -501,7 +503,7 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
       },
       //
          handlerUploadImage(){
-     
+             console.log("upload update")
         let self=this;
         let formData = new FormData();
         formData.append('image',self.image.file);
@@ -510,7 +512,11 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
              {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+                onUploadProgress: function(progressEvent) {
+             self.progress_image_upload = Math.round( (progressEvent.loaded * 100) / progressEvent.total )
+   
+             }
               })
              .then(function (req) {
                   console.log('respuesta' ,req)
@@ -547,19 +553,20 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
-                  onUploadProgress: function(progressEvent) {
+            onUploadProgress: function(progressEvent) {
              self.percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total )
    
              }
               })
              .then(function (req) {
+                 console.log(req)
                  if(!req.data.error){
-                     self.image.music_id =req.data.music._id;
+                    self.image.music_id =req.data.music._id;
                  }
-                  console.log('respuesta' ,response)
+                  console.log('respuesta' ,req)
              })
             .catch(function (err) {
-                 console.log('respuesta' ,err.response)
+                 console.log('respuesta' ,err)
         });
        
     }
@@ -748,7 +755,7 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
     left:0px;
     right: 0px;
     bottom: 0px;
-    height: 90%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.1);
     z-index: 10;
 }
