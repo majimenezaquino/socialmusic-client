@@ -27,22 +27,22 @@
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active">
                         <a class="persistant-disabled" href="#stepper-step-1" data-toggle="tab" aria-controls="stepper-step-1" role="tab" title="Step 1">
-                            <span class="round-tab">1</span>
+                            <span class="round-tab"><i class="zmdi zmdi-pin"></i></span>
                         </a>
                     </li>
                     <li role="presentation" class="disabled">
                         <a class="persistant-disabled" href="#stepper-step-2" data-toggle="tab" aria-controls="stepper-step-2" role="tab" title="Step 2">
-                            <span class="round-tab">2</span>
+                            <span class="round-tab"><i class="fa fa-music"></i></span>
                         </a>
                     </li>
                     <li role="presentation" class="disabled">
                         <a class="persistant-disabled" href="#stepper-step-3" data-toggle="tab" aria-controls="stepper-step-3" role="tab" title="Step 3">
-                            <span class="round-tab">3</span>
+                            <span class="round-tab"><i class="fa fa-check"></i></span>
                         </a>
                     </li>
                     <li role="presentation" class="disabled">
                         <a class="persistant-disabled" href="#stepper-step-4" data-toggle="tab" aria-controls="stepper-step-4" role="tab" title="Complete">
-                            <span class="round-tab">4</span>
+                            <span class="round-tab"><i class="fa fa-address-card"></i></span>
                         </a>
                     </li>
                 </ul>
@@ -391,6 +391,9 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_music)){
 
 
      handlerLoadImage(event){
+         if(this.image.music_id==undefined || this.image.music_id==null || this.image.music_id==''){
+             return false;
+         }
     let _this=this;
     let file =  event.target.files[0];
 if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){                       
@@ -519,6 +522,10 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
              }
               })
              .then(function (req) {
+                 if(!req.data.error){
+                     self.handlerCloseLoadMusic();
+                     self.handlerCloseLoadImage();
+                 }
                   console.log('respuesta' ,req)
              })
             .catch(function (err) {
