@@ -64,6 +64,16 @@
                                                         {{music.size }}
                                                         </p>
                                                     </div>
+                                                    <div class="load-pross">
+                                            <div class="progress" data-progress="90">
+                                                <div class="progress_mask isFull">
+                                                <div class="progress_fill"></div>
+                                                </div>
+                                                <div class="progress_mask">
+                                                <div class="progress_fill"></div>
+                                                </div>
+                                            </div>
+                                            </div>
                                             </div>
                                             <div class="previes" v-if="! isloaded_music">
                                                 <label for="inpu-upload-music" class="btn-upload-music">
@@ -242,6 +252,9 @@
                                     <ul class="list-inline pull-right">
                                         <li>
                                             <button type="button" class="btn btn-primary btn-flat" data-dismiss="modal">Close</button>
+                                            <button class="btn btn-primary next-step"
+                                            v-if="isloaded_image"
+                                             v-on:click.prevent="handlerUploadImage">Guardar y salir</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -306,6 +319,7 @@ export default {
                 download_allowed: false,
             },
             upload_image: undefined,
+            percentCompleted: undefined,
             image: {
                 music_id: undefined,
                 file: undefined,
@@ -389,7 +403,8 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
         }
     reader.readAsDataURL(file);
 
-    _this. isloaded_image=true; return true;
+    _this. isloaded_image=true; 
+    return true;
     }
     return false;
 }
@@ -484,9 +499,37 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
 
         });
       },
-         uploadFilesForm(){
-             
+      //
+         handlerUploadImage(){
      
+        let self=this;
+        let formData = new FormData();
+        formData.append('image',self.image.file);
+        formData.append('music_id',self.image.music_id);
+            axios.put(`${SERVER_URI}/api/upload/music?token=${this.user_data.token}`,formData,
+             {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              })
+             .then(function (req) {
+                  console.log('respuesta' ,req)
+             })
+            .catch(function (err) {
+                 console.log('erro' ,err.response)
+        });
+       
+    },
+
+      uploadFilesForm(){
+             
+   const config = {
+    onUploadProgress: function(progressEvent) {
+      var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total )
+      console.log(percentCompleted)
+    }
+  }
+  
         
         let self=this;
         let formData = new FormData();
@@ -503,10 +546,16 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
              {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+                  onUploadProgress: function(progressEvent) {
+             self.percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total )
+   
+             }
               })
-             .then(function (response) {
-                
+             .then(function (req) {
+                 if(!req.data.error){
+                     self.image.music_id =req.data.music._id;
+                 }
                   console.log('respuesta' ,response)
              })
             .catch(function (err) {
@@ -520,11 +569,16 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
             this.getGenres();
             this.getPrivacies();
             this.getUploadStatus();
+        },
+        watch: {
+            'percentCompleted':(val)=>{
+                console.log("value",val)
+            }
         }
 }
 </script>
 <style>
-  
+  @import url("./progress.css");
     .container-upload{
         display: flex; 
         justify-content: center;
@@ -685,5 +739,17 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
 #register_music_modal .form-group {
     padding-bottom: 0;
     margin: 0
+}
+.load-pross{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left:0px;
+    right: 0px;
+    bottom: 0px;
+    height: 90%;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: 10;
 }
 </style>
