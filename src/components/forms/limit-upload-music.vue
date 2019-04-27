@@ -2,11 +2,11 @@
     <div class="container-limit-upload" v-if="limit_upload">
  <div class="content">
 			 <h1>
-				límite  de subidas de músicas!
+				Límite  de subidas de músicas!
 			 </h1>
 			 
 			<p>
-				ya excedió el limite mensual de subidas de musicas, para subir mas musica cambie su cuenta  o espere hasta {{date_account}}.
+				Excedió el limite mensual de subidas de musicas, para subir mas musica cambie su cuenta  o espere hasta {{date_account}}.
 			</p>
         </div>
     </div>
@@ -67,6 +67,8 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 20px;
+        bottom: -300px;;
         
 }
     .conetent{

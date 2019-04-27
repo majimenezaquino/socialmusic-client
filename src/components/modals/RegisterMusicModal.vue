@@ -7,9 +7,11 @@
                          <div class="col-xs-12">
                              <FormUser v-if="show_vies.user_info" />
                              <FormAddress v-if="show_vies.address"/>
+                             
                          </div>
                      </div>
              </div>
+             <LimitUpladMusic /> 
             <div class="modal-header">
                 
                 <h4 class="modal-title" id="myModalLabel-2">Sube tu música aquí</h4>
@@ -277,13 +279,13 @@ import FormAddress from "@/components/address/address.vue";
 import WizanItem from "@/components/forms/wizan-btns.vue";
 import UploadMusic from "@/components/forms/uploadmusic.vue";
 import UploadPending from "@/components/forms/information-musics.vue";
-
+import LimitUpladMusic from '@/components/forms/limit-upload-music.vue';
 import CardAddUser from '@/components/users/CardAddUser.vue'
+import swal from 'sweetalert';
  const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
   const {DBLocal} =require('@/services/data_local')
   const dbLocal= new DBLocal(DB_USER_NAME);
   const axios = require('axios');
-  import swal from 'sweetalert';
 export default {
     name: 'upload-music',
     components:{
@@ -291,7 +293,8 @@ export default {
         FormUser,
         FormAddress,
         UploadMusic,
-        UploadPending
+        UploadPending,
+        LimitUpladMusic
     },
     data(){
         return {
@@ -457,8 +460,6 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
                })
            }else{
             this.music.genres.push(genre_id);
-            console.log(this.music)
-            btn.classList.toggle("active")
            }
             
         }
@@ -523,8 +524,18 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
               })
              .then(function (req) {
                  if(!req.data.error){
-                     self.handlerCloseLoadMusic();
+                      swal({
+                      text: "La imagen fue guardada ",
+                      icon: "success",
+                      button: "ok",
+                    }).then((value) => {
+            
+                    self.handlerCloseLoadMusic();
                      self.handlerCloseLoadImage();
+                     self.$router.go();
+  
+                       })
+                    
                  }
                   console.log('respuesta' ,req)
              })
@@ -765,5 +776,17 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
     height: 100%;
     background: rgba(0, 0, 0, 0.1);
     z-index: 10;
+}
+.modal.modal-stepper .modal-content {
+    /* padding-bottom: 55px; */
+    padding-bottom: 0px;
+}
+.modal.modal-stepper .modal-footer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0px;
+    margin: 0px;
 }
 </style>

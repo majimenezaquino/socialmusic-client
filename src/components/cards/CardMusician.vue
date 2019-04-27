@@ -64,11 +64,8 @@ export default {
         }
   },
   mounted(){
-    this.musician_limit=this.musician.musicians.filter((ms,index)=>{
-      if(index<=2)
-      return ms
-    })
-    console.log(this.musician.musicians)
+  
+
   }
 }
 </script>
