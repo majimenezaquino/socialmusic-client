@@ -57,13 +57,9 @@
                        <div id="container-music-item">
                       
                      <div class="row">
-                          
-                          <CardMusician 
-                          v-for="_musician in userMusicians"
-                          :musician="_musician"
-                          :key="_musician._id"
-                       
-                      />
+                            <div class="col-md-12">
+                              
+                            </div>
                           </div>
                      
                        </div>
@@ -76,7 +72,7 @@
   </div>
       </section>
 <!-- modal -->
-<CrearMusiciasModal />
+<CardMap />
   </div>
       	
      </LayoutDashboard>
@@ -94,7 +90,7 @@
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
     import CardMusician from "@/components/cards/CardMusician.vue";
-    import CrearMusiciasModal from "@/components/cards/CrearMusiciasModal.vue";
+    import CardMap from "@/components/map/map.vue";
 
     import { setTimeout } from 'timers';
     export default {
@@ -111,7 +107,7 @@
         components:{
           LayoutDashboard,
           CardMusician,
-          CrearMusiciasModal
+          CardMap
      
       
         },

@@ -39,7 +39,7 @@ export default {
           },
            getPlaylistItemByPlayList(_id){
             let self = this;
-            axios.get(`${SERVER_URI}/api/albumes?token=${this.user_data.token}`)
+            axios.get(`${SERVER_URI}/api/albumesbyuser?token=${this.user_data.token}`)
             .then(function(req){
                 console.log(req)
                 self.playLists=req.data.playlist
