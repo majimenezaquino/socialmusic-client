@@ -1,6 +1,7 @@
 <template>
 
      <LayoutDashboard> 
+        
 		 <div slot="content" id="content_outer_wrapper">
         <section id="content_wrapper">
         
@@ -13,7 +14,11 @@
                               <div class="music-header-search">
                                 <h1>Músicas</h1>
                                  <div class="uplod">
-                                    <a href="/uploads" class="button">
+                                    <a href="" class="button"
+                                    data-toggle="modal"
+                                    data-target="#register_music_modal"
+                                    v-on:click.prevent="handleCreateMusic"
+                                    >
                                        <i class="fa fa-cloud-upload"></i> 
                                     </a>
                                     <span class="hover-uplad">sube tu música aquí</span>
@@ -85,6 +90,14 @@
 <!-- modal -->
 
   </div>
+  <RegisterMusicModal />
+
+
+
+
+
+
+
       	  <CardMusicDedicate 
             :music_dedicate="music_select_id"
             />
@@ -93,6 +106,7 @@
             :music_dedicate="music_select_id"
             />
             <CardPlayListCreate  :music_dedicate="music_select_id" />
+            
      </LayoutDashboard>
 
 </template>
@@ -113,12 +127,14 @@
     import CardMusicDetail from "@/components/musics/CardMusicDetail.vue";
     import CardMusic from "@/components/musics/CardMusicRelaction.vue";
     import CardCalendar from "@/components/calendar/CardCalendar.vue";
+     import RegisterMusicModal from "@/components/modals/RegisterMusicModal.vue";
     import { setTimeout } from 'timers';
     export default {
         name: "upload-music",
         data(){
           return{
             user_data: undefined,
+            music_select_id: undefined,
             musics: [],
             musicsRelation: [],
             events:[
@@ -147,11 +163,15 @@
           CardCalendar,
           CardMusicDedicate,
           CardMusicAddToList,
-          CardPlayListCreate
+          CardPlayListCreate,
+          RegisterMusicModal
       
         },
         methods: {
-          
+          handleCreateMusic(event){
+            console.log(event)
+            $("#register_music_modal").modal('show');
+          },
         redirectUserLogin(){
           if(dbLocal.checkDataLocalStorageOBject())
            this.user_data  =dbLocal.getDataLocalStorageOBject();

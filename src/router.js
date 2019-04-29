@@ -9,7 +9,6 @@ import PlaylistDetail from "@/views/playlistitem.vue";
 import Profiles from "@/views/profiles";
 import Page404 from "@/views/pages/Page404.vue";
 import PageLogin from "@/views/pages/login.vue";
-import Uploads from "@/views/uploads.vue";
 import PageRegister from "@/views/pages/register.vue";
 import Terms from "@/views/pages/terms.vue";
 import MusicaFestival from "@/views/music-festival.vue";
@@ -52,11 +51,7 @@ export default new Router({
       name: "muisc",
       component: Muiscs
     },
-    {
-      path: "/uploads/:component?",
-      name: "uploads",
-      component: Uploads
-    },
+
     {
       path: "/musics/:id",
       name: "muiscdetail",

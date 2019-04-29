@@ -1,11 +1,15 @@
 <template>
-   <div class="conttainet-user-profiles">
+   <div class="container-fluid">
+       
       <div class="row">
-            <CardMusic 
-        v-for="(mus ,index) in musics" :music="mus" 
-        :key="index" 
-        :id="'card_music'+index"
-    />
+          <CardPlaylist 
+                      v-for="(_playlist,index) in playLists"
+                      :music="_playlist"
+                      :key="index"
+                      :active="true"
+                      :prop_playlist_select="hanlderActivatePlayList"
+                      />
+                
       </div>
    </div>
 </template>
@@ -14,21 +18,37 @@
 	const {DBLocal} =require('@/services/data_local')
 	const dbLocal= new DBLocal(DB_USER_NAME);
 	const axios = require('axios')
-import CardMusic from "@/components/musics/CardMusicProfile.vue";
+import CardPlaylist from "@/components/playlist/CardPlaylistProfile.vue";
 
 export default {
     name: "music-profiles",
     components:{
-        CardMusic
+        CardPlaylist
     },
     data(){
         return{
             musics: [],
                 user_data: undefined,
-                user_id: this.$route.params.id || 0
+                user_id: this.$route.params.id || 0,
+                playLists: [],
         }
     },
     	methods:{
+             hanlderActivatePlayList(playlist_id){
+            this.playlist_select_id=playlist_id;
+          },
+           getPlaylistItemByPlayList(_id){
+            let self = this;
+            axios.get(`${SERVER_URI}/api/albumes?token=${this.user_data.token}`)
+            .then(function(req){
+                console.log(req)
+                self.playLists=req.data.playlist
+            }).catch(function(err){
+                console.log("Error playlit profile".err.response)
+            })
+          
+
+        },
 		 redirectUserLogin(){
 			 
 		if(!dbLocal.checkDataLocalStorageOBject()){
@@ -57,21 +77,22 @@ export default {
 		},
 		
         created(){
-           this.redirectUserLogin()
-            this.getmusicsByUser();
+           this.redirectUserLogin();
+           let user_id =this.user_data.user.id;
+            this.getPlaylistItemByPlayList(user_id);
         
             
         }
 }
 </script>
 <style>
-    .conttainet-user-profiles {
+    /* .conttainet-user-profiles {
         display: flex;
         justify-content: space-around;
         flex-wrap: wrap;
         overflow-y: scroll;
         overflow-x: hidden;
         max-height: 70vh;
-    }
+    } */
 </style>
 
