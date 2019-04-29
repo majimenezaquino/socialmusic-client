@@ -56,15 +56,13 @@
                     <div class="card-body">
                        <div id="container-music-item">
                       
-                     <div class="row">
-                          
+                     <div class="row">  
                           <CardMusician 
                           v-for="_musician in userMusicians"
                           :musician="_musician"
-                          :key="_musician._id"
-                       
-                      />
-                          </div>
+                          :key="_musician._id" />
+                    </div>
+                
                      
                        </div>
                     </div>

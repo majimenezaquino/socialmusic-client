@@ -65,15 +65,10 @@
                       />
                         </div>
                         <div class="col-md-6">
-                              <header class="card-heading ">
-                                  <h1 class="card-title">Músicas relacionas </h1>
-                                </header>
+                             
                              <div class="row">
-                                 <!-- <CardMusic 
-                                    v-for="(_music,index) in musicsRelation"
-                                    :music="_music"
-                                    :key="index"
-                                 /> -->
+                               
+                                 <CardCalendar :music_events="events" />
                              </div>
                         </div>
                           </div>
@@ -117,7 +112,7 @@
     import CardPlayListCreate from "@/components/cards/CardPlaListCreate.vue";
     import CardMusicDetail from "@/components/musics/CardMusicDetail.vue";
     import CardMusic from "@/components/musics/CardMusicRelaction.vue";
-    import ModalDedicate from "@/components/cards/ModalDedicate.vue";
+    import CardCalendar from "@/components/calendar/CardCalendar.vue";
     import { setTimeout } from 'timers';
     export default {
         name: "upload-music",
@@ -126,6 +121,22 @@
             user_data: undefined,
             musics: [],
             musicsRelation: [],
+            events:[
+      {
+        start:"2019-04-10",
+        end:"2019-04-30",
+        title:"Cassio Godinho",
+        icon : "asterisk",
+       // url:"/reservas/44/edit",
+        allDay:true,
+        editable:true,
+       // updateUrl:"/reservation/44",
+        transport_id:1,
+        user_id:1,
+        textColor: "#ffffff",
+      }
+       
+    ]
   
           }
         },
@@ -133,7 +144,7 @@
           LayoutDashboard,
           CardMusicDetail,
           CardMusic,
-          ModalDedicate,
+          CardCalendar,
           CardMusicDedicate,
           CardMusicAddToList,
           CardPlayListCreate

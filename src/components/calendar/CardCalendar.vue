@@ -9,22 +9,7 @@
      v-on:eventResizeStop="handlerResizeStop"
     :defaultView="'dayGridMonth'"
    :weekends="true"
-    :events='[
-      {
-        start:"2019-04-10",
-        end:"2019-04-11",
-        title:"Cassio Godinho",
-        icon : "asterisk",
-       // url:"/reservas/44/edit",
-        allDay:true,
-        editable:true,
-       // updateUrl:"/reservation/44",
-        transport_id:1,
-        user_id:1,
-        textColor: "#ffffff",
-      }
-       
-    ]'
+    :events="music_events"
 
     />
     <AddEventCalendar />
@@ -52,6 +37,9 @@ export default {
     dayGridPlugin,
     AddEventCalendar
 
+  },
+  props:{
+    music_events: Array,
   },
   data(){
       return {

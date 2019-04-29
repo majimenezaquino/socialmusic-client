@@ -41,7 +41,9 @@
                     </header>
                     <div class="card-body">
                        <div id="container-music-item">
-                      
+                      <div class="header p-b-20 p-t-0">
+                         <h1> Músicas de acuerdos a tus gustos musical </h1>
+                        </div>
                      <div class="row">
                           
                           <CardMusic 
@@ -50,7 +52,19 @@
                           :key="_music._id"
                           :music_select_callback="handlerMusicSElect"
                       />
-                          </div>
+                </div>
+                   <div class="header p-b-15 p-t-50">
+                         <h1> Músicas de acuerdos a tus gustos musical </h1>
+                        </div>
+                   <div class="row">
+                          
+                          <CardMusic 
+                          v-for="_music in musics"
+                          :music="_music"
+                          :key="_music._id"
+                          :music_select_callback="handlerMusicSElect"
+                      />
+                </div>
                      
                        </div>
                     </div>
