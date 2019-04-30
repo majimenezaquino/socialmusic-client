@@ -42,7 +42,7 @@
                     <div class="card-body">
                        <div id="container-music-item">
                       <div class="header p-b-20 p-t-0">
-                         <h1> Músicas de acuerdos a tus gustos musical </h1>
+                         <h1> Las más populares  </h1>
                         </div>
                      <div class="row">
                           
@@ -54,7 +54,7 @@
                       />
                 </div>
                    <div class="header p-b-15 p-t-50">
-                         <h1> Músicas de acuerdos a tus gustos musical </h1>
+                         <h1> Nuevos talentos </h1>
                         </div>
                    <div class="row">
                           

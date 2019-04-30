@@ -91,7 +91,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" role="tabpanel" id="stepper-step-2">
+                            <div class="tab-pane fade active" role="tabpanel" id="stepper-step-2">
                                 <div>
                                         <h3 class="text-center p-b-10 p-t-0 m-t-0">Selecciones sus géneros de músicas </h3>
                                     <div class="container-upload">
@@ -101,13 +101,11 @@
                                                     v-for="gen in genres"
                                                     :key="gen._id"
                                                     >
-                                                        <button
-                                                        v-on:click.prevent="handlerSelectMusicGenge" 
-                                                        :value="gen._id"
-                                                        >
-                                                            <!-- <i :class="gen.icon"></i> -->
-                                                            <span>{{gen.name}}</span>
-                                                        </button>
+                                                     <CardButtonGenres 
+                                                     :genre="gen"
+                                                     :allower="music.genres.length<genres_limit"
+                                                     :callback="handlerSelectMusicGenge"
+                                                      />
                                                     </li>
                                                 
                                                     
@@ -281,6 +279,7 @@ import UploadMusic from "@/components/forms/uploadmusic.vue";
 import UploadPending from "@/components/forms/information-musics.vue";
 import LimitUpladMusic from '@/components/forms/limit-upload-music.vue';
 import CardAddUser from '@/components/users/CardAddUser.vue'
+import CardButtonGenres from './CardButtonGenres.vue'
 import swal from 'sweetalert';
  const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
   const {DBLocal} =require('@/services/data_local')
@@ -294,7 +293,8 @@ export default {
         FormAddress,
         UploadMusic,
         UploadPending,
-        LimitUpladMusic
+        LimitUpladMusic,
+        CardButtonGenres
     },
     data(){
         return {
@@ -439,13 +439,9 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
             this.image.size =undefined;
             this. isloaded_image=false;
         },
-        handlerSelectMusicGenge(ev){
-           let btn=ev.target;
-           let genre_id=ev.target.value;
-           if(genre_id==undefined){
-               return false;
-           }
-           if( this.music.genres.length>=this.genres_limit){
+        handlerSelectMusicGenge(genre){
+            
+         if( this.music.genres.length>=this.genres_limit && genre.add){
                 swal({
                       text: "Ya alcánzate el límite de géneros para esa música.",
                       icon: "error",
@@ -453,15 +449,14 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
                     });
                return false;
            }
-           if(this.music.genres.includes(genre_id)){
-               btn.classList.toggle("active")
-               this.music.genres=this.music.genres.filter(function(id){
-                    return id!= genre_id;
+            if(genre.add){
+             this.music.genres.push(genre.id);
+            }else{
+            this.music.genres=this.music.genres.filter(function(id){
+                    return id!= genre.id;
                })
-           }else{
-            this.music.genres.push(genre_id);
-           }
-            
+            }
+            console.log(this.music.genres);
         }
         ,handlerSelectPrivacy(ev){
             let priv =ev.target.value;
