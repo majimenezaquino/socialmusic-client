@@ -41,9 +41,6 @@ export default {
      
             this.callback({id: this.genre._id,add: this.toggleActive});
         }
-    },
-    mounted(){
-        console.log("genre==>", genre)
     }
 }
 </script>

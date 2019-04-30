@@ -134,23 +134,24 @@
                                 <div class="">
                      <section class="stepper-body">
                          <div class="card">
+                             
                                <h3 class="text-center p-b-10 p-t-0 m-t-0">Información de la música </h3>
                   <div class="card-body">
                     <div class="form-group">
                       <div class="input-group">
-                        <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+                        <span class="input-group-addon"><i class="fa fa-microphone"></i></span>
                         <input type="text" class="form-control" placeholder="Titulo" v-model="music.title">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="input-group">
-                        <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+                        <span class="input-group-addon"><i class="fa fa-text-width"></i></span>
                         <input type="email" class="form-control" placeholder="Description" v-model="music.description">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="input-group">
-                        <span class="input-group-addon"><i class="zmdi zmdi-phone"></i></span>
+                        <span class="input-group-addon"><i class="fa fa-tags"></i></span>
                         <input type="text" class="form-control" placeholder="Etiquetas separada por ,  Ej. Músicas, Recuerdo y mas..." v-model="music.tags">
                       </div>
                     </div>
@@ -375,7 +376,7 @@ export default {
         });
     },
  handlerSelectDownloadAllower(ev){
-    let  allower_d =ev.target.value;
+    let  allower_d =Boolean(ev.target.value);
     this.music.download_allowed =allower_d;
     },
  handlerLoadMusic(event){
@@ -441,14 +442,6 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
         },
         handlerSelectMusicGenge(genre){
             
-         if( this.music.genres.length>=this.genres_limit && genre.add){
-                swal({
-                      text: "Ya alcánzate el límite de géneros para esa música.",
-                      icon: "error",
-                      button: "ok",
-                    });
-               return false;
-           }
             if(genre.add){
              this.music.genres.push(genre.id);
             }else{
@@ -456,7 +449,6 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
                     return id!= genre.id;
                })
             }
-            console.log(this.music.genres);
         }
         ,handlerSelectPrivacy(ev){
             let priv =ev.target.value;
@@ -576,12 +568,18 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
                  if(!req.data.error){
                     self.image.music_id =req.data.music._id;
                  }
-                  console.log('respuesta' ,req)
+                  
              })
             .catch(function (err) {
                  console.log('respuesta' ,err)
         });
        
+    },
+
+    checkInformactio(){
+        if(this.music.title==undefined || this.music.title!=null){
+
+        }
     }
         },
         mounted(){
