@@ -1,0 +1,48 @@
+<template>
+    <div class="container-place-card">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="thumnail-m">
+                 <a href=""> 
+                    <img :src="imageurl" alt="">
+                 </a>
+             </div>
+            </div>
+            <div class="col-md-12">
+                <h1 class="text-center">Magia Inflable</h1>
+                    <CardStars />          
+                
+            </div>
+            <div class="col-md-12">
+                <address class="text-left p-5">Divino para la diversión de ... Excelente para niños pequeños..."</address>
+            </div>
+            <div class="col-md-12">
+                <div class="event-location">
+                    <a href=""><i class="fa fa-map-marker"></i></a>
+                    Eventos 5
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+import CardStars from './cardStars.vue'
+export default {
+    name: '',
+    components:{
+        CardStars
+    },
+    data(){
+        return {
+            imageurl: "https://cdn.theatlantic.com/assets/media/img/mt/2018/01/RTS193GB/lead_720_405.jpg?mod=1533691918",
+        }
+    }
+}
+</script>
+<style>
+    .container-place-card{
+        border: #ccc solid 1px;
+        border-radius: 5px;
+    }
+</style>
+

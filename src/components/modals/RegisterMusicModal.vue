@@ -91,7 +91,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="tab-pane fade active" role="tabpanel" id="stepper-step-2">
+                            <div class="tab-pane fade" role="tabpanel" id="stepper-step-2">
                                 <div>
                                         <h3 class="text-center p-b-10 p-t-0 m-t-0">Selecciones sus géneros de músicas </h3>
                                     <div class="container-upload">
@@ -209,7 +209,10 @@
                                         </li>
 
                                         <li>
-                                            <button class="btn btn-primary next-step" v-on:click.prevent="handlerUploadMusic">Publicar</button>
+                                            <button class="btn btn-primary next-step" 
+                                            v-on:click.prevent="handlerUploadMusic"
+                                            :disabled="(music.title===undefined || music.title===null || music.title =='')"
+                                            >Publicar</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -455,7 +458,6 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
             this.music.privacy = priv;
         },
         handlerUploadMusic(){
-            
             this.uploadFilesForm();
         },
         getUploadStatus(){
@@ -494,7 +496,6 @@ if(_this.extensionIsAllower(file.name,this.extension_allower_imag)){
       },
       //
          handlerUploadImage(){
-             console.log("upload update")
         let self=this;
         let formData = new FormData();
         formData.append('image',self.image.file);

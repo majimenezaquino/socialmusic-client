@@ -54,16 +54,24 @@
                       </ul>
                     </header>
                     <div class="card-body">
-                       <div id="container-music-item">
+                   
                       
                      <div class="row">
-                            <div class="col-md-12">
-                              
+                            <div class="col-md-3">
+                              <CardPlace />
+                            </div>
+                            <div class="col-md-3">
+                              <CardPlace />
+                            </div>
+                            <div class="col-md-3">
+                              <CardPlace />
+                            </div>
+                             <div class="col-md-3">
+                              <CardPlace />
                             </div>
                           </div>
                      
                        </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -90,6 +98,7 @@
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
     import FormUser from "@/components/forms/User.vue";
     import CardMusician from "@/components/cards/CardMusician.vue";
+    import CardPlace from "@/components/entertainmentcenters/CardPlace.vue";
     import CardMap from "@/components/map/map.vue";
 
     import { setTimeout } from 'timers';
@@ -107,7 +116,8 @@
         components:{
           LayoutDashboard,
           CardMusician,
-          CardMap
+          CardMap,
+          CardPlace
      
       
         },
