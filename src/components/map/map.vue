@@ -7,7 +7,7 @@
 export default {
   data(){
     return{ 
-      markersDataRight: [
+  markersDataRight: [
    {
       lat: 40.6386333,
       lng: -8.745,
@@ -33,7 +33,7 @@ export default {
       postalCode: "3830-225 Gafanha da Nazaré" // don't insert comma in the last item of each marker
    } // don't insert comma in the last item
 ],
-      markersDataLeft: [
+ markersDataLeft: [
    {
       lat: 40.6486333,
       lng: -8.745,

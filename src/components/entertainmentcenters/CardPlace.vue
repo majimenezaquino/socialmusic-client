@@ -14,13 +14,22 @@
                 
             </div>
             <div class="col-md-12">
-                <address class="text-left p-5">Divino para la diversión de ... Excelente para niños pequeños..."</address>
+                <address class="text-left p-5"> 
+                    <a href="">
+                    <i class="fa fa-map-marker"></i>
+                 Divino para la diversión de</a>  </address>
             </div>
             <div class="col-md-12">
-                <div class="event-location">
-                    <a href=""><i class="fa fa-map-marker"></i></a>
-                    Eventos 5
-                </div>
+               
+                    
+                    Eventos
+                     <ul class="event-calendar">
+                         <li><a href="">05</a></li>
+                         <li><a href="">05</a></li>
+                         <li><a href="">06</a></li>
+                     </ul>
+
+            
             </div>
         </div>
     </div>
@@ -43,6 +52,39 @@ export default {
     .container-place-card{
         border: #ccc solid 1px;
         border-radius: 5px;
+    }
+  
+    .event-calendar {
+        width: 100%;
+        display: flex;
+        border-top: #ccc solid 1px;
+        padding: 10px;
+    }
+    .event-calendar li a{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px 10px;
+        border: #ccc solid 1px;
+        border-top:#ccc solid  4px;
+        font-size: 9px;
+        margin: 1px;
+        position: relative;
+    }
+    .event-calendar li a::after , .event-calendar li a::before{
+        content: "";
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: #ccc;
+        top: -6px;
+
+    }
+    .event-calendar li a::after {
+        left: 2px;
+    }
+    .event-calendar li a::before{
+        right: 2px;
     }
 </style>
 
