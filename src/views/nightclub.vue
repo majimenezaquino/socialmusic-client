@@ -9,17 +9,11 @@
               <div class="row">
                 <div class="col-xs-12">
                   <div class="card card-data-tables product-table-wrapper">
-                    <header class="card-heading search-option-header">
-                              <div class="music-header-search">
-                                
-                                 <div class="uplod titlepopo">
-                                    <a href="#" class="button" data-toggle="modal" data-target="#create_musician">
-                                       <i class="zmdi zmdi-folder-person"></i>
+                    <header class="card-heading search-option-header">               
+                                   <a href="#" class="btn  btn-info m-l-10" data-toggle="modal" data-target="#modal_register_place">
+                                     <i class="fa fa-plus"></i>
+                                      centro de diversión
                                     </a>
-                                    <span class="hover-uplad">Creadores de contenidos musicales</span>
-                                 </div>
-                                 <h1> </h1>
-                              </div>
                       <div class="card-search">
                         <div id="productsTable_wrapper" class="form-group label-floating is-empty">
                           <i class="zmdi zmdi-search search-icon-left"></i>
@@ -80,6 +74,7 @@
   </div>
       </section>
 <!-- modal -->
+<RegisterPlace />
 <CardMap />
   </div>
       	
@@ -99,6 +94,7 @@
     import FormUser from "@/components/forms/User.vue";
     import CardMusician from "@/components/cards/CardMusician.vue";
     import CardPlace from "@/components/entertainmentcenters/CardPlace.vue";
+    import RegisterPlace from "@/components/entertainmentcenters/RegisterPlace.vue";
     import CardMap from "@/components/map/map.vue";
 
     import { setTimeout } from 'timers';
@@ -117,7 +113,8 @@
           LayoutDashboard,
           CardMusician,
           CardMap,
-          CardPlace
+          CardPlace,
+          RegisterPlace
      
       
         },

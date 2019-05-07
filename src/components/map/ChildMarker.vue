@@ -1,33 +1,37 @@
-<!-- ChildMarker.vue -->
-<template></template>
+<!-- MyMap.vue -->
+<template>
+  <div>
+    <h1>Map</h1>
+    <map-loader 
+      :map-config="mapConfig"
+      apiKey="AIzaSyDM_Kj71JDk3ip_NlHuKUDcKLzlclGXrPA"
+    >
+      <template v-for="( marker, index) in markers">
+        <child-marker :position="marker"  :key="index"/>
+      </template>
+    </map-loader>
+  </div>
+</template>
+
 <script>
-import imghouse from '@/assets/img/icons/home-address-blue.png';
-import stattic_image from '@/assets/img/music-no-image.png';
+import MapLoader from "./MapLoader.vue"
+import ChildMarker from './ChildMarker'
+
 export default {
-  inject: ["google", "map"],
   props: {
-    position: Object
+    markers: Array
   },
   data(){
-    return { marker: null}
-  },
-  mounted(){
-    let _this=this;
-    const { Marker } = this.google.maps
-    this.marker = new Marker({
-      position: this.position,
-      map: this.map,
-      title: "Child marker!",
-    //   icon: {
-    //   url: imghouse
-      
-    // }
-    }).addListener('click', _this.toggleBounce)
-  },
-  methods:{
-    toggleBounce(ev){
-      console.log(ev)
+    return {
+      mapConfig: {
+        zoom: 12,
+        center: this.markers[0]
+      }
     }
+  },
+  components: {
+    MapLoader,
+    ChildMarker
   }
 }
 </script>

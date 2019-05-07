@@ -2,7 +2,7 @@
     <div class="container-place-card">
         <div class="row">
             <div class="col-md-12">
-                <div class="thumnail-m">
+                <div class="thumbnail-center">
                  <a href=""> 
                     <img :src="imageurl" alt="">
                  </a>
@@ -22,7 +22,7 @@
             <div class="col-md-12">
                
                     
-                    Eventos
+                    <span class="text-events">Eventos por mes</span>
                      <ul class="event-calendar">
                          <li><a href="">05</a></li>
                          <li><a href="">05</a></li>
@@ -85,6 +85,19 @@ export default {
     }
     .event-calendar li a::before{
         right: 2px;
+    }
+    .text-events{
+        display: inline-block;
+        padding:0px 10px;
+        font-size: 13px;
+    }
+    .thumbnail-center{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        min-height: 100px;
+        background: #f55;
     }
 </style>
 

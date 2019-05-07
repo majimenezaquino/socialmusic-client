@@ -15,6 +15,7 @@
     "@fullcalendar/vue": "^4.0.2-beta",
     "axios": "^0.18.0",
     "before-unload": "^2.0.0",
+    "google-maps-api-loader": "^1.1.1",
     "jquery": "^3.3.1",
     "moment": "^2.24.0",
     "socket.io-client": "^2.1.1",
@@ -24,6 +25,7 @@
     "vue-full-calendar": "^2.7.0",
     "vue-fullcalendar": "^1.0.9",
     "vue-router": "^3.0.1",
+    "vue2-google-maps": "^0.10.6",
     "vuex": "^3.0.1",
     "wavesurfer.js": "^2.1.0"
   },
