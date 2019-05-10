@@ -1,7 +1,6 @@
 <!-- MyMap.vue -->
 <template>
   <div>
-    <h1>Map</h1>
     <map-loader 
       :map-config="mapConfig"
       apiKey="AIzaSyDM_Kj71JDk3ip_NlHuKUDcKLzlclGXrPA"

@@ -17,30 +17,18 @@
                       </div>
                     </div>
                         <div class="row">
-                            <div class="col-md-6">
-                                 <div class="form-group">
-                                        <label for="select-privacy">Seleccione  su  país</label>
-                                        <select class="form-control form-control-sm" id="select-privacy" >
-                                        <option value="55"></option>         
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                        <label for="select-privacy">seleccione  su  ciudad </label>
-                                        <select class="form-control form-control-sm" id="select-privacy" >
-                                        <option value="55"></option>         
-                                    </select>
-                                </div>
+                            <div class="col-md-12">
+                                    <div class="content-location">
+                                         <span>Obtener ubicación</span>
+                                        <button class="btn-get-location" 
+                                        v-on:click.prevent="getIpLocation"> 
+                                            <i class="fa fa-map-marker"></i>
+                                        </button>
+                                    </div>
                             </div>
                         </div>
                     
-                    <div class="form-group">
-                      <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-microphone"></i></span>
-                        <input type="text" class="form-control" placeholder="Titulo">
-                      </div>
-                    </div>
+                  
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-microphone"></i></span>
@@ -61,3 +49,60 @@
 		
     </section>
 </template>
+<script>
+
+import swal from 'sweetalert';
+const moment = require('moment');
+const axios = require('axios');
+const {SERVER_URI,DB_USER_NAME}=require('@/config/index');
+const {DBLocal} =require('@/services/data_local')
+const dbLocal= new DBLocal(DB_USER_NAME);
+    moment.locale('es')
+
+export default {
+    name: 'place-entertainmentcenters',
+    methods: {
+        getIpLocation(){
+               axios.get(`http://gd.geobytes.com/GetCityDetails`,{
+                   
+               }).
+            then(function(req){
+              
+                  
+                console.log("ubicacion",req)
+            }).catch(function(err){
+                console.log(`error--->${err}`)
+            });
+        }
+    }
+}
+</script>
+
+<style>
+.content-location{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+    .btn-get-location{
+
+    display: flex;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: rgba(32, 148, 242,0.8);
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    color: #fff;
+    border: #eee solid 2px;
+    font-size: 25px;
+    -webkit-box-shadow: 1px -4px 11px 7px rgba(194,184,194,0.44);
+    box-shadow: 1px -4px 11px 7px rgba(194,184,194,0.44);
+    cursor: pointer;
+    }
+</style>

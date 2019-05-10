@@ -75,7 +75,7 @@
       </section>
 <!-- modal -->
 <RegisterPlace />
-<CardMap />
+
   </div>
       	
      </LayoutDashboard>
@@ -95,7 +95,7 @@
     import CardMusician from "@/components/cards/CardMusician.vue";
     import CardPlace from "@/components/entertainmentcenters/CardPlace.vue";
     import RegisterPlace from "@/components/entertainmentcenters/RegisterPlace.vue";
-    import CardMap from "@/components/map/map.vue";
+ 
 
     import { setTimeout } from 'timers';
     export default {
@@ -112,7 +112,6 @@
         components:{
           LayoutDashboard,
           CardMusician,
-          CardMap,
           CardPlace,
           RegisterPlace
      

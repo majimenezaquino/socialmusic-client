@@ -223,28 +223,29 @@
      </section>
      <!-- fin secion de musica -->
     <!-- section player -->
-    <section class="cotainer-player">
-
+    <section class="container-fuid">
+        <ComponentMap :markers='[
+        {"lat":35.6432027,"lng":139.6729435},
+        {"lat":35.5279833,"lng":139.6989209},
+        {"lat":35.6563623,"lng":139.7215211},
+        {"lat":35.6167531,"lng":139.5469376},
+        {"lat":35.6950961,"lng":139.5037899}
+      ]' />
+    </section>
+    <section class="cotainer-fuid">
+        <CardPricing />
     </section>
     <!--fin  section player -->
 
-    <!-- section player -->
-    <section class="cotainer-footer">
-            <div class="container">
-                <div class="item">
-                    
-                    <PlayList> </PlayList>
-                </div>
-            </div>
-    </section>
-    <!--fin  section player -->
     </section>
 
 </template>
 
 <script>
   const axios=require('axios')
-    import PlayList from "@/components/player/Player.vue"
+
+    import CardPricing from "@/components/cards/CardPricing.vue"
+     import ComponentMap from "@/components/map/map.vue";
     export default {
         name: "musica-fetival",
         data(){
@@ -269,7 +270,8 @@
             }
         },
         components:{
-            PlayList
+            ComponentMap,
+            CardPricing
         }
     }
 </script>

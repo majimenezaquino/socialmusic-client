@@ -1,37 +1,21 @@
-<!-- MyMap.vue -->
-<template>
-  <div>
-    <h1>Map</h1>
-    <map-loader 
-      :map-config="mapConfig"
-      apiKey="AIzaSyDM_Kj71JDk3ip_NlHuKUDcKLzlclGXrPA"
-    >
-      <template v-for="( marker, index) in markers">
-        <child-marker :position="marker"  :key="index"/>
-      </template>
-    </map-loader>
-  </div>
-</template>
-
+<!-- ChildMarker.vue -->
+<template></template>
 <script>
-import MapLoader from "./MapLoader.vue"
-import ChildMarker from './ChildMarker'
-
 export default {
+  inject: ["google", "map"],
   props: {
-    markers: Array
+    position: Object
   },
   data(){
-    return {
-      mapConfig: {
-        zoom: 12,
-        center: this.markers[0]
-      }
-    }
+    return { marker: null}
   },
-  components: {
-    MapLoader,
-    ChildMarker
+  mounted(){
+    const { Marker } = this.google.maps
+    this.marker = new Marker({
+      position: this.position,
+      map: this.map,
+      title: "Child marker!"
+    })
   }
 }
 </script>
