@@ -63,13 +63,16 @@ export default {
     name: 'place-entertainmentcenters',
     methods: {
         getIpLocation(){
-               axios.get(`http://gd.geobytes.com/GetCityDetails`,{
-                   
-               }).
+               axios.get(`http://www.geoplugin.net/json.gp`).
             then(function(req){
               
-                  
-                console.log("ubicacion",req)
+                 let  geoplugin_status = req.data.geoplugin_status || undefined;
+                 if(geoplugin_status!=200){
+                     return ;
+                 }
+
+
+                console.log("ubicacion", req.data)
             }).catch(function(err){
                 console.log(`error--->${err}`)
             });
