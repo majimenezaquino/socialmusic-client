@@ -16,8 +16,14 @@
                         <input type="text" class="form-control" placeholder="Nombre">
                       </div>
                     </div>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-microphone"></i></span>
+                        <input type="text" class="form-control" placeholder="Dirrecion">
+                      </div>
+                    </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6 col-xs-12">
                                     <div class="content-location">
                                          <span>Obtener ubicación</span>
                                         <button class="btn-get-location" 
@@ -26,15 +32,13 @@
                                         </button>
                                     </div>
                             </div>
+                            <div class="col-md-6">
+                                
+                            </div>
                         </div>
                     
                   
-                    <div class="form-group">
-                      <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-microphone"></i></span>
-                        <input type="text" class="form-control" placeholder="Titulo">
-                      </div>
-                    </div>
+                    
 
             </div>
             <div class="modal-footer">
@@ -61,6 +65,16 @@ const dbLocal= new DBLocal(DB_USER_NAME);
 
 export default {
     name: 'place-entertainmentcenters',
+    data(){
+        return {
+            place: {
+                name: undefined,
+                address: undefined,
+                longitud: undefined,
+                latitud: undefined
+            }
+        }
+    },
     methods: {
         getIpLocation(){
                axios.get(`http://www.geoplugin.net/json.gp`).
