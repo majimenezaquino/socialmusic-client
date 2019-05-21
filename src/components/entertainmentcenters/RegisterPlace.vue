@@ -22,8 +22,7 @@
                         <input type="text" class="form-control" placeholder="Dirrecion">
                       </div>
                     </div>
-                        <div class="row">
-                            <div class="col-md-6 col-xs-12">
+                      <div class="col-xs-12">
                                     <div class="content-location">
                                          <span>Obtener ubicación</span>
                                         <button class="btn-get-location" 
@@ -32,9 +31,13 @@
                                         </button>
                                     </div>
                             </div>
-                            <div class="col-md-6">
-                                
+                        <div class="row">
+                            <div class=" col-xs-4">
+                                <HourComponent />
                             </div>
+                          
+                            
+                            
                         </div>
                     
                   
@@ -58,6 +61,7 @@
 import swal from 'sweetalert';
 const moment = require('moment');
 const axios = require('axios');
+import HourComponent from "./CardHourFrom.vue"
 const {SERVER_URI,DB_USER_NAME}=require('@/config/index');
 const {DBLocal} =require('@/services/data_local')
 const dbLocal= new DBLocal(DB_USER_NAME);
@@ -75,6 +79,9 @@ export default {
             }
         }
     },
+    components:{
+        HourComponent
+    },
     methods: {
         getIpLocation(){
                axios.get(`http://www.geoplugin.net/json.gp`).
@@ -90,6 +97,9 @@ export default {
             }).catch(function(err){
                 console.log(`error--->${err}`)
             });
+        }, 
+        registerPlaceEntertinmencenter(){
+            
         }
     }
 }
