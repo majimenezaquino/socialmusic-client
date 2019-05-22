@@ -32,8 +32,17 @@
                                     </div>
                             </div>
                         <div class="row">
-                            <div class=" col-xs-4">
-                                <HourComponent />
+                            <div class=" col-xs-10">
+                            <div class="container-set-hours">
+                                <select class="custom-select" id="inputGroupSelect01">
+                                    <option selected>Choose...</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                                 <HourComponent :callback="handleHuorStart" /> -
+                                <HourComponent :callback="handleHuorEnd" />
+                                </div>
                             </div>
                           
                             
@@ -98,6 +107,14 @@ export default {
                 console.log(`error--->${err}`)
             });
         }, 
+        handleHuorStart(data){
+            console.log(data)
+
+        },
+         handleHuorEnd(data){
+            console.log(data)
+
+        },
         registerPlaceEntertinmencenter(){
             
         }
@@ -131,5 +148,10 @@ export default {
     -webkit-box-shadow: 1px -4px 11px 7px rgba(194,184,194,0.44);
     box-shadow: 1px -4px 11px 7px rgba(194,184,194,0.44);
     cursor: pointer;
+    }
+    .container-set-hours{
+        display: flex;
+        justify-content: start;
+        margin: 0px auto;
     }
 </style>

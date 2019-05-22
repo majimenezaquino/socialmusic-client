@@ -15,12 +15,18 @@
     <script>
     export default {
         name: "select-hour",
+        props: {
+            callback: {
+                type: Function,
+                required: false
+            },
+        },
         data(){
             return {
                 hour: {
-                    h: undefined,
-                    m: undefined,
-                    p: undefined
+                    h: 1,
+                    m: 0,
+                    p: 'am'
                 },
                 hours: 12,
                 minute: 60
@@ -29,13 +35,19 @@
         methods:{
             handlerChangeHour(ev){
                 this.hour.h=ev.target.value;
+                this.callback(`${this.hour.h}:${this.hour.m} ${this.hour.p}`);
             },
             handlerChangeMinuto(ev){
                 this.hour.m=ev.target.value;
+                this.callback(`${this.hour.h}:${this.hour.m} ${this.hour.p}`);
             },
             handlerChangeP(ev){
                 this.hour.p=ev.target.value;
+                this.callback(`${this.hour.h}:${this.hour.m} ${this.hour.p}`);
             }
+        },
+        mounted(){
+            this.callback(`${this.hour.h}:${this.hour.m} ${this.hour.p}`);
         }
     }
     </script>
