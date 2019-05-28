@@ -13,7 +13,11 @@
                 <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-text-width"></i></span>
-                        <input type="text" class="form-control" placeholder="Nombre">
+                        <input 
+                        type="text" class="form-control" placeholder="Nombre"
+                         v-validate="'required|alpha'" name="email"
+                        >
+                        <span>{{ errors.first('email') }}</span>
                       </div>
                     </div>
                     <div class="form-group">
@@ -31,26 +35,23 @@
                                         </button>
                                     </div>
                             </div>
-                        <div class="row">
-                            <div class=" col-xs-10">
-                            <div class="container-set-hours">
-                                <select class="custom-select" id="inputGroupSelect01">
-                                    <option selected>Choose...</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                                 <HourComponent :callback="handleHuorStart" /> -
-                                <HourComponent :callback="handleHuorEnd" />
-                                </div>
-                            </div>
+                        <div class="container-fluid">
+                            
                           
-                            
-                            
+<!-- <select class="custom-select" id="inputGroupSelect01">
+<option v-for=" day in days" :key="day._id">
+{{day.name}}
+</option>
+
+</select> -->                       <span>Lunes</span> 
+                                    <HourComponent :callback="handleHuorStart" /> -
+                                    <HourComponent :callback="handleHuorEnd" />
+                                    <input type="checkbox" name="" id="">
+                              
                         </div>
                     
                   
-                    
+                   
 
             </div>
             <div class="modal-footer">
@@ -80,6 +81,8 @@ export default {
     name: 'place-entertainmentcenters',
     data(){
         return {
+            user_data: undefined,
+            days: undefined,
             place: {
                 name: undefined,
                 address: undefined,
@@ -107,6 +110,25 @@ export default {
                 console.log(`error--->${err}`)
             });
         }, 
+        redirectUserLogin(){
+          if(dbLocal.checkDataLocalStorageOBject())
+           this.user_data  =dbLocal.getDataLocalStorageOBject();
+         },
+         getEntertainmentCent(){
+        let self=this;
+             axios.get(`${SERVER_URI}/api/entertainmentcentersday/es?token=${this.user_data.token}`,
+            )
+             .then(function (req) {
+            //handle success
+            
+             self.days=req.data.schedules || [];
+             console.log(" day now",self.days)
+             })
+            .catch(function (err) {
+            //handle error
+            console.log("erro ", err);
+        });
+    },
         handleHuorStart(data){
             console.log(data)
 
@@ -118,6 +140,10 @@ export default {
         registerPlaceEntertinmencenter(){
             
         }
+    },
+    mounted(){
+        this.redirectUserLogin();
+        this.getEntertainmentCent();
     }
 }
 </script>

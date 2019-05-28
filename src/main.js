@@ -2,9 +2,13 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from '@/store';
+import VeeValidate ,{ Validator } from 'vee-validate';
+import es from 'vee-validate/dist/locale/es';
 const EventBus = new Vue();
-import VueCookies from 'vue-cookies'
-
+import VueCookies from 'vue-cookies';
+  Vue.use(VeeValidate);
+  Validator.localize('es', es);
+  
 const User = new Vue();
 new Vue({
   EventBus,
