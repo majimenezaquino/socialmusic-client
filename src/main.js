@@ -8,8 +8,14 @@ const EventBus = new Vue();
 import VueCookies from 'vue-cookies';
   Vue.use(VeeValidate);
   Validator.localize('es', es);
+
+  const {DB_USER_NAME}=require('@/config/index')
+  const {DBLocal} =require('@/services/data_local')
+  const dbLocal= new DBLocal(DB_USER_NAME);
+
+  Vue.prototype.$user_data=dbLocal.getDataLocalStorageOBject();
   
-const User = new Vue();
+
 new Vue({
   EventBus,
   VueCookies,

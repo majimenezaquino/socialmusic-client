@@ -26,7 +26,12 @@
                         <input type="text" class="form-control" placeholder="Dirrecion">
                       </div>
                     </div>
-                      <div class="col-xs-12">
+
+                    <div class="form-group">
+                      <HourComponent />
+                     
+                    </div>
+                      <!-- <div class="col-xs-12">
                                     <div class="content-location">
                                          <span>Obtener ubicación</span>
                                         <button class="btn-get-location" 
@@ -34,7 +39,7 @@
                                             <i class="fa fa-map-marker"></i>
                                         </button>
                                     </div>
-                            </div>
+                            </div> -->
                         <div class="container-fluid">
                             
                           
@@ -43,10 +48,7 @@
 {{day.name}}
 </option>
 
-</select> -->                       <span>Lunes</span> 
-                                    <HourComponent :callback="handleHuorStart" /> -
-                                    <HourComponent :callback="handleHuorEnd" />
-                                    <input type="checkbox" name="" id="">
+</select> -->                       
                               
                         </div>
                     
@@ -71,7 +73,7 @@
 import swal from 'sweetalert';
 const moment = require('moment');
 const axios = require('axios');
-import HourComponent from "./CardHourFrom.vue"
+import HourComponent from "./schedules.vue"
 const {SERVER_URI,DB_USER_NAME}=require('@/config/index');
 const {DBLocal} =require('@/services/data_local')
 const dbLocal= new DBLocal(DB_USER_NAME);
@@ -83,6 +85,7 @@ export default {
         return {
             user_data: undefined,
             days: undefined,
+            schedules:[],
             place: {
                 name: undefined,
                 address: undefined,
@@ -129,21 +132,19 @@ export default {
             console.log("erro ", err);
         });
     },
-        handleHuorStart(data){
-            console.log(data)
+      
+        handlerCheckBox(ev){
+            let day= ev.target.value;
 
-        },
-         handleHuorEnd(data){
-            console.log(data)
+            if(ev.target.checked){
 
-        },
-        registerPlaceEntertinmencenter(){
-            
+            }
         }
     },
     mounted(){
         this.redirectUserLogin();
         this.getEntertainmentCent();
+        console.log("user global", this.$user_data)
     }
 }
 </script>
@@ -179,5 +180,21 @@ export default {
         display: flex;
         justify-content: start;
         margin: 0px auto;
+    }
+    .checkbo-day{
+        width: 22px;
+        height: 22px;
+        font-size: 18px;
+        margin: 5px;
+        display: flex;
+        border: none;
+        background: #f55;
+
+    }
+    .checkbo-day input{
+        display: flex;
+        font-size: 18px;
+        width: 24px;
+        height: 24px;;
     }
 </style>

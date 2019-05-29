@@ -38,5 +38,14 @@
     </script>
     <script src="../assets/js/vendor.bundle.js"></script>
     <script src="../assets/js/app.bundle.js"></script>
+    <script>
+      String.prototype.capitalize = function(){
+                    // \b encuentra los limites de una palabra
+                    // \w solo los meta-carácter  [a-zA-Z0-9].                
+                    return this.toLowerCase().replace( /\b\w/, function (m) {
+                        return m.toUpperCase();
+                    });
+                };
+    </script>
   </body>
 </html>

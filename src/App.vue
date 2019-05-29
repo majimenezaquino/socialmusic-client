@@ -68,8 +68,7 @@ getCookie(cname) {
     }
     this.user_data =dbLocal.getDataLocalStorageOBject();
      let on_sockt_user  = this.user_data.user.id
-
-  
+    
     socket.on('connect', function(data){
       console.log("connectado")
     });

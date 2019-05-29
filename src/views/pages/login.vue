@@ -125,6 +125,7 @@ const dbLocal = new DBLocal(DB_USER_NAME);
 			},
 
 	redirectUserLogin(){
+		
 		if(dbLocal.checkDataLocalStorageOBject()){
 			this.$router.push( '/profile/' +dbLocal.getDataLocalStorageOBject().user.id)
 			}

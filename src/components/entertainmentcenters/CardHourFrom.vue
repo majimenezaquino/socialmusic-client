@@ -20,6 +20,10 @@
                 type: Function,
                 required: false
             },
+            day: {
+                type: String,
+                required: false
+            }
         },
         data(){
             return {
@@ -35,19 +39,19 @@
         methods:{
             handlerChangeHour(ev){
                 this.hour.h=ev.target.value;
-                this.callback(`${this.hour.h}:${this.hour.m} ${this.hour.p}`);
+                this.callback({day: this.day, hour:`${this.hour.h}:${this.hour.m} ${this.hour.p}`});
             },
             handlerChangeMinuto(ev){
                 this.hour.m=ev.target.value;
-                this.callback(`${this.hour.h}:${this.hour.m} ${this.hour.p}`);
+                this.callback({day: this.day, hour:`${this.hour.h}:${this.hour.m} ${this.hour.p}`});
             },
             handlerChangeP(ev){
                 this.hour.p=ev.target.value;
-                this.callback(`${this.hour.h}:${this.hour.m} ${this.hour.p}`);
+                this.callback({day: this.day, hour:`${this.hour.h}:${this.hour.m} ${this.hour.p}`});
             }
         },
         mounted(){
-            this.callback(`${this.hour.h}:${this.hour.m} ${this.hour.p}`);
+            this.callback({day: this.day, hour:`${this.hour.h}:${this.hour.m} ${this.hour.p}`});
         }
     }
     </script>
