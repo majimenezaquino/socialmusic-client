@@ -20,18 +20,51 @@
                         <span>{{ errors.first('email') }}</span>
                       </div>
                     </div>
+
+                    <div class="form-group">
+                    
+                        <div class="row">
+                            <di class="col-md-6">
+                           <div class="input-group">
+                            <label for="select-privacy">Privacidad</label>
+                            <select class="form-control form-control-sm" id="select-privacy"
+                            v-on:change="handlerSelectPrivacy"
+                            >
+                                     <option v-for="priv in privacies" :key="priv._id"
+                                     :value="priv._id"
+                                     >
+                                         {{priv.name}}
+                                        </option>
+                                     
+                            </select>
+                          </div>
+                            </di>
+                             <di class="col-md-6">
+                                <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-text-width"></i></span>
+                        <input 
+                        type="text" class="form-control" placeholder="Nombre"
+                         v-validate="'required|alpha'" name="email"
+                        >
+                        <span>{{ errors.first('email') }}</span>
+                      </div>
+                            </di>
+                        </div>
+                     
+                    </div>
                     <div class="form-group">
                       <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-microphone"></i></span>
-                        <input type="text" class="form-control" placeholder="Dirrecion">
+                        <span class="input-group-addon"><i class="fa fa-text-height"></i></span>
+                        <textarea type="text" class="form-control" placeholder="Dirrecion">
+                        </textarea>
                       </div>
                     </div>
 
                     <div class="form-group">
-                      <HourComponent />
+                      <HourComponent :callback="handlerSchedules" />
                      
                     </div>
-                      <!-- <div class="col-xs-12">
+                      <div class="col-xs-12">
                                     <div class="content-location">
                                          <span>Obtener ubicación</span>
                                         <button class="btn-get-location" 
@@ -39,16 +72,11 @@
                                             <i class="fa fa-map-marker"></i>
                                         </button>
                                     </div>
-                            </div> -->
+                            </div>
                         <div class="container-fluid">
                             
                           
-<!-- <select class="custom-select" id="inputGroupSelect01">
-<option v-for=" day in days" :key="day._id">
-{{day.name}}
-</option>
-
-</select> -->                       
+                      
                               
                         </div>
                     
@@ -98,6 +126,9 @@ export default {
         HourComponent
     },
     methods: {
+        handlerSelectPrivacy(){
+
+        },
         getIpLocation(){
                axios.get(`http://www.geoplugin.net/json.gp`).
             then(function(req){
@@ -133,18 +164,13 @@ export default {
         });
     },
       
-        handlerCheckBox(ev){
-            let day= ev.target.value;
-
-            if(ev.target.checked){
-
-            }
-        }
+       handlerSchedules(data){
+           console.log(data)
+       }
     },
     mounted(){
         this.redirectUserLogin();
-        this.getEntertainmentCent();
-        console.log("user global", this.$user_data)
+       // console.log("user global", this.$user_data)
     }
 }
 </script>

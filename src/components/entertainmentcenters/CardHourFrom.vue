@@ -68,6 +68,7 @@
         border: none;
         background: #fff;
         text-align: center;
+        font-size: 14px;
     }
     .container-select-hour select::-webkit-scrollbar {
                 width: 2px;
