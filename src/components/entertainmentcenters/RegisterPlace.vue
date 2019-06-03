@@ -20,39 +20,7 @@
                         <span>{{ errors.first('email') }}</span>
                       </div>
                     </div>
-
-                    <div class="form-group">
-                    
-                        <div class="row">
-                            <di class="col-md-6">
-                           <div class="input-group">
-                            <label for="select-privacy">Privacidad</label>
-                            <select class="form-control form-control-sm" id="select-privacy"
-                            v-on:change="handlerSelectPrivacy"
-                            >
-                                     <option v-for="priv in privacies" :key="priv._id"
-                                     :value="priv._id"
-                                     >
-                                         {{priv.name}}
-                                        </option>
-                                     
-                            </select>
-                          </div>
-                            </di>
-                             <di class="col-md-6">
-                                <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-text-width"></i></span>
-                        <input 
-                        type="text" class="form-control" placeholder="Nombre"
-                         v-validate="'required|alpha'" name="email"
-                        >
-                        <span>{{ errors.first('email') }}</span>
-                      </div>
-                            </di>
-                        </div>
-                     
-                    </div>
-                    <div class="form-group">
+                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-text-height"></i></span>
                         <textarea type="text" class="form-control" placeholder="Dirrecion">
@@ -60,11 +28,27 @@
                       </div>
                     </div>
 
-                    <div class="form-group">
-                      <HourComponent :callback="handlerSchedules" />
-                     
-                    </div>
-                      <div class="col-xs-12">
+                        <div class="row">
+                         <div class="col-md-3">
+                            <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Privacidad</label>
+                            </div>
+                            <input type="file" accept="image*">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Privacidad</label>
+                            </div>
+                            <select class="custom-select" id="inputGroupSelect01">
+                                <option selected>Choose...</option>
+                                <option value="1" v-for="pv in  privacies" :key="pv._id">One</option>
+                            </select>
+                            </div>
+                        </div>
+                         <div class="col-xs-6">
                                     <div class="content-location">
                                          <span>Obtener ubicación</span>
                                         <button class="btn-get-location" 
@@ -73,6 +57,15 @@
                                         </button>
                                     </div>
                             </div>
+                        </div>
+         
+                   
+
+                    <div class="form-group">
+                      <HourComponent :callback="handlerSchedules" />
+                     
+                    </div>
+                     
                         <div class="container-fluid">
                             
                           
@@ -112,7 +105,9 @@ export default {
     data(){
         return {
             user_data: undefined,
+            privacies: undefined,
             days: undefined,
+            
             schedules:[],
             place: {
                 name: undefined,
@@ -132,13 +127,10 @@ export default {
         getIpLocation(){
                axios.get(`http://www.geoplugin.net/json.gp`).
             then(function(req){
-              
                  let  geoplugin_status = req.data.geoplugin_status || undefined;
                  if(geoplugin_status!=200){
                      return ;
                  }
-
-
                 console.log("ubicacion", req.data)
             }).catch(function(err){
                 console.log(`error--->${err}`)
@@ -147,6 +139,7 @@ export default {
         redirectUserLogin(){
           if(dbLocal.checkDataLocalStorageOBject())
            this.user_data  =dbLocal.getDataLocalStorageOBject();
+           console.log(this.user_data)
          },
          getEntertainmentCent(){
         let self=this;
@@ -166,11 +159,24 @@ export default {
       
        handlerSchedules(data){
            console.log(data)
-       }
+       },
+        getPrivacies(_token){
+          let self=this;
+        axios.get(`${SERVER_URI}/api/privacies?token=${this._token}`)
+             .then(function (req) {
+             self.privacies =req.data.privacies;  
+            //  self.music.privacy=  self.privacies[0]._id;
+                   console.log("privacidad",self.privacies)
+             })
+            .catch(function (response) {
+            //handle error
+            console.log(response);
+        });}
     },
     mounted(){
         this.redirectUserLogin();
-       // console.log("user global", this.$user_data)
+        this.getPrivacies(this.$user_data.token);
+       // console.log("user global", )
     }
 }
 </script>

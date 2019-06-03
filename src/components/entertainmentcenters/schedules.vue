@@ -51,18 +51,7 @@ export default {
              }); 
          this.callback(this.schedul)
         },
-        getPrivacies(){
-          let self=this;
-        axios.get(`${SERVER_URI}/api/privacies?token=${this.user_data.token}`)
-             .then(function (req) {
-             self.privacies =req.data.privacies;  
-              self.music.privacy=  self.privacies[0]._id;
-                   
-             })
-            .catch(function (response) {
-            //handle error
-            console.log(response);
-        });},
+       
          handleHuorEnd(data){
              this.schedul=this.schedul.filter(function(sced){
                  if(sced._id==data.day){
