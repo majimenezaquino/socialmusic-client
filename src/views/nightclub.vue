@@ -52,16 +52,7 @@
                       
                      <div class="row">
                             <div class="col-md-3">
-                              <CardPlace />
-                            </div>
-                            <div class="col-md-3">
-                              <CardPlace />
-                            </div>
-                            <div class="col-md-3">
-                              <CardPlace />
-                            </div>
-                             <div class="col-md-3">
-                              <CardPlace />
+                              <CardPlace  :contend_id="555555"/>
                             </div>
                           </div>
                      

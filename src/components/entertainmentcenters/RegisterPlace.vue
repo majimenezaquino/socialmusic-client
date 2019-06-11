@@ -31,10 +31,14 @@
                         <div class="row">
                          <div class="col-md-3">
                             <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">Privacidad</label>
-                            </div>
-                            <input type="file" accept="image*">
+                          
+                            <label for="upload_image_entertainmentcenters" class="upload_image btn-get-location">
+                                <i class="fa fa-camera" aria-hidden="true"></i>
+                            </label>
+                            <input type="file" accept="image*" 
+                            id="upload_image_entertainmentcenters"
+                             style="display: none;"
+                             >
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -62,7 +66,7 @@
                    
 
                     <div class="form-group">
-                      <HourComponent :callback="handlerSchedules" />
+                      <HourComponent :callback="handlerSchedules"  v-if="false" />
                      
                     </div>
                      
@@ -127,11 +131,11 @@ export default {
         getIpLocation(){
                axios.get(`http://www.geoplugin.net/json.gp`).
             then(function(req){
-                 let  geoplugin_status = req.data.geoplugin_status || undefined;
+     let  geoplugin_status = req.data.geoplugin_status || undefined;
                  if(geoplugin_status!=200){
                      return ;
                  }
-                console.log("ubicacion", req.data)
+                console.log("ubicacion", req.data);
             }).catch(function(err){
                 console.log(`error--->${err}`)
             });
@@ -179,6 +183,22 @@ export default {
        // console.log("user global", )
     }
 }
+
+
+//console.log("tu ano son: ", (ano_actua-ano_persona))
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 
 <style>
@@ -229,4 +249,13 @@ export default {
         width: 24px;
         height: 24px;;
     }
+
+    label.upload_image{
+        display: flex;
+        width: 60px;
+        height: 60px;
+        justify-content: center;
+        align-items: center;
+    }
+    
 </style>
