@@ -82,8 +82,8 @@
   const axios = require('axios');
   const {EventBus} =require('@/eventbus');
     import LayoutDashboard from "@/layouts/LayoutDashboard.vue";
-    import FormUser from "@/components/forms/User.vue";
-    import CardMusician from "@/components/cards/CardMusician.vue";
+ 
+
     import CardPlace from "@/components/entertainmentcenters/CardPlace.vue";
     import RegisterPlace from "@/components/entertainmentcenters/RegisterPlace.vue";
  
@@ -102,7 +102,6 @@
         },
         components:{
           LayoutDashboard,
-          CardMusician,
           CardPlace,
           RegisterPlace
      

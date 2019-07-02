@@ -37,7 +37,7 @@
                             </label>
                             <input type="file" accept="image*" 
                             id="upload_image_entertainmentcenters"
-                             style="display: none;"
+                             style="display: none"
                              >
                             </div>
                         </div>
@@ -47,7 +47,6 @@
                                 <label class="input-group-text" for="inputGroupSelect01">Privacidad</label>
                             </div>
                             <select class="custom-select" id="inputGroupSelect01">
-                                <option selected>Choose...</option>
                                 <option value="1" v-for="pv in  privacies" :key="pv._id">One</option>
                             </select>
                             </div>
@@ -66,7 +65,7 @@
                    
 
                     <div class="form-group">
-                      <HourComponent :callback="handlerSchedules"  v-if="false" />
+                      <HourComponent :callback="handlerSchedules"  v-if="true" />
                      
                     </div>
                      
@@ -83,7 +82,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Ok</button>
+                <button type="button" class="btn btn-primary" v-on:click.prevent="handlerSubmit">Ok</button>
             </div>
         </div>
         <!-- modal-content -->
@@ -160,17 +159,19 @@ export default {
             console.log("erro ", err);
         });
     },
+    handlerSubmit(ev){
+        console.log(ev)
+    },
       
        handlerSchedules(data){
-           console.log(data)
+           console.log("horarios",data)
        },
         getPrivacies(_token){
           let self=this;
         axios.get(`${SERVER_URI}/api/privacies?token=${this._token}`)
              .then(function (req) {
              self.privacies =req.data.privacies;  
-            //  self.music.privacy=  self.privacies[0]._id;
-                   console.log("privacidad",self.privacies)
+           
              })
             .catch(function (response) {
             //handle error
