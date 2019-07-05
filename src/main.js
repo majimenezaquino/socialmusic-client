@@ -5,6 +5,9 @@ import store from '@/store';
 
 const EventBus = new Vue();
 import VueCookies from 'vue-cookies';
+import VueLazyload from 'vue-lazyload'
+ 
+Vue.use(VueLazyload)
 
 import VueFormWizard from 'vue-form-wizard'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'

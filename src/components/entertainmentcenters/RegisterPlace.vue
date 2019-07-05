@@ -33,14 +33,18 @@
                    icon="ti-image">
                    <div class="row">
                        <div class="col-md-12">
-                           <UploadFile />
+                           <UploadFile :callback="handlerdata"/>
                        </div>
                    </div>
       
       </tab-content>
-      <tab-content title="Last step"
-                   icon="ti-check">
-        Yuhuuu! This seems pretty damn simple
+      <tab-content title="Horarios"
+                   icon="ti-time">
+                <div class="row">
+                    <div class="col-md-12">
+                         <HourComponent :callback="handlerSchedules"  v-if="true" />
+                    </div>
+                </div>
       </tab-content>
   </form-wizard>
             </div>
@@ -53,6 +57,7 @@
 </template>
 <script>
 import UploadFile from '@/components/forms/UploadFile.vue'
+import HourComponent from "./schedules.vue"
 export default {
     name: 'register-validate',
     data(){
@@ -64,7 +69,8 @@ export default {
         }
     },
     components:{
-        UploadFile
+        UploadFile,
+        HourComponent
     },
     methods:{
         validateFirstTab(){
@@ -72,6 +78,13 @@ export default {
                 return false;
             }
             return true;
+        },
+        handlerdata(data){
+            console.log(data)
+        },
+        handlerSchedules(data){
+            console.log(data)
+
         }
     }
 }
