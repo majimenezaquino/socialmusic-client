@@ -12,50 +12,24 @@
                      </div>
              </div>
              <LimitUpladMusic /> 
-            <div class="modal-header">
-                
-                <h4 class="modal-title" id="myModalLabel-2">Sube tu música aquí</h4>
-                <ul class="card-actions icons right-top">
-                    <li>
-                    <a href="javascript:void(0)" data-dismiss="modal" class="text-white" aria-label="Close">
-                        <i class="zmdi zmdi-close"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
+      
         <div class="modal-body p-0">
-             
-            <div class="stepper">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active">
-                        <a class="persistant-disabled" href="#stepper-step-1" data-toggle="tab" aria-controls="stepper-step-1" role="tab" title="Step 1">
-                            <span class="round-tab"><i class="zmdi zmdi-pin"></i></span>
-                        </a>
-                    </li>
-                    <li role="presentation" class="disabled">
-                        <a class="persistant-disabled" href="#stepper-step-2" data-toggle="tab" aria-controls="stepper-step-2" role="tab" title="Step 2">
-                            <span class="round-tab"><i class="fa fa-music"></i></span>
-                        </a>
-                    </li>
-                    <li role="presentation" class="disabled">
-                        <a class="persistant-disabled" href="#stepper-step-3" data-toggle="tab" aria-controls="stepper-step-3" role="tab" title="Step 3">
-                            <span class="round-tab"><i class="fa fa-check"></i></span>
-                        </a>
-                    </li>
-                    <li role="presentation" class="disabled">
-                        <a class="persistant-disabled" href="#stepper-step-4" data-toggle="tab" aria-controls="stepper-step-4" role="tab" title="Complete">
-                            <span class="round-tab"><i class="fa fa-address-card"></i></span>
-                        </a>
-                    </li>
-                </ul>
-                <div class="form-wrapper">
-                    <form role="form">
-                        <div class="tab-content">
-                            <div class="tab-pane fade in active" role="tabpanel" id="stepper-step-1">
-                                <div class="p-20">
-                                    
-                                    <section class="stepper-body">
-                                        <div class="container-upload">
+               <form-wizard 
+                        shape="square"
+                        stepSize="xs"
+                        color="#3498db"
+                        title="Centro de Diversión"
+                        subtitle="Registras tus centros de diversiones."
+                        nextButtonText="Siguiente"
+                        backButtonText="Volver atrás"
+                         @on-complete="()=>{}"
+               >
+             <tab-content
+                 title="Personal details"
+                 icon="ti-music-alt"
+                 :before-change="()=>isloaded_music"
+                  >
+                        <div class="container-upload">
                                             <div class="previes" v-if=" isloaded_music">
                                                 <a href="" class="close-music-upload"
                                                  v-on:click.prevent=" handlerCloseLoadMusic"
@@ -77,23 +51,13 @@
                                             </div>
                                             
                                         </div>
-                                    </section>
-                                </div>
-                                
-                                <div class="modal-footer">
-                                    <ul class="list-inline pull-right">
-                                        <li>
-                                            <button class="btn btn-primary next-step" 
-                                            :disabled="! isloaded_music"
-                                            v-on:click.prevent="handlerNext"
-                                            >Guardar </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" role="tabpanel" id="stepper-step-2">
-                                <div>
-                                        <h3 class="text-center p-b-10 p-t-0 m-t-0">Selecciones sus géneros de músicas </h3>
+     </tab-content>
+     <tab-content title="Additional Info"
+                  icon="ti-settings"
+                  :before-change="handlerBeforeGenres"
+                  
+                  >
+                   <h3 class="text-center p-b-10 p-t-0 m-t-0">Selecciones sus géneros de músicas </h3>
                                     <div class="container-upload">
                                             <div class="container">
                                                 <ul class="container-genren">
@@ -113,28 +77,10 @@
                                             </div>
                                             
                                         </div>
-                                    
-                                </div>
-                                <div class="modal-footer">
-                                    <ul class="list-inline pull-right">
-                                        <li>
-                                            <a class="btn btn-default prev-step">Volver  atrás</a>
-                                        </li>
-                                        <li>
-                                            <button class="btn btn-primary next-step"
-                                             :disabled="!music.genres.length>0"
-                                             v-on:click.prevent="handlerNext"
-                                            >Guardar</button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" role="tabpanel" id="stepper-step-3">
-                              
-                                <div class="">
-                     <section class="stepper-body">
-                         <div class="card">
-                             
+     </tab-content>
+     <tab-content title="Last step"
+                  icon="ti-check">
+       <div class="card">
                                <h3 class="text-center p-b-10 p-t-0 m-t-0">Información de la música </h3>
                   <div class="card-body">
                     <div class="form-group">
@@ -199,75 +145,10 @@
                     </div>
                   </div>
              
-                </div>
-                                    </section>
-                                </div>
-                                <div class="modal-footer">
-                                    <ul class="list-inline pull-right">
-                                        <li>
-                                            <a class="btn btn-default prev-step">Volver  atrás</a>
-                                        </li>
-
-                                        <li>
-                                            <button class="btn btn-primary next-step" 
-                                            v-on:click.prevent="handlerUploadMusic"
-                                            :disabled="(music.title===undefined || music.title===null || music.title =='')"
-                                            >Publicar</button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" role="tabpanel" id="stepper-step-4">
-                                <div class="p-20">
-                                     <section class="stepper-body">
-                                        <div class="container-upload">
-                                            <div class="previes" v-if="isloaded_image">
-                                                <a href="" class="close-music-upload"
-                                                 v-on:click.prevent=" handlerCloseLoadImage"
-                                                > <i class="zmdi zmdi-close"></i></a>
-                                                    <div class="card-show-music ">
-                                                        <img :src="upload_image" alt="">
-                                                       
-                                                <div class="load-pross"
-                                                v-if="progress_image_upload>0 && progress_image_upload<100"
-                                                >
-                                                <div class="progress" :data-progress="progress_image_upload">
-                                                    <div class="progress_mask isFull">
-                                                    <div class="progress_fill"></div>
-                                                    </div>
-                                                    <div class="progress_mask">
-                                                    <div class="progress_fill"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                                    </div>
-                                            </div>
-                                            <div class="previes" v-if="! isloaded_image">
-                                                <label for="music-upload-image" class="btn-upload-music">
-                                                    <i class="fa fa-camera" aria-hidden="true"></i>
-                                                    </label>
-                                                <input type="file" id="music-upload-image" accept="image/*" v-on:change="handlerLoadImage" class="hidden">
-                                                <p class="text-info">Máximo de 2mb</p>
-                                            </div>
-                                            
-                                        </div>
-                                    </section>
-                                </div>
-                                <div class="modal-footer">
-                                    <ul class="list-inline pull-right">
-                                        <li>
-                                            <button type="button" class="btn btn-primary btn-flat" data-dismiss="modal">Close</button>
-                                            <button class="btn btn-primary next-step"
-                                            v-if="isloaded_image"
-                                             v-on:click.prevent="handlerUploadImage">Guardar y salir</button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+ </div>
+     </tab-content>
+ </form-wizard>
+            
         </div>
         <!-- modal-content -->
     </div>
@@ -345,6 +226,17 @@ export default {
     methods:{
         handlerNext(e){
             console.log(e)
+        },
+ handlerBeforeGenres(ev){
+     console.log(this.music.genres.length)
+     if(this.music.genres.length>0){
+         return true;
+     }else{
+ return false;
+     }
+     
+    
+
         },
     redirectUserLogin(){
         if(dbLocal.checkDataLocalStorageOBject())

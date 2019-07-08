@@ -12,7 +12,7 @@
                         subtitle="Registras tus centros de diversiones."
                         nextButtonText="Siguiente"
                         backButtonText="Volver atrás"
-                        validateOnBack="true"
+                         @on-complete="onComplete"
                         >
       <tab-content 
       title="Dirección"
@@ -56,6 +56,12 @@
     </section>
 </template>
 <script>
+ const {SERVER_URI,DB_USER_NAME}=require('@/config/index')
+  const {DBLocal} =require('@/services/data_local')
+  const dbLocal= new DBLocal(DB_USER_NAME);
+  const axios = require('axios');
+
+
 import UploadFile from '@/components/forms/UploadFile.vue'
 import HourComponent from "./schedules.vue"
 export default {
@@ -65,7 +71,10 @@ export default {
             place: {
                 name: undefined,
                 description: undefined,
-            }
+                schedule: undefined,
+                image: undefined
+            },
+               user_data: {},
         }
     },
     components:{
@@ -80,12 +89,35 @@ export default {
             return true;
         },
         handlerdata(data){
+            this.place.image=data;
             console.log(data)
         },
         handlerSchedules(data){
-            console.log(data)
+            this.place.schedule=data;
+
+        },
+        onComplete(){
+       let place= this.place;
+       let formData = new FormData();
+       formData.append('image',"");
+        formData.append('schedules',"");
+        console.log(place)
+
+
+        axios.post(`${SERVER_URI}/api/nightclub?token=${this.user_data.token}`,formData)
+             .then(function (req) {
+               console.log(req.data)
+             })
+            .catch(function (err) {
+           
+        });
+
 
         }
+    },
+    mounted(){
+        if(dbLocal.checkDataLocalStorageOBject())
+        this.user_data  =dbLocal.getDataLocalStorageOBject();
     }
 }
 </script>
