@@ -90,7 +90,7 @@ export default {
         },
         handlerdata(data){
             this.place.image=data;
-            console.log(data)
+         
         },
         handlerSchedules(data){
             this.place.schedule=data;
@@ -99,12 +99,13 @@ export default {
         onComplete(){
        let place= this.place;
        let formData = new FormData();
-       formData.append('image',"");
-        formData.append('schedules',"");
-        console.log(place)
+       console.log(this.place)
+       formData.append('image', this.place.image);
+        formData.append('schedules','hola');
+   
 
 
-        axios.post(`${SERVER_URI}/api/nightclub?token=${this.user_data.token}`,formData)
+        axios.post(`${SERVER_URI}/api/create_place?token=${this.user_data.token}`,formData)
              .then(function (req) {
                console.log(req.data)
              })

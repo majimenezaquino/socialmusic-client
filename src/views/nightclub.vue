@@ -54,6 +54,12 @@
                             <div class="col-md-3">
                               <CardPlace  :contend_id="555555"/>
                             </div>
+                            <div class="col-md-3">
+                              <CardPlace  :contend_id="555555"/>
+                            </div>
+                            <div class="col-md-3">
+                              <CardPlace  :contend_id="555555"/>
+                            </div>
                           </div>
                      
                        </div>

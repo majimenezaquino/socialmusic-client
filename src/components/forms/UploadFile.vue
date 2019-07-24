@@ -45,11 +45,13 @@ export default {
   methods: {
     uploadImageSuccess(formData, index, fileList) {
       //console.log('data', formData, index, fileList)
-      let data ={
-            file: formData,
-            file_detail: fileList,
-            file_index: index
-      }
+       let data = formData ;
+       //{
+      //       file: formData,
+      //       file_detail: fileList,
+      //       file_index: index
+      // }
+      console.log(formData, index, fileList);
       this.callback(data);
       // Upload image api
       // axios.post('http://your-url-upload', formData).then(response => {
