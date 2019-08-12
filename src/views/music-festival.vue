@@ -16,6 +16,11 @@
                             <button type="button" class="btn btn-primary" style="background:rgb(33, 150, 243)">Regístrate</button>
                        </div>
                         </div>
+                        <div class="container-hidden" v-if="showContentSearch">
+                            <div class="container">
+
+                            </div>
+                        </div>
                       
             </div>
                   <div class="slider-festival">
@@ -143,6 +148,7 @@
         name: "musica-fetival",
         data(){
             return{
+                showContentSearch: false,
                 background: [
                     {img:  "background-image: url(http://blog.ticketea.com/wp-content/uploads/2016/03/1600x900xerasmus-party-1.jpg.pagespeed.ic.2UGf861WtA.jpg);"}
                 ]

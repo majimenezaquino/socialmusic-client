@@ -108,6 +108,12 @@
     width: 100%;
     z-index: 10000;
 }
+.container-hidden{
+    width: 100%;
+    height: 100vh;
+    background: #fff;
+    z-index: 1000;
+}
 
 .container-header-fetistival{
     width: 100%;
