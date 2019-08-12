@@ -100,18 +100,53 @@
     background: rgba(0, 0, 0, 0.7);
     display: flex
 }
-.navbar-menu{
-    margin: 0px;
-    position: absolute;
-    display: flex;
-    bottom: 0px;
+.menu-search-festival{
+    position: fixed;
+    top: 0px;
     left: 0px;
     background: rgba(0, 0, 0, 0.7);
     width: 100%;
-    padding: 0px 20px;
-    box-sizing: border-box;
-    justify-content: space-between;
+    z-index: 10000;
+}
 
+.container-header-fetistival{
+    width: 100%;
+    margin: 0px auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 1180px;
+    z-index: 1000;
+}
+.searc-content{
+    flex-grow: 1;
+    width: 300px;
+    padding: 0px;
+    display: flex;
+    margin: 0px 20px;
+    justify-content: space-between;
+    border: #ccc solid 1px;
+    border-radius: 20px;
+    overflow: hidden;
+    padding: 0px 5px;
+    background: #fff;
+    color: #444;
+}
+.btn-login{
+    display: inline-block;
+    margin: 0px 10px;
+    color: #eee;
+    font-size: 16px;
+}
+.searc-content button{
+    border: none;
+    background: transparent;
+}
+#input_search{
+    display: block;
+    width: 300px;
+    flex-grow: 1;
+    border: 0px;
 }
 .navbar-menu .logo{
     display: inline-block;

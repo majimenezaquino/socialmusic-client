@@ -1,7 +1,23 @@
 <template>
     <section class="main">
     <header>
+    
             <div class="container-festival"  :style="background[0].img">
+                    <div class="menu-search-festival">
+                  
+                        <div class="container-header-fetistival">
+                        <div class="logo"><h1>SOCIALMUSIC</h1></div>
+                         <div class="searc-content">
+                             <input type="search" name="" id="input_search">
+                             <button><i class="fa fa-search" aria-hidden="true"></i></button>
+                         </div>
+                       <div class="navbar-iniciar">
+                           <a href="" class="btn-login">Iniciar sesión</a>
+                            <button type="button" class="btn btn-primary" style="background:rgb(33, 150, 243)">Regístrate</button>
+                       </div>
+                        </div>
+                      
+            </div>
                   <div class="slider-festival">
                         <div class="item">
                             <h1>Music Festival</h1>
@@ -26,133 +42,12 @@
                         </div>
                   </div>
 
-                  <div class="container-autentication">
-                       <div class="autentication">
-                           <a href="./login" class="btn-account md-bg-blue-700"> login <i class="zmdi zmdi-arrow-right"></i></a>
-                           <a href="./register" class="btn-account md-bg-green-A700"><i class="zmdi zmdi-account"></i> Register</a>
-                       </div>
-                  </div>
 
-                  <div class="container-navbar drawer-fixed">
-                      <div class="navbar-menu">
-                        <div class="logo"><h1>SOCIALMUSIC</h1></div>
-                       <div class="navbar">
-                           <ul>
-                               <li><a href="">Home</a></li>
-                               <li><a href="">evente</a></li>
-                               <li><a href="">Musics</a></li>
-                           </ul>
-                       </div>
-                      </div>
-                  </div>
+                  
             </div>
             
     </header>
-    <!-- secion de musica -->
-     <section class="container-music">
-         <div class="header">
-             <h1>Musics Performers</h1>
-         </div>
-        <div class="musics">
-            <div class="item">
-                <div class="thumbnails">
-                      <img src="https://www.hola.com/imagenes/actualidad/2016112189834/andres-ceballos-dvicio-grammy-latinos/0-404-706/dvicio-getty2-t.jpg" alt=""/>
-                    </div>
-                    <div class="info">
-                        <h3>Miguel Jimenez</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do </p>
-                    </div>
-                <div class="controls">
-                    <a href="" class="btn-player"><i class="zmdi zmdi-play-circle"></i></a>
-                </div>
-            </div>
-            <div class="item">
-                <div class="thumbnails">
-                      <img src="https://img.elcomercio.pe/files/article_content_ec_fotos/uploads/2017/05/12/5916528eeeb7d.jpeg" alt=""/>
-                    </div>
-                    <div class="info">
-                        <h3>Miguel Jimenez</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do </p>
-                    </div>
-                <div class="controls">
-                    <a href="" class="btn-player"><i class="zmdi zmdi-play-circle"></i></a>
-                </div>
-            </div>
-            <div class="item">
-                <div class="thumbnails">
-                      <img src="https://static.vix.com/es/sites/default/files/styles/large/public/imj/c/cantantes-portada.jpg?itok=x3cDPC71" alt=""/>
-                    </div>
-                    <div class="info">
-                        <h3>Miguel Jimenez</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do </p>
-                    </div>
-                 <div class="controls">
-                    <a href="" class="btn-player"><i class="zmdi zmdi-play-circle"></i></a>
-                </div>
-            </div>
-            <div class="item">
-                <div class="thumbnails">
-                      <img src="https://www.superprof.mx/blog/file/2017/06/cantante-autodidacta.jpg" alt=""/>
-                    </div>
-                    <div class="info">
-                        <h3>Miguel Jimenez</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do </p>
-                    </div>
-                <div class="controls">
-                    <a href="" class="btn-player"><i class="zmdi zmdi-play-circle"></i></a>
-                </div>
-            </div>
-            <div class="item">
-                <div class="thumbnails">
-                      <img src="https://www.hola.com/imagenes/actualidad/2016112189834/andres-ceballos-dvicio-grammy-latinos/0-404-706/dvicio-getty2-t.jpg" alt=""/>
-                    </div>
-                    <div class="info">
-                        <h3>Miguel Jimenez</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do </p>
-                    </div>
-                <div class="controls">
-                    <a href="" class="btn-player"><i class="zmdi zmdi-play-circle"></i></a>
-                </div>
-            </div>
-            <div class="item">
-                <div class="thumbnails">
-                      <img src="https://img.elcomercio.pe/files/article_content_ec_fotos/uploads/2017/05/12/5916528eeeb7d.jpeg" alt=""/>
-                    </div>
-                    <div class="info">
-                        <h3>Miguel Jimenez</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do </p>
-                    </div>
-                <div class="controls">
-                    <a href="" class="btn-player"><i class="zmdi zmdi-play-circle"></i></a>
-                </div>
-            </div>
-            <div class="item">
-                <div class="thumbnails">
-                      <img src="https://static.vix.com/es/sites/default/files/styles/large/public/imj/c/cantantes-portada.jpg?itok=x3cDPC71" alt=""/>
-                    </div>
-                    <div class="info">
-                        <h3>Miguel Jimenez</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do </p>
-                    </div>
-                 <div class="controls">
-                    <a href="" class="btn-player"><i class="zmdi zmdi-play-circle"></i></a>
-                </div>
-            </div>
-            <div class="item">
-                <div class="thumbnails">
-                      <img src="https://www.hola.com/imagenes/actualidad/2016112189834/andres-ceballos-dvicio-grammy-latinos/0-404-706/dvicio-getty2-t.jpg" alt=""/>
-                    </div>
-                    <div class="info">
-                        <h3>Miguel Jimenez</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do </p>
-                    </div>
-                <div class="controls">
-                    <a href="" class="btn-player"><i class="zmdi zmdi-play-circle"></i></a>
-                </div>
-            </div>
-        </div>
-     </section>
-     <!-- fin secion de musica -->
+  
        <!-- secion de eventos -->
      <section class="container-music container-event">
          <div class="header">
@@ -232,9 +127,7 @@
         {"lat":35.6950961,"lng":139.5037899}
       ]' />
     </section>
-    <section class="cotainer-fuid">
-        <CardPricing />
-    </section>
+
     <!--fin  section player -->
 
     </section>
@@ -251,7 +144,7 @@
         data(){
             return{
                 background: [
-                    {img:  "background-image: url(https://www.superprof.mx/blog/file/2017/06/cantante-autodidacta.jpg);"}
+                    {img:  "background-image: url(http://blog.ticketea.com/wp-content/uploads/2016/03/1600x900xerasmus-party-1.jpg.pagespeed.ic.2UGf861WtA.jpg);"}
                 ]
                     
                 
